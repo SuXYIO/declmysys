@@ -36,4 +36,4 @@ Create empty file for necessary files.
 
 Create empty directory for the user defined sections.
 
-See fotmats/dotdecldir for structure.
+See fotmats/files/dotdecldir for structure.
