@@ -6,6 +6,8 @@
 
 DeclMySys (_Declare My System_), the **simple**, **declarative**, system config manager.
 
+The **intuitive** way for **geeks**, that drops the redundancy for _production environments_.
+
 Inspired by _Nix_, lighter than _Nix_.
 
 ### Why
@@ -17,12 +19,22 @@ When it comes to managing system configs, you are basically left with two option
 
 I mean, _Nix_ did do a great job in managing, but it complicated for sure. After all, it's made for _reproducibility_, so it has to keep generations and stuff. It's mostly a **production environment** thing.
 
-Maybe, for us who just does _ricing_, it's time to consider using a simpler tool.
+Maybe, for us geeks, it's time to consider using a lighter tool.
 
 ## Roadmap
 
-- [ ] Define config formats
+Basic:
+
+- [ ] Design config formats
 - [ ] Basic implementation
+
+Design:
+
+- [ ] More intuitive designs
+
+Implementation:
+
+- [ ] Concurrency support
 - [ ] Multi-system support
 
 ## Note

@@ -10,12 +10,19 @@ See example, pretty self-explainatory.
 
 ## Values
 
+I'll use `packages//` for any subtable under `packages` list.
+
 - `packages`: List of tables of managers, the managers will be executed in this order
-- `packages/manager`: Put your manager's `install` command here. See formats/represents/cmd
-- `packages/list`: The list of package specs
+- `packages//name`: Description name, make it human-readable. See docs/formats/represents/name
+- `packages//manager`: A preset manager name, or put your manager's `install` command here. See formats/represents/cmd
+- `packages//list`: The list of package specs
 - `priority`: Default 200 for packages. See docs/files/represents/priority
 
+> Note: Doesn't see the reason for setting manager specific priority, and the install operation is executed in the order of the `packages` list
+
 ### Package Spec
+
+It's manager-dependent so good luck.
 
 Example:
 
@@ -26,12 +33,23 @@ list = [
 ]
 ```
 
+## Preset Managers
+
+Not gonna add much, since I usually only deal with these. Adding these is pretty dangerous, let alone adding something I've never used.
+
+Welcome to add more via Pull Request.
+
+`apt`: `["sudo", "apt", "install", "-y"]`
+`flatpak-user-flathub`: `["flatpak", "install", "flathub", "--noninteractive", "-y", "--user"]`
+`flatpak-system-flathub`: `["flatpak", "install", "flathub", "--noninteractive", "-y", "--system"]`
+
 ## Example
 
 ```toml
 packages = [
     {
-        manager = ["sudo", "apt", "install"],
+        manager = "apt",
+        # omit the name, which uses the preset name
         list = [
             "git",
             "neovim",
@@ -39,14 +57,20 @@ packages = [
         ]
     },
     {
-        manager = ["flatpak", "install"],
+        # or spec it yourself
+        name = "flatpak-user-mysource",
+        manager = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"]
         list = [
-            "io.gitlab.librewolf-community",
+            "com.valvesoftware.Steam",
+            "com.visualstudio.code",
         ]
     }
 ]
 priority = 500
 ```
+
+> Note: Notice it's flatpak-flathub instead of flatpak. It looks better visually when listing.
+> It prints `[flatpak-flathub]: com.valvesoftware.Steam  com.visualstudio.code` instead of `[flatpak-flathub]: flathub com.valvesoftware.Steam  flathub com.visualstudio.code`
 
 ## Behavior
 

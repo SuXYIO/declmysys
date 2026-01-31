@@ -1,6 +1,6 @@
 # OperTable
 
-This document describes the format which operation representations will be in.
+The representation for operations.
 
 ## Format
 

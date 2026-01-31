@@ -36,12 +36,14 @@ dots/
 
 #### Structure
 
+- `name`: Description name, make it human-readable. See docs/formats/represents/name
 - `proc`: Can be a string of a built-in processor, or a table describing the processing operation needed. See formats/represents/opertable.toml.
 - `priority`: Default `100` for dots. See docs/formats/represents/priority
 
 Example for built-in:
 
 ```toml
+name = "foobar"
 proc = "stow"
 priority = 1000
 ```
@@ -59,7 +61,6 @@ proc = [
         "baz.txt",
     ],
 ]
-priority = 1000
 ```
 
 Built-in processors:
@@ -87,6 +88,7 @@ Bashrc via stow:
 # └── data/
 #     └── .bashrc
 
+name = ".bashrc dots"
 proc = "stow"
 priority = 1000
 ```
@@ -98,9 +100,10 @@ Clone your own repo:
 # nvim/
 # └── desc.toml
 
+name = "clone neovim config"
 proc = "git"
 url = "https://github.com/username/neovim_config"
-dest = "/home/suxy/.config/nvim"
+dest = "{HOME}/.config/nvim"
 priority = 500  # Maybe this can wait a little?
 ```
 
@@ -114,6 +117,7 @@ Copy apt source:
 #     ├── debian.sources
 #     └── extrepo.sources
 
+name = "apt-sources"
 proc = [
     cmd = [
         ["sudo", "mv", "data/*", "/etc/apt/sources.list.d"]
