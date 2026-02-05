@@ -14,7 +14,7 @@ I'll use `packages//` for any subtable under `packages` list.
 
 - `packages`: List of tables of managers, the managers will be executed in this order
 - `packages//name`: Description name, make it human-readable. See docs/formats/represents/name
-- `packages//manager`: A preset manager name, or put your manager's `install` command here. See formats/represents/cmd
+- `packages//do`: A preset manager name, or put your manager's `install` command here. See formats/represents/cmd
 - `packages//list`: The list of package specs
 - `priority`: Default 200 for packages. See docs/files/represents/priority
 
@@ -48,7 +48,7 @@ Welcome to add more via Pull Request.
 ```toml
 packages = [
     {
-        manager = "apt",
+        do = "apt",
         # omit the name, which uses the preset name
         list = [
             "git",
@@ -59,7 +59,7 @@ packages = [
     {
         # or spec it yourself
         name = "flatpak-user-mysource",
-        manager = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"]
+        do = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"]
         list = [
             "com.valvesoftware.Steam",
             "com.visualstudio.code",
@@ -74,7 +74,7 @@ priority = 500
 
 ## Behavior
 
-When executing packages, the manager command and element in `list` will be concated into a single command.
+When executing packages, the do command and element in `list` will be concated into a single command.
 
 For example, when using list representation, the Example will be translated to command `{"sudo", "apt", "install", "git", "neovim", "python=3.14"}` and `flatpak install io.gitlab.librewolf-community".
 

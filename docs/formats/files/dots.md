@@ -37,21 +37,21 @@ dots/
 #### Structure
 
 - `name`: Description name, make it human-readable. See docs/formats/represents/name
-- `proc`: Can be a string of a built-in processor, or a table describing the processing operation needed. See formats/represents/opertable.toml.
+- `do`: Can be a string of a built-in processor, or a table describing the processing operation needed. See formats/represents/opertable.toml.
 - `priority`: Default `100` for dots. See docs/formats/represents/priority
 
 Example for built-in:
 
 ```toml
 name = "foobar"
-proc = "stow"
+do = "stow"
 priority = 1000
 ```
 
 Example for opertable:
 
 ```toml
-proc = [
+do = [
     cmd = [
         ["cp", "data/foo.txt", "/root/bar.txt"],
         ["rm", "/root/baz.txt"],
@@ -89,7 +89,7 @@ Bashrc via stow:
 #     └── .bashrc
 
 name = ".bashrc dots"
-proc = "stow"
+do = "stow"
 priority = 1000
 ```
 
@@ -101,7 +101,7 @@ Clone your own repo:
 # └── desc.toml
 
 name = "clone neovim config"
-proc = "git"
+do = "git"
 url = "https://github.com/username/neovim_config"
 dest = "{HOME}/.config/nvim"
 priority = 500  # Maybe this can wait a little?
@@ -118,7 +118,7 @@ Copy apt source:
 #     └── extrepo.sources
 
 name = "apt-sources"
-proc = [
+do = [
     cmd = [
         ["sudo", "mv", "data/*", "/etc/apt/sources.list.d"]
     ]

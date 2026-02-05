@@ -35,9 +35,9 @@ user@host:~$ declmysys list 250
 Procedure list for /home/user/Dotdecl, priority 250:
     - Actions
         apt update
-            cmd: ["sudo", "apt", "update"]
+            do: ["sudo", "apt", "update"]
             affected: []
         add flathub source to flatpak
-            cmd: ["flatpak", "remote-add", "--if-not-exists", "flathub", "https://dl.flathub.org/repo/flathub.flatpakrepo"]
+            do: ["flatpak", "remote-add", "--if-not-exists", "flathub", "https://dl.flathub.org/repo/flathub.flatpakrepo"]
             affected: []
 ```

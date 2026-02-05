@@ -17,9 +17,13 @@ When it comes to managing system configs, you are basically left with two option
 - **Stow**, the simple yet non-flexible
 - **Nix**, the powerful yet complex
 
-I mean, _Nix_ did do a great job in managing, but it complicated for sure. After all, it's made for _reproducibility_, so it has to keep generations and stuff. It's mostly a **production environment** thing.
+I mean, _Nix_ did do a great job, but it complicated things for sure. It's like using a high-precision laser just for baking bread.
 
-Maybe, for us geeks, it's time to consider using a lighter tool.
+After all, _Nix_ is made for _strict reproducibility_, so it has to keep generations and stuff. It's mostly a **production environment** thing.
+
+Maybe, for us geeks, we don't need _production environment grade_ tools just for our configs.
+
+It's time to consider using a lighter tool.
 
 ## Roadmap
 
