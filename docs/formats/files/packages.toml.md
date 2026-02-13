@@ -13,12 +13,13 @@ See example, pretty self-explainatory.
 I'll use `packages//` for any subtable under `packages` list.
 
 - `packages`: List of tables of managers, the managers will be executed in this order
-- `packages//name`: Description name, make it human-readable. See docs/formats/represents/name
-- `packages//do`: A preset manager name, or put your manager's `install` command here. See formats/represents/cmd
+- `packages//name`: Description name, make it human-readable. See [name](../represents/name.md)
+- `packages//do`: A preset manager name, or put your manager's `install` command here. See [cmd](../represents/cmd.md)
 - `packages//list`: The list of package specs
-- `priority`: Default 200 for packages. See docs/files/represents/priority
+- `priority`: Default 200 for packages. See [priority](../represents/priority.md)
 
-> Note: Doesn't see the reason for setting manager specific priority, and the install operation is executed in the order of the `packages` list
+> [!NOTE]
+> Doesn't see the reason for setting manager specific priority, the install operation is executed in the order of the `packages` list
 
 ### Package Spec
 
@@ -69,7 +70,8 @@ packages = [
 priority = 500
 ```
 
-> Note: Notice it's flatpak-flathub instead of flatpak. It looks better visually when listing.
+> [!NOTE]
+> Notice it's flatpak-flathub instead of flatpak. It looks better visually when listing.
 > It prints `[flatpak-flathub]: com.valvesoftware.Steam  com.visualstudio.code` instead of `[flatpak-flathub]: flathub com.valvesoftware.Steam  flathub com.visualstudio.code`
 
 ## Behavior
@@ -78,4 +80,4 @@ When executing packages, the do command and element in `list` will be concated i
 
 For example, when using list representation, the Example will be translated to command `{"sudo", "apt", "install", "git", "neovim", "python=3.14"}` and `flatpak install io.gitlab.librewolf-community".
 
-If you use single string representation, the command will be translated to `{"bash", "-c", yourcommand}`. It's not safe, don't use it. See formats/represents/cmd.
+If you use single string representation, the command will be translated to `{"bash", "-c", yourcommand}`. It's not safe, don't use it. See [cmd](../represents/cmd.md).

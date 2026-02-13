@@ -23,6 +23,6 @@ DotDecl
 ```
 
 - `.git/`: regular git directory, for version control. Created via `git init`
-- `packages.toml`: defines package manager to use, and also packages to be installed. See cli/packages.toml
-- `dots/`: stores dotfile definitions. See cli/dots
-- `actions/`: stores action definitions. See cli/actions
+- `packages.toml`: defines package manager to use, and also packages to be installed. See [packages](packages.toml.md)
+- `dots/`: stores dotfile definitions. See [dots](dots.md)
+- `actions/`: stores action definitions. See [actions](actions.md)

@@ -1,6 +1,6 @@
 # Subcommands-Init
 
-Inits new dotdecldir in directory.
+Initialize new dotdecldir in directory.
 
 ## Args
 
@@ -8,7 +8,7 @@ Inits new dotdecldir in directory.
 declmysys init [DOTDECLDIR]
 ```
 
-- `DOTDECLDIR`, the _dotdecldir_ path to be initialized. default: `~/Dotdecl`
+- `DOTDECLDIR`: the _dotdecldir_ path to be initialized. default: `~/Dotdecl`
 
 ## Example
 
@@ -36,4 +36,4 @@ Create empty file for necessary files.
 
 Create empty directory for the user defined sections.
 
-See fotmats/files/dotdecldir for structure.
+See [dotdecldir](../../formats/files/dotdecldir.md) for structure.

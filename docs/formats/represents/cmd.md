@@ -25,7 +25,8 @@ A macro expands to a certain content. List of macros:
 - `{HOME}`: Expands to your home directory, e.g. `/home/foobar` for user `foobar`
 - `{USERNAME}`: Expands to your user name, e.g. `foobar` for user `foobar`
 
-> Note: This is an awkward design, but due to safety concerns and sticking to lists, the `~` cannot be interpreted (it is a shell feature), so I have to do it this way.
+> [!NOTE]
+> This is an awkward design, but due to safety concerns and sticking to lists, the `~` cannot be interpreted (it is a shell feature), so I have to do it this way.
 > Theoretically the single string representation or sudo can process this since it is interpreted via bash or the shell for root user.
 
 ## Example

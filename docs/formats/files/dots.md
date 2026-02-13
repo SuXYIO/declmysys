@@ -36,9 +36,9 @@ dots/
 
 #### Structure
 
-- `name`: Description name, make it human-readable. See docs/formats/represents/name
-- `do`: Can be a string of a built-in processor, or a table describing the processing operation needed. See formats/represents/opertable.toml.
-- `priority`: Default `100` for dots. See docs/formats/represents/priority
+- `name`: Description name, make it human-readable. See [name](../represents/name.md)
+- `do`: Can be a string of a built-in processor, or a table describing the processing operation needed. See [opertable](../represents/opertable.md)
+- `priority`: Default `100` for dots. See [priority](../represents/priority.md)
 
 Example for built-in:
 

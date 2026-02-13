@@ -2,7 +2,9 @@
 
 Execute all the stuff.
 
-> Note: Yeah I chose a strange name, but I decided that typing `exec` `execute` or `install` is not descriptive for this project, and too long. What's more, it pairs with `undo` perfectly. It's simple, just ordering the program to DO IT.
+> [!NOTE]
+> Yeah I chose a strange name, but I decided that typing `exec` `execute` or `install` is not descriptive for this project, and too long.
+> What's more, it pairs with `undo` perfectly, although not implemented yet. It's simple, just ordering the program to DO IT.
 
 ## Args
 
@@ -13,11 +15,9 @@ declmysys do [-D DOTDECLDIR] [-d] [-v] [PROCEDURE]
 `-D DOTDECLDIR`: Specify the dotdecldir to scan, if not set, use the one defined in `~/.declmysys` or the default
 `-d`: Dry run, only print the procedures out. The difference from `list` subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected
 `-v`: Verbose, print verbose information, including procedure outputs and stats
-`PROCEDURE`: Specify the procedure to do, e.g. `dots.foobar`. See docs/formats/represents/procedure-spec
+`PROCEDURE`: Specify the procedure to do, e.g. `dots.foobar`. See [procedure spec](../../formats/represents/procedure-spec.md)
 
 ## Example
-
-> Note: Should really add a progress bar, and color.
 
 Do all:
 
@@ -47,10 +47,11 @@ Do /home/user/Dotdecl:
     Done!
 ```
 
-> Note: Notice that it prints which thing (action or manager or dotfile processor) is using sudo, before sudo asks for passwords. This design ensures that you know why sudo is asked, which improves safety.
-> The program though, simply matches for `sudo` commands in the command, so
+> [!Note]
+> Notice that it prints which thing (action or manager or dotfile processor) is using sudo, before sudo asks for passwords. This design ensures that you know why sudo is asked, which improves safety.
 
-> Note: Managers might ask for stuff, have to test that.
+> [!Note]
+> Managers might ask for stuff, have to test that.
 > ~~interactive design is paradise for users, but they really make automation f\*\*ked up~~
 
 Dry run:

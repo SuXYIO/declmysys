@@ -8,7 +8,7 @@ List the procedure defined by order (descending priority).
 declmysys list [-D DOTDECLDIR] [PRIORITY]
 ```
 
-`-D DOTDECLDIR`: Specify the dotdecldir to scan, if not set, use the one defined in `~/.declmysys` or the default
+`-D DOTDECLDIR`: Specify the dotdecldir to scan, if not set, use the one defined in `~/.declmysysrc` or the default
 `PRIORITY`: Show the specific procedures for a certain priority, shows them more verbosely by default
 
 ## Example

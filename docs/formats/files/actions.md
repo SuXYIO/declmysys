@@ -19,11 +19,11 @@ actions
 
 ## Structure (action toml file)
 
-- `name`: Description name, make it human-readable. See docs/formats/represents/name
-- `do`: List of commands. See docs/formats/represents/cmd
+- `name`: Description name, make it human-readable. See [name](../represents/name.md)
+- `do`: List of commands. See [cmd](../represents/cmd.md)
 - `undo`: Optional list of commands, that reverts the changes
 - `affected`: Optional list of affected files. No action made yet, maybe add backup feature later
-- `priority`: Default `50` for actions. See docs/files/represents/priority
+- `priority`: Default `50` for actions. See [priority](../represents/priority.md)
 
 ## Example
 

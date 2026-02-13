@@ -6,7 +6,8 @@ Using the subfile / subdirectory name does not require you to be in the dotdecld
 
 (And yes, you guessed it, names must not contain `.`)
 
-> Note: Not using `/` for seperation, cuz that might be misinterpreted by some shells for files.
+> [!NOTE]
+> Not using `/` for seperation, cuz that might be misinterpreted by some shells for files.
 
 ## Example
 

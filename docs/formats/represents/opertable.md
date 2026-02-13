@@ -4,7 +4,7 @@ The representation for operations.
 
 ## Format
 
-`cmd`: Command, or list of commands. See docs/formats/represents/cmd
+`cmd`: Command, or list of commands. See [cmd](cmd.md)
 `affected`: List affected files, optional
 
 ## Example

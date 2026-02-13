@@ -27,14 +27,21 @@ It's time to consider using a lighter tool.
 
 ## Roadmap
 
+Well, it's more like a _Todo List_ than a _Roadmap_.
+
 Basic:
 
 - [ ] Design config formats
 - [ ] Basic implementation
+- [ ] Add logfile
 
 Design:
 
-- [ ] More intuitive designs
+- [ ] Update docs (i mean, at least make it _human readable_)
+- [ ] Add more glyph sets (NerdFonts, Emojis)
+- [ ] Better UI
+  - [ ] Progress bar
+  - [ ] Colorscheme
 
 Implementation:
 
