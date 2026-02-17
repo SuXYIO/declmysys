@@ -1,6 +1,6 @@
 # Subcommands-Do
 
-Execute all the stuff.
+Execute defined stuff.
 
 > [!NOTE]
 > Yeah I chose a strange name, but I decided that typing `exec` `execute` or `install` is not descriptive for this project, and too long.
@@ -9,10 +9,9 @@ Execute all the stuff.
 ## Args
 
 ```bash
-declmysys do [-D DOTDECLDIR] [-d] [-v] [PROCEDURE]
+declmysys do [-d|--dry] [-v|--verbose] [PROCEDURE]
 ```
 
-`-D DOTDECLDIR`: Specify the dotdecldir to scan, if not set, use the one defined in `~/.declmysys` or the default
 `-d`: Dry run, only print the procedures out. The difference from `list` subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected
 `-v`: Verbose, print verbose information, including procedure outputs and stats
 `PROCEDURE`: Specify the procedure to do, e.g. `dots.foobar`. See [procedure spec](../../formats/represents/procedure-spec.md)

@@ -5,10 +5,9 @@ List the procedure defined by order (descending priority).
 ## Args
 
 ```bash
-declmysys list [-D DOTDECLDIR] [PRIORITY]
+declmysys list [PRIORITY]
 ```
 
-`-D DOTDECLDIR`: Specify the dotdecldir to scan, if not set, use the one defined in `~/.declmysysrc` or the default
 `PRIORITY`: Show the specific procedures for a certain priority, shows them more verbosely by default
 
 ## Example

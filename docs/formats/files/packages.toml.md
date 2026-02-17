@@ -48,24 +48,10 @@ Welcome to add more via Pull Request.
 
 ```toml
 packages = [
-    {
-        do = "apt",
-        # omit the name, which uses the preset name
-        list = [
-            "git",
-            "neovim",
-            "python=3.14",
-        ]
-    },
-    {
-        # or spec it yourself
-        name = "flatpak-user-mysource",
-        do = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"]
-        list = [
-            "com.valvesoftware.Steam",
-            "com.visualstudio.code",
-        ]
-    }
+    # omit the name, which uses the preset name
+    { do = "apt", list = ["git", "neovim", "python=3.14"] },
+    # or spec it yourself
+    { name = "flatpak-user-mysource", do = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"], list = ["com.valvesoftware.Steam", "com.visualstudio.code"] }
 ]
 priority = 500
 ```

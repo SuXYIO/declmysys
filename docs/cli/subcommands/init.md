@@ -1,18 +1,16 @@
 # Subcommands-Init
 
-Initialize new dotdecldir in directory.
+Initialize new dotdecldir.
 
 ## Args
 
 ```bash
-declmysys init [DOTDECLDIR]
+declmysys init
 ```
-
-- `DOTDECLDIR`: the _dotdecldir_ path to be initialized. default: `~/Dotdecl`
 
 ## Example
 
-Initialize new dotdecldir in `~/Dotdecl`:
+Initialize new dotdecldir in default dotdecldir or specified:
 
 ```bash
 declmysys init

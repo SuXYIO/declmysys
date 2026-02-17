@@ -1,7 +1,9 @@
 # Subcommand-Help
 
-Just gives you the command help.
+Gives you the commandline help.
+
+Can't spec which subcmd to show help, so `-h` and `--help` is more recommended.
 
 ## Aliases
 
-same as `declmysys --help` or `declmysys -h`
+Similar to `--help` or `-h`

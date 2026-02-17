@@ -1,15 +1,15 @@
 # Subcommand-Version
 
-Just gives you the version info.
+Gives you the version info.
 
 ## Aliases
 
-same as `-V` or `--version`
+Same as `-V` or `--version`
 
 ## Example
 
 ```
 user@host:~$ declmysys version
 declmysys v1.0.0
-build: amd64
+build: amd64 linux
 ```
