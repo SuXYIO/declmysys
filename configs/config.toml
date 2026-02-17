@@ -1,0 +1,6 @@
+dotdecldir = "~/Dotdecl"
+glyphset = "ascii"
+
+[subs]
+global = {}
+files_cmds = {}

@@ -31,9 +31,11 @@ Well, it's more like a _Todo List_ than a _Roadmap_.
 
 Basic:
 
-- [ ] Design config formats
+- [x] Design config formats
 - [ ] Basic implementation
-- [ ] Add logfile
+  - [x] Cmdline args
+  - [ ] Parsing stuff
+  - [ ] Executint stuff
 
 Design:
 
