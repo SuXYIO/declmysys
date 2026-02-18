@@ -10,6 +10,5 @@ import (
 type VersionOpts struct{}
 
 func Version() {
-	fmt.Println(consts.Name, consts.Version)
-	fmt.Println("build:", runtime.GOARCH, runtime.GOOS)
+	fmt.Println(consts.Name, consts.Version, runtime.GOOS+"/"+runtime.GOARCH)
 }

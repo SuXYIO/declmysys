@@ -10,6 +10,5 @@ Same as `-V` or `--version`
 
 ```
 user@host:~$ declmysys version
-declmysys v1.0.0
-build: amd64 linux
+declmysys v1.2.3 linux/amd64
 ```
