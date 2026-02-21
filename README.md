@@ -6,28 +6,30 @@
 
 DeclMySys (_Declare My System_), the **simple**, **declarative**, system config manager.
 
-The **intuitive** way for **geeks**, that drops the redundancy for _production environments_.
+The **intuitive** way for us **geeks**.
 
-Inspired by _Nix_, lighter than _Nix_.
+The config manager, that is more than _stow_, less than _nix_.
 
 ### Why
 
-When it comes to managing system configs, you are basically left with two options:
+When it comes to managing system configs, you are basically left with a few options:
 
-- **Stow**, the simple yet non-flexible
-- **Nix**, the powerful yet complex
+1. **Writing Scripts By Hand**
+   Well if you really enjoy this and is good at this, then I admire you.
+2. **Stow**
+   Simple, intuitive, the old-school manager, but lacks features we need. (If stow can run scripts, I'll be sticking to it. The simplicity is really a beauty, made with Unix Philosophy and all)
+3. **YADM & Other Modern Dotfile Managers**
+   While they implemented encryption and stuff, I don't really enjoy them. Not denying their work, but in my opinion, some are overly simplified while others are overly complicated. What's more, they're not really declarative.
+4. **Nix**
+   Really powerful, yet complicated.
+   Don't get me wrong, _Nix_ did a great job, but it complicated things for sure. It's like using a high-precision laser just for baking bread, too much for us who just tinks around our configs.
+   After all, _Nix_ is made for _strict reproducibility_. It's mostly a **production environment** thing.
 
-I mean, _Nix_ did do a great job, but it complicated things for sure. It's like using a high-precision laser just for baking bread.
+I wish to build a manager, not only limited to dotfiles, but can also describe any detail of your system (via scripts).
 
-After all, _Nix_ is made for _strict reproducibility_, so it has to keep generations and stuff. It's mostly a **production environment** thing.
+I'm afraid it won't be as intuitive as **Stow**, but I promise using it will be easy.
 
-Maybe, for us geeks, we don't need _production environment grade_ tools just for our configs.
-
-It's time to consider using a lighter tool.
-
-## Roadmap
-
-Well, it's more like a _Todo List_ than a _Roadmap_.
+## TODO
 
 Basic:
 
@@ -39,9 +41,9 @@ Basic:
 
 Design:
 
-- [ ] Update docs (i mean, at least make it _human readable_)
+- [ ] Update docs (i mean, at least make it _readable_)
 - [ ] Add more glyph sets (NerdFonts, Emojis)
-- [ ] Better UI
+- [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme
 
@@ -52,6 +54,6 @@ Implementation:
 
 ## Note
 
-I'm just getting started to programming, let alone having only used `C` and `Python`. `Go` and stuff is pretty new to me, so it's also a learning project for me, into the _real development_ world.
+I'm just getting started to programming, **Go** is pretty new to me, so it's also a learning project.
 
-btw, `Rust` will NOT be used as far as I'm concerned. Yes, I tried to learn it, and I failed :sweat_smile:.
+btw, **Rust** will NOT be used as far as I'm concerned. Yes, I tried to learn it, and I failed :sweat_smile:.
