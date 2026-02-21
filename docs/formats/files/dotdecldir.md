@@ -12,6 +12,7 @@ The default dotdecldir is `~/Dotdecl/`, and the cli should support for modifying
 DotDecl
 ├── .git/
 ├── packages.toml
+├── subs.toml
 ├── dots/
 │   ├── dot1/
 │   ├── dot2/

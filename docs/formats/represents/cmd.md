@@ -2,6 +2,9 @@
 
 A command will be described as either a _list of strings_ or a _single string_.
 
+Will be parsed through files&cmds subs rules. See [subs](../represents/subs.md)
+If using list representations, all elements of the list will be parsed.
+
 ## Format
 
 ### List
@@ -24,7 +27,6 @@ It will be executed via `exec.Command("bash", "-c", s)` where `s` is the single 
 
 - Command `sudo rm -rf /*` should be written as `["sudo", "rm", "-rf", "/*"]`
 - Command `echo 'foo bar'` should be written as `["echo", "'foo bar'"]`
-- Command `cp ~/Downloads/nvim.bak ~/.config/nvim` should be written as `["cp", "{HOME}/Downloads/nvim.bak", "~/.config/nvim"]`
 
 ### Single
 

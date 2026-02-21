@@ -10,7 +10,7 @@ Will add a search order later. If no matches found, create one automatically.
 
 ## Values
 
-- `dotdecldir`, the directory path of _dotdecldir_
+- `dotdecldir`, the directory path of _dotdecldir_. Will be parsed through the default files&cmds subs rules
 - `glyphset`, the set of characters the program uses for better visual text. Currently only supports `ascii`, will add NerdFonts and Emojis option later.
 
 ## Example

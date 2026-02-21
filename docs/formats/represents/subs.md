@@ -6,14 +6,14 @@ Dotdecldir substitutions.
 
 ### Global
 
-For all strings.
+For every string in toml files.
 
 - `{USER}` is replaced with username
 - `{HOST}` is replaced with hostname
 
 ### Files & Cmds
 
-Applies for filepaths, cmds, and even some command line args.
+Applies for filepaths, cmds, and even some command line args (see the files and cli docs for details).
 
 Special homedir subs:
 
@@ -49,6 +49,21 @@ Example:
 ```
 
 it turns string `{GREET}, {NAME}.` to `Hello, Dave.`
+
+### Order
+
+The rest of the subs defined in your dotdecldir is applied before the defaults, so that it enables aliases.
+For example, if you love git or vim style homedir specification, you can specify
+
+```toml
+"%USERPROFILE%" = "{HOME}"
+```
+
+where after your custom substitution, it will be substituted again by the defaults, turning `%USERPROFILE%` to the actual home dir.
+
+> [!NOTE]
+> Sadly, there are limitations to this rough design, for example you can override defaults, but you cannot disable defaults.
+> Create a enhancement/feature request Issue, or pull up in the discussions, if you have a better idea. (and i hope it's not regex)
 
 ### Example
 

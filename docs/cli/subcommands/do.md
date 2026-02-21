@@ -25,7 +25,7 @@ user@host:~$ declmysys do
 Do /home/user/Dotdecl:
     - Actions (250)
         apt update
-    apt: [sudo] password for user:
+    [sudo] password for user:
     Done!
         add flathub source to flatpak
     Done!
@@ -37,7 +37,6 @@ Do /home/user/Dotdecl:
     Done!
     - Dots (100)
         zshrc  git  tmux  neofetch  neovim  kitty  apt-sources
-    apt-sources: used root without authentication
     Done!
     - Actions (50)
         create ~/Workspace directory
@@ -45,9 +44,6 @@ Do /home/user/Dotdecl:
         add user to dialout group
     Done!
 ```
-
-> [!Note]
-> Notice that it prints which thing (action or manager or dotfile processor) is using sudo, before sudo asks for passwords. This design ensures that you know why sudo is asked, which improves safety.
 
 > [!Note]
 > Managers might ask for stuff, have to test that.
