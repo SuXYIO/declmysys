@@ -2,6 +2,8 @@
 
 Dotdecldir substitutions.
 
+The substitutions are all non-recursive, e.g. rule `{"foo": "bar", "bar": "foo"}` turns string `"foobar"` to `"barfoo"`.
+
 ## Defaults
 
 ### Global

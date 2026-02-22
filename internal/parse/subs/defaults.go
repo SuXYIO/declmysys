@@ -6,16 +6,6 @@ import (
 	"strings"
 )
 
-type SubsRules map[string]string
-
-// ApplySubs applies a set of subs rules to string
-func ApplySubs(str string, rules SubsRules) string {
-	for from, to := range rules {
-		str = strings.ReplaceAll(str, from, to)
-	}
-	return str
-}
-
 // ApplySpecialHDSubs applies the special homedir subs
 func ApplySpecialHDSubs(str string) (string, error) {
 	homedir, err := os.UserHomeDir()
