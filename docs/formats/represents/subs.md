@@ -8,8 +8,14 @@ Dotdecldir substitutions.
 
 For every string in toml files.
 
-- `{USER}` is replaced with username
-- `{HOST}` is replaced with hostname
+- `{USERNAME}` is replaced with username (login name)
+- `{NAME}` is replaced with username (display name)
+- `{HOSTNAME}` is replaced with hostname
+
+> [!NOTE]
+> Check out the [type User: Go os/user Package Docs](https://pkg.go.dev/os/user#User) for differences between login name and display name.
+> `userinfo.Username` is the login name, and `userinfo.Name` is the display name (where `userinfo, err := user.Current()`), this program uses this API to fetch these names.
+> It's recommended to use login name over display name, since display name is optional (might be empty), while login name is mandatory.
 
 ### Files & Cmds
 
@@ -17,7 +23,13 @@ Applies for filepaths, cmds, and even some command line args (see the files and 
 
 Special homedir subs:
 
-- First character `~` or any ` ~` (notice the space) is replaced with user home dir
+- First character `~` is replaced with homedir
+- `~` with spaces on it's left and right, is replaced with ` ` + homedir + ` `
+- `~/` with space on it's left, is replaced with ` ` + homedir + `/`
+
+`homedir` is probably `/home/foo` if your username is `foo`. (Unless you set a homedir manually, the `os` package'll probably correctly get the path anyway)
+
+If you think of it in a command line scenario, these rule'll be more obvious.
 
 > [!NOTE]
 > You can disable this special subs in config. I personally recommend disabling this and use the safe `{HOME}` subs.
@@ -26,6 +38,7 @@ Other:
 
 - `{HOME}` is replaced with user home dir
 - `{CONF}` or `{CONFIG}` will be replaced with user config dir
+- `{CACHE}` will be replaced with user cache dir
 - `{TMP}` will be replaced with system provided temporary dir
 
 ## Subs table
