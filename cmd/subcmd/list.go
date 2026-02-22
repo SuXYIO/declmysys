@@ -8,7 +8,7 @@ type ListOpts struct {
 	}
 }
 
-// TODO: Impl
 func List(gc parse.Globconf, opts *ListOpts) error {
+	// TODO: Impl
 	return nil
 }

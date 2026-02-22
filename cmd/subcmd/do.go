@@ -10,7 +10,7 @@ type DoOpts struct {
 	}
 }
 
-// TODO: Impl
 func Do(gc parse.Globconf, opts *DoOpts) error {
+	// TODO: Impl
 	return nil
 }

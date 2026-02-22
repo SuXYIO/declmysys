@@ -14,10 +14,10 @@ const (
 	defaultDDDirPath    string = "{HOME}/Dotdecl"
 )
 
-func DefaultGlobconf() (string, error) {
-	return parse.DefaultFilesCmdsSubs(defaultGlobconfPath)
+func DefaultGlobconfPath() (string, error) {
+	return parse.ApplyDefaultFCSubs(defaultGlobconfPath)
 }
 
-func DefaultDDDir() (string, error) {
-	return parse.DefaultFilesCmdsSubs(defaultDDDirPath)
+func DefaultDDDirPath() (string, error) {
+	return parse.ApplyDefaultFCSubs(defaultDDDirPath)
 }

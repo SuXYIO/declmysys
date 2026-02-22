@@ -2,9 +2,11 @@ package subcmd
 
 import "github.com/suxyio/declmysys/internal/parse"
 
-type InitOpts struct{}
+type InitOpts struct {
+	NoGit bool `long:"no-git" description:"Won't create the .git directory (via git init)"`
+}
 
-// TODO: Impl
 func Init(gc parse.Globconf, opts *InitOpts) error {
+	// TODO: Impl
 	return nil
 }

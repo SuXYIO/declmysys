@@ -8,10 +8,10 @@ import (
 
 type HelpOpts struct{}
 
-// TODO: maybe add options showing help for specified subcmd?
 func Help(p *flags.Parser) {
 	// change active for showing main help
 	// otherwise shows help for `help` subcmd
+	// TODO: maybe add options showing help for specified subcmd?
 	a := p.Active
 	p.Active = nil
 
