@@ -25,7 +25,7 @@ func LoadGlobconf(dat []byte) (Globconf, error) {
 	}
 
 	// subs
-	res, err := ApplyDefaultFCSubs(gc.DDDir)
+	res, err := ApplyDefaultPCSubs(gc.DDDir)
 	if err != nil {
 		return gc, err
 	}
@@ -36,7 +36,7 @@ func LoadGlobconf(dat []byte) (Globconf, error) {
 
 // SubsGlobconf substitudes necessary stuff for globconf
 func SubsGlobconf(gc Globconf) (Globconf, error) {
-	dddir, err := ApplyDefaultFCSubs(gc.DDDir)
+	dddir, err := ApplyDefaultPCSubs(gc.DDDir)
 	if err != nil {
 		return gc, err
 	}

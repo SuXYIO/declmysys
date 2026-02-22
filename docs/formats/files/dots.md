@@ -51,16 +51,7 @@ priority = 1000
 Example for opertable:
 
 ```toml
-do = [
-    cmd = [
-        ["cp", "data/foo.txt", "/root/bar.txt"],
-        ["rm", "/root/baz.txt"],
-    ],
-    affected = [
-        "bar.txt",
-        "baz.txt",
-    ],
-]
+do = {cmd = [["cp", "data/foo.txt", "/root/bar.txt"],["rm", "/root/baz"]], affected = ["/root/bar.txt","/root/baz"]}
 ```
 
 Built-in processors:
@@ -118,11 +109,6 @@ Copy apt source:
 #     └── extrepo.sources
 
 name = "apt-sources"
-do = [
-    cmd = [
-        ["sudo", "mv", "data/*", "/etc/apt/sources.list.d"]
-    ]
-    affected = ["/etc/apt/sources.list.d"]
-]
+do = { cmd = [["sudo", "mv", "data/*", "/etc/apt/sources.list.d"]], affected = ["/etc/apt/sources.list.d"]}
 priority = 1000
 ```

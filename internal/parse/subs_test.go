@@ -65,7 +65,7 @@ func TestApplyDefaultGSubs(t *testing.T) {
 	subsTester(t, ApplyDefaultGSubs, tests)
 }
 
-func TestApplyDefaultFCSubs(t *testing.T) {
+func TestApplyDefaultPCSubs(t *testing.T) {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
 		t.Errorf("get homedir failed: %v", err)
@@ -88,5 +88,5 @@ func TestApplyDefaultFCSubs(t *testing.T) {
 		tests["foo"+from+"/bar"] = subsReturn{"foo" + to + "/bar", false}
 	}
 
-	subsTester(t, ApplyDefaultFCSubs, tests)
+	subsTester(t, ApplyDefaultPCSubs, tests)
 }

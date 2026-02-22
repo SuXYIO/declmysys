@@ -11,7 +11,7 @@ import (
 
 func GetGlobconf(gcpath string) (parse.Globconf, error) {
 	// parse path with paths&cmds subs first
-	gcpath, err := parse.ApplyDefaultFCSubs(gcpath)
+	gcpath, err := parse.ApplyDefaultPCSubs(gcpath)
 	if err != nil {
 		return parse.Globconf{}, err
 	}

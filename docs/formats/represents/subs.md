@@ -17,9 +17,9 @@ For every string in toml files.
 > `userinfo.Username` is the login name, and `userinfo.Name` is the display name (where `userinfo, err := user.Current()`), this program uses this API to fetch these names.
 > It's recommended to use login name over display name, since display name is optional (might be empty), while login name is mandatory.
 
-### Files & Cmds
+### Paths & Cmds
 
-Applies for filepaths, cmds, and even some command line args (see the files and cli docs for details).
+Applies for filepaths, cmds, and even some command line args (see the specific docs for details).
 
 Special homedir subs:
 
@@ -46,7 +46,7 @@ Other:
 ### Values
 
 - `subs`: the subs table, overrides default and dotdecldir subs. See [substitutions](../formats/represents/substitutions.md)
-  - `disable_homedir_subs`: whether to disable the special homedir substitution feature
+  - `disable_homedir_subs`: whether to disable the special homedir substitution feature (won't disable `{HOME}`, don't worry)
   - `global`: set of subs rules for any string parsed
   - `files_cmds`: set of subs rules specific for filepaths and commands
 

@@ -55,8 +55,8 @@ func ApplyDefaultGSubs(str string) (string, error) {
 	return str, nil
 }
 
-// ApplyDefaultFCSubs applies the default files & cmds subs rules to string
-func ApplyDefaultFCSubs(str string) (string, error) {
+// ApplyDefaultPCSubs applies the default paths & cmds subs rules to string
+func ApplyDefaultPCSubs(str string) (string, error) {
 	// first special homedir
 	str, err := ApplySpecialHDSubs(str)
 	if err != nil {

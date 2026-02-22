@@ -15,9 +15,9 @@ const (
 )
 
 func DefaultGlobconfPath() (string, error) {
-	return parse.ApplyDefaultFCSubs(defaultGlobconfPath)
+	return parse.ApplyDefaultPCSubs(defaultGlobconfPath)
 }
 
 func DefaultDDDirPath() (string, error) {
-	return parse.ApplyDefaultFCSubs(defaultDDDirPath)
+	return parse.ApplyDefaultPCSubs(defaultDDDirPath)
 }
