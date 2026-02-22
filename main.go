@@ -13,11 +13,11 @@ import (
 )
 
 type MainOpts struct {
-	// since cant embed the const string in the tag, pls ensure DDDir default == consts.DefaultDDDirPath
+	//WARN: since can't embed the const string in the tag, pls ensure DDDir default == consts.DefaultDDDirPath
 	DDDir    string `short:"D" default:"~/Dotdecl" description:"the dotdecldir path to operate"`
 	Loglevel string `short:"l" long:"loglevel" default:"WARN" description:"Specify log level. One of DEBUG INFO WARN ERROR, case-insensitive"`
 	Logfile  string `short:"L" long:"logfile" default:"" description:"Specify log file"`
-	// also pls ensure GlobConf default == consts.DefaultGlobconfPath
+	//WARN: also pls ensure GlobConf default == consts.DefaultGlobconfPath
 	GlobConf string `short:"C" long:"config" default:"{CONF}/declmysys/config.toml" description:"Specify global config"`
 	Version  bool   `short:"V" long:"version" description:"Gives you version info, same as subcommand version"`
 	// -h and --help is automatically set, since HelpFlag is set
@@ -69,6 +69,8 @@ func main() {
 
 	// if not using -v or -h, and no subcommand given
 	if parser.Command.Active == nil {
+		parser.WriteHelp(os.Stdout)
+		fmt.Println()
 		utils.Panic("no subcommand specified", nil, exitcode.InvalidArgs)
 	}
 

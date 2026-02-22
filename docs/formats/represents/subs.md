@@ -66,7 +66,7 @@ it turns string `{GREET}, {NAME}.` to `Hello, Dave.`
 ### Order
 
 The rest of the subs defined in your dotdecldir is applied before the defaults, so that it enables aliases.
-For example, if you love git or vim style homedir specification, you can specify
+For example, if you love Windows style homedir specification (it's actually a env var in Windows), you can specify
 
 ```toml
 "%USERPROFILE%" = "{HOME}"

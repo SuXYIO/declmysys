@@ -1,6 +1,6 @@
 package subcmd
 
-import "github.com/suxyio/declmysys/internal/parse"
+import "github.com/suxyio/declmysys/internal/parse/globconf"
 
 type ListOpts struct {
 	Positional struct {
@@ -8,7 +8,7 @@ type ListOpts struct {
 	} `positional-args:"true"`
 }
 
-func List(gc parse.Globconf, opts *ListOpts) error {
+func List(gc globconf.Globconf, opts *ListOpts) error {
 	// TODO: Impl
 	return nil
 }

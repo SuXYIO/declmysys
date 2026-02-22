@@ -1,4 +1,4 @@
-package parse
+package subs
 
 import (
 	"os"
@@ -30,7 +30,7 @@ func subsTester(t *testing.T, subsfunc func(string) (string, error), tests subsT
 func TestApplySpecialHDSubs(t *testing.T) {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
-		t.Errorf("get user home dir failed: %v", err)
+		t.Fatal("unable to get user home dir:", err)
 	}
 
 	tests := subsTests{
@@ -46,13 +46,13 @@ func TestApplySpecialHDSubs(t *testing.T) {
 func TestApplyDefaultGSubs(t *testing.T) {
 	userinfo, err := user.Current()
 	if err != nil {
-		t.Errorf("get user info failed: %v", err)
+		t.Fatal("unable to get user info:", err)
 	}
 	username := userinfo.Username
 	name := userinfo.Name
 	hostname, err := os.Hostname()
 	if err != nil {
-		t.Errorf("get hostname info failed: %v", err)
+		t.Fatal("unable to get hostname info:", err)
 	}
 
 	tests := subsTests{
@@ -68,15 +68,15 @@ func TestApplyDefaultGSubs(t *testing.T) {
 func TestApplyDefaultPCSubs(t *testing.T) {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
-		t.Errorf("get homedir failed: %v", err)
+		t.Fatal("unable to get homedir:", err)
 	}
 	confdir, err := os.UserConfigDir()
 	if err != nil {
-		t.Errorf("get confdir failed: %v", err)
+		t.Fatal("unable to get confdir:", err)
 	}
 	cachedir, err := os.UserCacheDir()
 	if err != nil {
-		t.Errorf("get cachedir failed: %v", err)
+		t.Fatal("unable to get cachedir:", err)
 	}
 	tmpdir := os.TempDir()
 

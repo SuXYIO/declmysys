@@ -1,6 +1,6 @@
 package subcmd
 
-import "github.com/suxyio/declmysys/internal/parse"
+import "github.com/suxyio/declmysys/internal/parse/globconf"
 
 type DoOpts struct {
 	Dry        bool `short:"d" long:"dry" description:"Dry run, only print the procedures out" long-description:"Dry run, only print the procedures out. The difference from list subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected"`
@@ -10,7 +10,7 @@ type DoOpts struct {
 	} `positional-args:"true"`
 }
 
-func Do(gc parse.Globconf, opts *DoOpts) error {
+func Do(gc globconf.Globconf, opts *DoOpts) error {
 	// TODO: Impl
 	return nil
 }

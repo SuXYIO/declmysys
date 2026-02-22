@@ -1,6 +1,6 @@
 package consts
 
-import "github.com/suxyio/declmysys/internal/parse"
+import "github.com/suxyio/declmysys/internal/parse/subs"
 
 const (
 	// program metadata
@@ -15,9 +15,9 @@ const (
 )
 
 func DefaultGlobconfPath() (string, error) {
-	return parse.ApplyDefaultPCSubs(defaultGlobconfPath)
+	return subs.ApplyDefaultPCSubs(defaultGlobconfPath)
 }
 
 func DefaultDDDirPath() (string, error) {
-	return parse.ApplyDefaultPCSubs(defaultDDDirPath)
+	return subs.ApplyDefaultPCSubs(defaultDDDirPath)
 }

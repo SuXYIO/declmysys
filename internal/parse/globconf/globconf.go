@@ -1,7 +1,8 @@
-package parse
+package globconf
 
 import (
 	"github.com/BurntSushi/toml"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 type Globconf struct {
@@ -25,7 +26,7 @@ func LoadGlobconf(dat []byte) (Globconf, error) {
 	}
 
 	// subs
-	res, err := ApplyDefaultPCSubs(gc.DDDir)
+	res, err := subs.ApplyDefaultPCSubs(gc.DDDir)
 	if err != nil {
 		return gc, err
 	}
@@ -36,7 +37,7 @@ func LoadGlobconf(dat []byte) (Globconf, error) {
 
 // SubsGlobconf substitudes necessary stuff for globconf
 func SubsGlobconf(gc Globconf) (Globconf, error) {
-	dddir, err := ApplyDefaultPCSubs(gc.DDDir)
+	dddir, err := subs.ApplyDefaultPCSubs(gc.DDDir)
 	if err != nil {
 		return gc, err
 	}

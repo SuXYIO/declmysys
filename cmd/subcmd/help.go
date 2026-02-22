@@ -15,6 +15,8 @@ type HelpOpts struct {
 func Help(opts *HelpOpts, p *flags.Parser) {
 	// change active for showing main help
 	// otherwise shows help for `help` subcmd
+	// HACK: this is really awkward code, changing the values of parser and all
+	// I was expecting something like someSubcmd.WriteHelp() instead of this
 	a := p.Active
 	p.Active = p.Find(opts.Positional.Subcommand)
 

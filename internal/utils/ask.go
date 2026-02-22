@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"strings"
 )
 
 // Really should pass a option type for defaults and valid chars and stuff, but i dont think i need those functionalities
@@ -23,18 +24,13 @@ func AskYN(msg string) bool {
 		fmt.Print(msg + " [y/n]: ")
 		fmt.Scanln(&str)
 
-		if len(str) != 1 {
-			// too long
-			fmt.Println("Input must be one character long")
-			continue
-		}
-
-		switch str[0] {
-		case 'Y', 'y':
+		switch strings.ToLower(str) {
+		case "y", "yes":
 			return true
-		case 'N', 'n':
+		case "n", "no":
 			return false
 		default:
+			fmt.Println(`Must be one of "y" "yes" "n" "no" (case-insensitive)`)
 			continue
 		}
 	}

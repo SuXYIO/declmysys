@@ -3,21 +3,21 @@ package utils
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
-	"github.com/suxyio/declmysys/internal/parse"
+	"github.com/suxyio/declmysys/internal/parse/globconf"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/templates"
 )
 
-func GetGlobconf(gcpath string) (parse.Globconf, error) {
+func GetGlobconf(gcpath string) (globconf.Globconf, error) {
 	// parse path with paths&cmds subs first
-	gcpath, err := parse.ApplyDefaultPCSubs(gcpath)
+	gcpath, err := subs.ApplyDefaultPCSubs(gcpath)
 	if err != nil {
-		return parse.Globconf{}, err
+		return globconf.Globconf{}, err
 	}
 
 	// Get global config, create one if not exist
-	var gc parse.Globconf
+	var gc globconf.Globconf
 	if _, err := os.Stat(gcpath); err == nil {
 		// exists, no action
 	} else if !os.IsNotExist(err) {
@@ -28,31 +28,19 @@ func GetGlobconf(gcpath string) (parse.Globconf, error) {
 		fmt.Printf("Global config file not found at %s. Will load default config if not created.\n", gcpath)
 		docreate := AskYN("create default there?")
 		if !docreate {
-			return parse.DefaultGlobconf, nil
+			return globconf.DefaultGlobconf, nil
 		}
-
-		// create dir
-		dir := filepath.Dir(gcpath)
-		if dir != "." && dir != "" {
-			fmt.Printf("Missing top directories found, creating all: %s\n", dir)
-			err = os.MkdirAll(dir, 0755)
-			if err != nil {
-				return gc, err
-			}
-		}
-
-		// copy file
-		err = os.WriteFile(gcpath, templates.Globconf, 0644)
+		err = CreateFile(gcpath, templates.Globconf)
 		if err != nil {
 			return gc, err
 		}
 	}
-	// read it
+	// read & parse
 	dat, err := os.ReadFile(gcpath)
 	if err != nil {
 		return gc, err
 	}
-	gc, err = parse.LoadGlobconf(dat)
+	gc, err = globconf.LoadGlobconf(dat)
 	if err != nil {
 		return gc, err
 	}
