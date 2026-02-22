@@ -6,14 +6,17 @@ import (
 	"github.com/jessevdk/go-flags"
 )
 
-type HelpOpts struct{}
+type HelpOpts struct {
+	Positional struct {
+		Subcommand string `positional-arg-name:"subcommand" description:"Specify the subcommand to show help to" long-description:"Specify the subcommand to show help to, if not specified or cannot find subcommand with this name, shows help for the main program"`
+	} `positional-args:"true"`
+}
 
-func Help(p *flags.Parser) {
+func Help(opts *HelpOpts, p *flags.Parser) {
 	// change active for showing main help
 	// otherwise shows help for `help` subcmd
-	// TODO: maybe add options showing help for specified subcmd?
 	a := p.Active
-	p.Active = nil
+	p.Active = p.Find(opts.Positional.Subcommand)
 
 	p.WriteHelp(os.Stdout)
 

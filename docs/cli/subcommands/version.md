@@ -2,6 +2,12 @@
 
 Gives you the version info.
 
+## Args
+
+```
+declmysys version
+```
+
 ## Aliases
 
 Same as `-V` or `--version`
