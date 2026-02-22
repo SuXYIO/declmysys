@@ -8,7 +8,7 @@ List the procedure defined by order (descending priority).
 declmysys list [PRIORITY]
 ```
 
-`PRIORITY`: Show the specific procedures for a certain priority, shows them more verbosely by default
+- `PRIORITY`: Show the specific procedures for a certain priority, shows them more verbosely by default
 
 ## Example
 

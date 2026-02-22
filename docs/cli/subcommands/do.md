@@ -12,9 +12,9 @@ Execute defined stuff.
 declmysys do [-d|--dry] [-v|--verbose] [PROCEDURE]
 ```
 
-`-d`: Dry run, only print the procedures out. The difference from `list` subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected
-`-v`: Verbose, print verbose information, including procedure outputs and stats
-`PROCEDURE`: Specify the procedure to do, e.g. `dots.foobar`. See [procedure spec](../../formats/represents/procedure-spec.md)
+- `-d`: Dry run, only print the procedures out. The difference from `list` subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected
+- `-v`: Verbose, print verbose information, including procedure outputs and stats
+- `PROCEDURE`: Specify the procedure to do, e.g. `dots.foobar`. See [procedure spec](../../formats/represents/procedure-spec.md)
 
 ## Example
 

@@ -5,8 +5,10 @@ Initialize new dotdecldir.
 ## Args
 
 ```bash
-declmysys init
+declmysys init [--no-git]
 ```
+
+- `--no-git`: Won't create the `.git/` directory (via `git init`)
 
 ## Example
 

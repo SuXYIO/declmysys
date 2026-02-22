@@ -14,7 +14,7 @@ I'll use `packages//` for any subtable under `packages` list.
 
 - `packages`: List of tables of managers, the managers will be executed in this order
 - `packages//name`: Description name, make it human-readable. See [name](../represents/name.md)
-- `packages//do`: A preset manager name, or put your manager's `install` command here. See [cmd](../represents/cmd.md)
+- `packages//do`: A preset manager name, or put your manager's `install` command here. Note that for self-defined manager command, the _list_ representation is forced here, won't be able to recognize otherwise. See [cmd](../represents/cmd.md)
 - `packages//list`: The list of package specs
 - `priority`: Default 200 for packages. See [priority](../represents/priority.md)
 
