@@ -4,8 +4,8 @@ import "github.com/suxyio/declmysys/internal/parse"
 
 type ListOpts struct {
 	Positional struct {
-		Priority int `positional-name:"priority" required:"false" description:"Show the specific procedures for a certain priority" long-description:"Show the specific procedures for a certain priority, shows them more verbosely by default"`
-	}
+		Priority int `positional-arg-name:"priority" description:"Show the specific procedures for a certain priority" long-description:"Show the specific procedures for a certain priority, shows them more verbosely by default"`
+	} `positional-args:"true"`
 }
 
 func List(gc parse.Globconf, opts *ListOpts) error {

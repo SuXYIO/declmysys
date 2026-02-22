@@ -61,7 +61,7 @@ func main() {
 
 	// version
 	if argMain.Version {
-		subcmd.Version()
+		subcmd.Version(argVersion)
 		os.Exit(exitcode.Success)
 	}
 
@@ -80,9 +80,9 @@ func main() {
 
 	switch parser.Active.Name {
 	case "help":
-		subcmd.Help(parser)
+		subcmd.Help(argHelp, parser)
 	case "version":
-		subcmd.Version()
+		subcmd.Version(argVersion)
 	case "do":
 		subcmd.Do(gc, argDo)
 	case "init":

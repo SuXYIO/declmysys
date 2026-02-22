@@ -9,6 +9,6 @@ import (
 
 type VersionOpts struct{}
 
-func Version() {
+func Version(opts *VersionOpts) {
 	fmt.Println(consts.Name, consts.Version, runtime.GOOS+"/"+runtime.GOARCH)
 }
