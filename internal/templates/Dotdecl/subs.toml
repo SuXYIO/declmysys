@@ -1,0 +1,4 @@
+[subs]
+disable_homedir_subs = false
+[[global]]
+[[files_cmds]]
