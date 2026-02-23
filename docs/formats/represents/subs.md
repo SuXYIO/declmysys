@@ -50,7 +50,7 @@ Other:
 - `subs`: the subs table, overrides default and dotdecldir subs. See [substitutions](../formats/represents/substitutions.md)
   - `disable_homedir_subs`: whether to disable the special homedir substitution feature (won't disable `{HOME}`, don't worry)
   - `global`: set of subs rules for any string parsed
-  - `files_cmds`: set of subs rules specific for filepaths and commands
+  - `paths_cmds`: set of subs rules specific for filepaths and commands
 
 Brackets are recommended since they are lessly used in naming, but not forced.
 
@@ -92,5 +92,5 @@ where after your custom substitution, it will be substituted again by the defaul
 [subs]
 disable_homedir_subs = false
 [[global]]
-[[files_cmds]]
+[[paths_cmds]]
 ```

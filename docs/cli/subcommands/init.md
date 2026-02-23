@@ -21,7 +21,7 @@ declmysys init
 initialize new dotdecldir in `~/Mydotdecl`:
 
 ```bash
-declmysys init ~/Mydotdecl
+declmysys init -D ~/Mydotdecl
 ```
 
 ## Behavior

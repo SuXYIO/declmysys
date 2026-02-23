@@ -42,7 +42,6 @@ Basic:
 Design:
 
 - [ ] Update docs (i mean, at least make it _readable_)
-- [ ] Add more glyph sets (NerdFonts, Emojis)
 - [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme

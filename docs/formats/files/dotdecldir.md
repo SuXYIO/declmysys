@@ -9,7 +9,7 @@ The default dotdecldir is `~/Dotdecl/`, and the cli should support for modifying
 ## Structure
 
 ```
-DotDecl
+Dotdecl
 ├── .git/
 ├── packages.toml
 ├── subs.toml

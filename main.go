@@ -6,27 +6,18 @@ import (
 
 	"github.com/jessevdk/go-flags"
 
+	"github.com/suxyio/declmysys/cmd"
 	"github.com/suxyio/declmysys/cmd/subcmd"
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/exitcode"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
-type MainOpts struct {
-	//WARN: since can't embed the const string in the tag, pls ensure DDDir default == consts.DefaultDDDirPath
-	DDDir    string `short:"D" default:"~/Dotdecl" description:"the dotdecldir path to operate"`
-	Loglevel string `short:"l" long:"loglevel" default:"WARN" description:"Specify log level. One of DEBUG INFO WARN ERROR, case-insensitive"`
-	Logfile  string `short:"L" long:"logfile" default:"" description:"Specify log file"`
-	//WARN: also pls ensure GlobConf default == consts.DefaultGlobconfPath
-	GlobConf string `short:"C" long:"config" default:"{CONF}/declmysys/config.toml" description:"Specify global config"`
-	Version  bool   `short:"V" long:"version" description:"Gives you version info, same as subcommand version"`
-	// -h and --help is automatically set, since HelpFlag is set
-}
-
 func main() {
 	// parser setup
-	argMain := MainOpts{}
-	parser := flags.NewParser(&argMain, flags.PrintErrors|flags.HelpFlag)
+	argMain := &cmd.MainOpts{}
+	parser := flags.NewParser(argMain, flags.PrintErrors|flags.HelpFlag)
 	parser.Name = consts.Name
 	parser.ShortDescription = consts.Desc
 	parser.SubcommandsOptional = true
@@ -74,23 +65,38 @@ func main() {
 		utils.Panic("no subcommand specified", nil, exitcode.InvalidArgs)
 	}
 
+	// parse argmain.globconf (default case)
+	if argMain.GlobConf == "" {
+		argMain.GlobConf, err = consts.DefaultGlobconfPath()
+		if err != nil {
+			utils.Panic("get default globconf path fail", err, exitcode.Unknown)
+		}
+	}
 	// get globconf
 	gc, err := utils.GetGlobconf(argMain.GlobConf)
 	if err != nil {
 		utils.Panic("read/create global config fail", err, exitcode.ConfigError)
 	}
+	// replace argmain dddir with default in globconf if empty
+	if argMain.DDDir == "" {
+		argMain.DDDir, err = subs.ApplyDefaultPCSubs(gc.DDDir)
+		if err != nil {
+			utils.Panic("apply default paths&cmds subs to main arg dddir fail", err, exitcode.Unknown)
+		}
+	}
 
 	switch parser.Active.Name {
+	// not gonna design error capture for subcommands, just panic in the subcmd function if anything goes wrong
 	case "help":
 		subcmd.Help(argHelp, parser)
 	case "version":
 		subcmd.Version(argVersion)
 	case "do":
-		subcmd.Do(gc, argDo)
+		subcmd.Do(gc, argMain, argDo)
 	case "init":
-		subcmd.Init(gc, argInit)
+		subcmd.Init(gc, argMain, argInit)
 	case "list":
-		subcmd.List(gc, argList)
+		subcmd.List(gc, argMain, argList)
 	default:
 		utils.Panic(fmt.Sprintf("unknown subcommand: %v", parser.Active.Name), nil, exitcode.InvalidArgs)
 	}

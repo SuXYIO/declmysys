@@ -6,13 +6,11 @@ import (
 )
 
 type Globconf struct {
-	DDDir    string `toml:"dotdecldir"`
-	GlyphSet string `toml:"glyphset"`
+	DDDir string `toml:"dotdecldir"`
 }
 
 var DefaultGlobconf Globconf = Globconf{
-	DDDir:    "~/Dotdecl",
-	GlyphSet: "ascii",
+	DDDir: "~/Dotdecl",
 }
 
 // LoadGlobconf decodes toml []byte to Globconf
@@ -36,12 +34,12 @@ func LoadGlobconf(dat []byte) (Globconf, error) {
 }
 
 // SubsGlobconf substitudes necessary stuff for globconf
-func SubsGlobconf(gc Globconf) (Globconf, error) {
+func SubsGlobconf(gc *Globconf) error {
 	dddir, err := subs.ApplyDefaultPCSubs(gc.DDDir)
 	if err != nil {
-		return gc, err
+		return err
 	}
-
 	gc.DDDir = dddir
-	return gc, nil
+
+	return nil
 }

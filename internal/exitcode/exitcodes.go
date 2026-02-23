@@ -8,5 +8,6 @@ const (
 	FileError   int = 2
 	ConfigError int = 2
 	SetupError  int = 2
+	ExecError   int = 2
 	Unknown     int = 3
 )
