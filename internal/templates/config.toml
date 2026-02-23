@@ -1,2 +1,4 @@
+# The global config file
+
+# specifies the default place the program looks for dotdecldir
 dotdecldir = "~/Dotdecl"
-glyphset = "ascii"

@@ -1,0 +1,16 @@
+# The package specifications
+
+# packages list
+# example:
+#   packages = [
+#     { name = "install apt packages", do = "apt", list = [
+#       "neovim",
+#       "tmux",
+#     ] },
+#   ]
+packages = []
+
+# execution priority
+# specifies when the packages will be installed, relative to other procedures
+# it seems that manager specific priority is not necessary, they will be installed with the order of the packages list
+priority = 200
