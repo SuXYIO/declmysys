@@ -3,9 +3,9 @@ package subs
 // NOTE: The idea is to pass this thing around, to let functions know about user custom subs.
 // Implies that the first file parsed in dddir should be subs.toml, since parsing others need it
 type SubsDef struct {
-	SpecialHDEnable bool
-	CustomG         SubsRules
-	CustomPC        SubsRules
+	SpecialHDDisable bool
+	CustomG          SubsRules
+	CustomPC         SubsRules
 }
 
 // ApplyG applies global subs
@@ -20,14 +20,14 @@ func (sd SubsDef) ApplyG(s string) (string, error) {
 	s = ApplySubs(s, &grepl)
 
 	// Defaults
-	tmp, err := ApplyDefaultGSubs(s)
+	tmp, err := applyDefaultGSubs(s)
 	if err != nil {
 		return "", err
 	}
 	s = tmp
 	// special hd
-	if sd.SpecialHDEnable {
-		tmp, err := ApplySpecialHDSubs(s)
+	if !sd.SpecialHDDisable {
+		tmp, err := applySpecialHDSubs(s)
 		if err != nil {
 			return "", err
 		}
@@ -47,17 +47,17 @@ func (sd SubsDef) ApplyPC(s string) (string, error) {
 	s = ApplySubs(s, &pcrepl)
 
 	// Defaults
-	tmp, err := ApplyDefaultGSubs(s)
+	tmp, err := applyDefaultGSubs(s)
 	if err != nil {
 		return "", err
 	}
 	s = tmp
-	tmp, err = ApplyDefaultPCSubs(s)
+	tmp, err = applyDefaultPCSubs(s)
 	if err != nil {
 		return "", err
 	}
 	s = tmp
-	tmp, err = ApplySpecialHDSubs(s)
+	tmp, err = applySpecialHDSubs(s)
 	if err != nil {
 		return "", err
 	}

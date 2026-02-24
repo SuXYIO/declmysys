@@ -1,18 +1,25 @@
 package packages
 
 import (
+	"os/user"
 	"testing"
 
 	"github.com/suxyio/declmysys/internal/parse"
 )
 
 func TestPkgsLoad(t *testing.T) {
+	usr, err := user.Current()
+	if err != nil {
+		t.Errorf("failed to get username: %v", err)
+	}
+	username := usr.Username
+
 	tests := parse.TomlLoadTests{
 		// common wrong cases
-		"":              {Result: &Pkgs{}, ExpectErr: true},
-		"packages = [":  {Result: &Pkgs{}, ExpectErr: true},
-		"packages = []": {Result: &Pkgs{}, ExpectErr: true},
-		"priority = 0":  {Result: &Pkgs{}, ExpectErr: true},
+		"":              {Result: nil, ExpectErr: true},
+		"packages = [":  {Result: nil, ExpectErr: true},
+		"packages = []": {Result: nil, ExpectErr: true},
+		"priority = 0":  {Result: nil, ExpectErr: true},
 
 		// empty case
 		`packages = []
@@ -32,7 +39,7 @@ priority = 42`: {Result: nil, ExpectErr: true},
 		// normal (preset manager & cmdlist manager spec)
 		`packages = [
   { manager = "bar", packs = [
-    "foo",
+    "{USERNAME}",
     "bar",
     "baz",
   ] },
@@ -43,7 +50,7 @@ priority = 42`: {Result: nil, ExpectErr: true},
   ] },
 ]
 priority = 42`: {Result: &Pkgs{Packages: []PacksSpec{
-			{Manager: manSpec{"bar", nil}, Packs: []string{"foo", "bar", "baz"}},
+			{Manager: manSpec{"bar", nil}, Packs: []string{username, "bar", "baz"}},
 			{Manager: manSpec{"", []string{"sudo", "apt", "install"}}, Packs: []string{"abc", "def", "ghi"}},
 		}, Priority: 42}, ExpectErr: false},
 	}

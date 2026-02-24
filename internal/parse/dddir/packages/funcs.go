@@ -5,10 +5,11 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 // LoadPkgsToml parses the packages.toml data
-func (pkgs *Pkgs) Load(data []byte) error {
+func (pkgs *Pkgs) Load(data []byte, sd subs.SubsDef) error {
 	// toml decode
 	metadat, err := toml.Decode(string(data), pkgs)
 	if err != nil {
@@ -32,6 +33,36 @@ func (pkgs *Pkgs) Load(data []byte) error {
 		// at least one pack
 		if len(ps.Packs) < 1 {
 			return fmt.Errorf("must specify at least one pack in all packsspec, missing for packages[%d]", i)
+		}
+	}
+
+	// subs
+	err = pkgs.Subs(sd)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (pkgs *Pkgs) Subs(sd subs.SubsDef) error {
+	for _, ps := range pkgs.Packages {
+		// global subs for all
+		for i := range ps.Packs {
+			tmp, err := sd.ApplyG(ps.Packs[i])
+			if err != nil {
+				return err
+			}
+			ps.Packs[i] = tmp
+		}
+
+		// paths&cmds & global for self defined cmd
+		for i := range ps.Manager.CustomCmd {
+			subed, err := sd.ApplyPC(ps.Manager.CustomCmd[i])
+			if err != nil {
+				return err
+			}
+			ps.Manager.CustomCmd[i] = subed
 		}
 	}
 

@@ -79,7 +79,7 @@ func main() {
 	}
 	// replace argmain dddir with default in globconf if empty
 	if argMain.DDDir == "" {
-		argMain.DDDir, err = subs.ApplyDefaultPCSubs(gc.DDDir)
+		argMain.DDDir, err = subs.ApplyDefaultPC(gc.DDDir)
 		if err != nil {
 			utils.Panic("apply default paths&cmds subs to main arg dddir fail", err, exitcode.Unknown)
 		}

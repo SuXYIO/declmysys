@@ -11,7 +11,7 @@ import (
 
 func GetGlobconf(gcpath string) (globconf.Globconf, error) {
 	// parse path with paths&cmds subs first
-	gcpath, err := subs.ApplyDefaultPCSubs(gcpath)
+	gcpath, err := subs.ApplyDefaultPC(gcpath)
 	if err != nil {
 		return globconf.Globconf{}, err
 	}
@@ -40,7 +40,7 @@ func GetGlobconf(gcpath string) (globconf.Globconf, error) {
 	if err != nil {
 		return gc, err
 	}
-	gc, err = globconf.LoadGlobconfToml(dat)
+	err = gc.Load(dat, subs.SubsDef{})
 	if err != nil {
 		return gc, err
 	}

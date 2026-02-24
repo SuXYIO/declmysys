@@ -3,10 +3,12 @@ package parse
 import (
 	"reflect"
 	"testing"
+
+	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 type Loadable interface {
-	Load([]byte) error
+	Load([]byte, subs.SubsDef) error
 }
 
 type TomlLoadRet struct {
@@ -22,9 +24,12 @@ func RunTomlLoadTest[L Loadable](t *testing.T, tests TomlLoadTests, typeinst L) 
 
 	ltype := reflect.TypeOf(typeinst).Elem()
 
+	// NOTE: Will be tested with default (empty) subsdef
+	sd := subs.SubsDef{}
+
 	for in, out := range tests {
 		inst := reflect.New(ltype).Interface().(L)
-		err := inst.Load([]byte(in))
+		err := inst.Load([]byte(in), sd)
 
 		// check
 		if out.ExpectErr && err == nil {
