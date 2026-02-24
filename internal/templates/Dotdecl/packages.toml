@@ -3,7 +3,7 @@
 # packages list
 # example:
 #   packages = [
-#     { name = "install apt packages", do = "apt", list = [
+#     { manager = "apt", packs = [
 #       "neovim",
 #       "tmux",
 #     ] },

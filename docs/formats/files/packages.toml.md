@@ -13,9 +13,8 @@ See example, pretty self-explainatory.
 I'll use `packages//` for any subtable under `packages` list.
 
 - `packages`: List of tables of managers, the managers will be executed in this order
-- `packages//name`: Description name, make it human-readable. See [name](../represents/name.md)
-- `packages//do`: A preset manager name, or put your manager's `install` command here. Note that for self-defined manager command, the _list_ representation is forced here, won't be able to recognize otherwise. See [cmd](../represents/cmd.md)
-- `packages//list`: The list of package specs
+- `packages//manager`: A preset manager name, or put your manager's `install` command here. Note that the manager must support passing multiple packages to command at the same time (e.g. `["manager", "install", "pkg1", "pkg2", "pkg3]` works), managers that doesn't support this is currently not supported
+- `packages//packs`: The list of package specs
 - `priority`: Default 200 for packages. See [priority](../represents/priority.md)
 
 > [!NOTE]
@@ -28,9 +27,9 @@ It's manager-dependent so good luck.
 Example:
 
 ```toml
-list = [
+packs = [
     "foo",
-    "bar=1.0.0",    # Use your own manager's version spec
+    "bar=1.0.0",    # Use your own manager's version spec format
 ]
 ```
 
@@ -48,10 +47,9 @@ Welcome to add more via Pull Request.
 
 ```toml
 packages = [
-    # omit the name, which uses the preset name
-    { do = "apt", list = ["git", "neovim", "python=3.14"] },
+    { manager = "apt", packs = ["git", "neovim", "python=3.14"] },
     # or spec it yourself
-    { name = "flatpak-user-mysource", do = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"], list = ["com.valvesoftware.Steam", "com.visualstudio.code"] }
+    { manager = ["flatpak", "install", "mysource", "--noninteractive", "-y", "--user"], packs = ["com.valvesoftware.Steam", "com.visualstudio.code"] }
 ]
 priority = 500
 ```
@@ -62,8 +60,6 @@ priority = 500
 
 ## Behavior
 
-When executing packages, the do command and element in `list` will be concated into a single command.
+When executing packages, the manager command and element in `packs` will be concated into a single command.
 
-For example, when using list representation, the Example will be translated to command `{"sudo", "apt", "install", "git", "neovim", "python=3.14"}` and `flatpak install io.gitlab.librewolf-community".
-
-If you use single string representation, the command will be translated to `{"bash", "-c", yourcommand}`. It's not safe, don't use it. See [cmd](../represents/cmd.md).
+For example, when using list representation, the Example will be translated to command `{"sudo", "apt", "install", "git", "neovim", "python=3.14"}` and `flatpak install io.gitlab.librewolf-community"`.

@@ -14,7 +14,7 @@ var DefaultGlobconf Globconf = Globconf{
 }
 
 // LoadGlobconf decodes toml []byte to Globconf
-func LoadGlobconf(dat []byte) (Globconf, error) {
+func LoadGlobconfToml(dat []byte) (Globconf, error) {
 	var gc Globconf
 
 	// toml decode
@@ -24,17 +24,16 @@ func LoadGlobconf(dat []byte) (Globconf, error) {
 	}
 
 	// subs
-	res, err := subs.ApplyDefaultPCSubs(gc.DDDir)
+	err = gc.SubsGlobconf()
 	if err != nil {
 		return gc, err
 	}
-	gc.DDDir = res
 
 	return gc, nil
 }
 
 // SubsGlobconf substitudes necessary stuff for globconf
-func SubsGlobconf(gc *Globconf) error {
+func (gc *Globconf) SubsGlobconf() error {
 	dddir, err := subs.ApplyDefaultPCSubs(gc.DDDir)
 	if err != nil {
 		return err

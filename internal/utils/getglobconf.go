@@ -40,15 +40,10 @@ func GetGlobconf(gcpath string) (globconf.Globconf, error) {
 	if err != nil {
 		return gc, err
 	}
-	gc, err = globconf.LoadGlobconf(dat)
+	gc, err = globconf.LoadGlobconfToml(dat)
 	if err != nil {
 		return gc, err
 	}
 
-	// and run subs
-	err = globconf.SubsGlobconf(&gc)
-	if err != nil {
-		return gc, err
-	}
 	return gc, nil
 }

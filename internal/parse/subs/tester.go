@@ -13,7 +13,7 @@ type subsRulesTests map[string]string
 type subsFuncTests map[string]subsFuncRet
 
 // subsRulesTester helps write tests for subs rules
-func subsRulesTester(t *testing.T, rules SubsRules, tests subsRulesTests) {
+func (tests subsRulesTests) run(t *testing.T, rules SubsRules) {
 	repl := rules.ToReplacer()
 	for in, out := range tests {
 		res := ApplySubs(in, &repl)
@@ -24,14 +24,14 @@ func subsRulesTester(t *testing.T, rules SubsRules, tests subsRulesTests) {
 }
 
 // subsFuncTester helps write tests for subs functions
-func subsFuncTester(t *testing.T, subsfunc func(string) (string, error), tests subsFuncTests) {
+func (tests subsFuncTests) run(t *testing.T, subsfunc func(string) (string, error)) {
 	for in, out := range tests {
 		res, err := subsfunc(in)
 
 		if out.ExpectErr && err == nil {
-			t.Errorf(`error expected for case "%v", got nil`, in)
+			t.Errorf(`expected error for case "%v", got nil`, in)
 		} else if !out.ExpectErr && err != nil {
-			t.Errorf(`error not expected for case "%v", got error "%v"`, in, err)
+			t.Errorf(`unexpected error for case "%v", got error "%v"`, in, err)
 		} else if res != out.Result {
 			t.Errorf(`expected "%v" for case "%v", got "%v"`, out.Result, in, res)
 		}

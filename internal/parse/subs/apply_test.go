@@ -12,5 +12,5 @@ func TestApplySubs(t *testing.T) {
 		"bar": "baz",
 		"baz": "bar",
 	}
-	subsRulesTester(t, rules, tests)
+	tests.run(t, rules)
 }
