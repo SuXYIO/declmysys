@@ -1,5 +1,11 @@
 package parse
 
+/*
+these functions should ONLY be used in test files!!!
+these functions should ONLY be used in test files!!!
+these functions should ONLY be used in test files!!!
+*/
+
 import (
 	"reflect"
 	"testing"

@@ -23,9 +23,9 @@ func Panic(msg string, err error, exitcode int) {
 		}
 	*/
 	if err != nil {
-		colorstring.Fprintf(os.Stderr, "[red]"+msg+": %v\n", err)
+		colorstring.Fprintf(os.Stderr, "[red]%s: %v\n", msg, err)
 	} else {
-		colorstring.Fprint(os.Stderr, "[red]"+msg+"\n")
+		colorstring.Fprintf(os.Stderr, "[red]%s\n", msg)
 	}
 	os.Exit(exitcode)
 }

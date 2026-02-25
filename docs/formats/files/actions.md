@@ -10,7 +10,7 @@ Contains action toml files.
 
 Example:
 
-```
+```text
 actions
 ├── foo.toml
 ├── bar.toml
@@ -21,7 +21,7 @@ actions
 
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
 - `do`: List of commands. See [cmd](../represents/cmd.md)
-- `undo`: Optional list of commands, that reverts the changes
+- `undo`: Optional list of commands, that revert the changes
 - `affected`: Optional list of affected files. No action made yet, maybe add backup feature later
 - `priority`: Default `50` for actions. See [priority](../represents/priority.md)
 
@@ -49,7 +49,7 @@ undo = [
 priority = 50
 ```
 
-```
+```toml
 name = "create ~/Workspace dir"
 do = [
     ["mkdir", "{HOME}/Workspace"]

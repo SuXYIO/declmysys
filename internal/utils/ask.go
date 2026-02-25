@@ -19,10 +19,14 @@ func AskYN(msg string) bool {
 				// don't delete
 			}
 	*/
-	for true {
+	for {
 		var str string
 		fmt.Print(msg + " [y/n]: ")
-		fmt.Scanln(&str)
+		_, scanErr := fmt.Scanln(&str)
+		if scanErr != nil {
+			// EOF or read error — treat as "no"
+			return false
+		}
 
 		switch strings.ToLower(str) {
 		case "y", "yes":

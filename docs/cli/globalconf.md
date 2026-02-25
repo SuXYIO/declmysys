@@ -1,6 +1,6 @@
 # GlobalConf
 
-The cli should read from a global (user specific) config file for certain values.
+The CLI should read from a global (user-specific) config file for certain values.
 
 ## Default
 

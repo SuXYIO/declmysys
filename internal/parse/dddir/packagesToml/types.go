@@ -1,4 +1,4 @@
-package packages
+package packagestoml
 
 type Pkgs struct {
 	Packages []PacksSpec `toml:"packages"`

@@ -15,10 +15,12 @@ It will be executed via `exec.Command(l[0], l[1:]...)` where `l` is the list of 
 > [!NOTE]
 > Why not use a single string? Well, using a list of strings has many benefits:
 >
-> 1. Safety. The command line arguments are passed clearly, non-ambiguously, and prevents command injection.
+> 1. Safety. The command-line arguments are passed clearly, non-ambiguously, and prevents command injection.
 > 2. Performance. The command can be executed without interpreting by shell (theoretically, I'm not an expert on this).
 > 3. Easy for implementation. Well, as you might know, Go is not good at handling generic types, heck it doesn't have a union. So if using multiple types, it's hard for me to implement it.
->    ~~Actually I intended to support single string command representations at first, but threw it away when having a hard time painstakingly implementing generic command types~~
+>    ~~Actually I intended to support single-string command representations at first, but threw it away when having a hard time painstakingly implementing generic command types~~
+
+If you really want single string representations, you can use something like `["bash", "-c", "you-command-here foo bar"]`, and it even gives you shell features like `*` pattern matching, so using it is up to you.
 
 ## Example
 

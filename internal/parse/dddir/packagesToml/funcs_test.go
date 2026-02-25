@@ -1,4 +1,4 @@
-package packages
+package packagestoml
 
 import (
 	"os/user"

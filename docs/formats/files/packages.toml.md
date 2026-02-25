@@ -6,14 +6,14 @@ Defines the package manager and packages to install.
 
 ## Structure
 
-See example, pretty self-explainatory.
+See example, pretty self-explanatory.
 
 ## Values
 
 I'll use `packages//` for any subtable under `packages` list.
 
 - `packages`: List of tables of managers, the managers will be executed in this order
-- `packages//manager`: A preset manager name, or put your manager's `install` command here. Note that the manager must support passing multiple packages to command at the same time (e.g. `["manager", "install", "pkg1", "pkg2", "pkg3]` works), managers that doesn't support this is currently not supported
+- `packages//manager`: A preset manager name, or put your manager's `install` command here. Note that the manager must support passing multiple packages to command at the same time (e.g. `["manager", "install", "pkg1", "pkg2", "pkg3"]` works), managers that doesn't support this is currently not supported. Do not use something like `["bash", "-c", "manager install"]`, appending packs will not be interpreted by shell correctly
 - `packages//packs`: The list of package specs
 - `priority`: Default 200 for packages. See [priority](../represents/priority.md)
 
@@ -55,11 +55,14 @@ priority = 500
 ```
 
 > [!NOTE]
-> Notice it's flatpak-flathub instead of flatpak. It looks better visually when listing.
-> It prints `[flatpak-flathub]: com.valvesoftware.Steam  com.visualstudio.code` instead of `[flatpak-flathub]: flathub com.valvesoftware.Steam  flathub com.visualstudio.code`
+> Notice it's flatpak-user-flathub instead of flatpak. It looks better visually when listing.
+> It prints `[flatpak-user-flathub]: com.valvesoftware.Steam  com.visualstudio.code` instead of `[flatpak-user-flathub]: flathub com.valvesoftware.Steam  flathub com.visualstudio.code`
 
 ## Behavior
 
-When executing packages, the manager command and element in `packs` will be concated into a single command.
+When executing packages, the manager command and elements in `packs` will be concatenated into a single command.
 
-For example, when using list representation, the Example will be translated to command `{"sudo", "apt", "install", "git", "neovim", "python=3.14"}` and `flatpak install io.gitlab.librewolf-community"`.
+For example, the Example above will be translated to:
+
+- `["sudo", "apt", "install", "-y", "git", "neovim", "python=3.14"]`
+- `["flatpak", "install", "mysource", "--noninteractive", "-y", "--user", "com.valvesoftware.Steam", "com.visualstudio.code"]`

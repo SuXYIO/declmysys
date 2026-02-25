@@ -1,4 +1,4 @@
-package packages
+package packagestoml
 
 import (
 	"fmt"
@@ -19,6 +19,9 @@ func (m *manSpec) UnmarshalTOML(data any) error {
 		m.Preset = v
 		m.CustomCmd = nil
 	case []any:
+		if len(v) == 0 {
+			return fmt.Errorf("cmd list must not be empty list")
+		}
 		// might be cmd list
 		for _, p := range v {
 			s, ok := p.(string)

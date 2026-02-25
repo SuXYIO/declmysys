@@ -47,12 +47,12 @@ Other:
 
 ### Values
 
-- `subs`: the subs table, overrides default and dotdecldir subs. See [substitutions](../formats/represents/substitutions.md)
+- `subs`: the subs table, overrides default and dotdecldir subs
   - `disable_homedir_subs`: whether to disable the special homedir substitution feature (won't disable `{HOME}`, don't worry)
   - `global`: set of subs rules for any string parsed
   - `paths_cmds`: set of subs rules specific for filepaths and commands
 
-Brackets are recommended since they are lessly used in naming, but not forced.
+Brackets are recommended since they are less commonly used in naming, but not forced.
 
 Subs Rules is just a dict/map (key value pairs), specifying replacement from string to string.
 Example:
@@ -85,12 +85,13 @@ where after your custom substitution, it will be substituted again by the defaul
 > [!NOTE]
 > Cannot represent complex substitutions. Sorry im not a regex fan.
 
-> [!WARN]
+> [!WARNING]
 > Substitutions are not garanteed to be safe, use with causion.
 
 ```toml
 [subs]
 disable_homedir_subs = false
+
 [[global]]
 [[paths_cmds]]
 ```

@@ -12,7 +12,7 @@ declmysys list [PRIORITY]
 
 ## Example
 
-```
+```console
 user@host:~$ declmysys list
 Procedure list for /home/user/Dotdecl:
     - Actions (250)
@@ -29,7 +29,7 @@ Procedure list for /home/user/Dotdecl:
         add user to dialout group
 ```
 
-```
+```console
 user@host:~$ declmysys list 250
 Procedure list for /home/user/Dotdecl, priority 250:
     - Actions

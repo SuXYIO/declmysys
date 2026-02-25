@@ -12,7 +12,7 @@ import (
 // subs.toml is not loaded so passing it is meaningless, the argument is just for interface compatability
 func (gc *Globconf) Load(data []byte, _ subs.SubsDef) error {
 	// toml decode
-	metadat, err := toml.Decode(string(data), &gc)
+	metadat, err := toml.Decode(string(data), gc)
 	if err != nil {
 		return err
 	}

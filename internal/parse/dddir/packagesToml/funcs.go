@@ -1,4 +1,4 @@
-package packages
+package packagestoml
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
-// LoadPkgsToml parses the packages.toml data
+// Load parses the packages.toml data
 func (pkgs *Pkgs) Load(data []byte, sd subs.SubsDef) error {
 	// toml decode
 	metadat, err := toml.Decode(string(data), pkgs)

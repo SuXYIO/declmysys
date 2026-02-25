@@ -11,7 +11,7 @@ Each _dotpack_ consists of two major parts:
 1. `desc.toml`: The descriptor, describing what the dotfiles in the pack are for, and also how to operate it (via `stow` by default)
 2. `data/`: The optional content, which is usually a `stow` structure or something the descriptor can operate with
 
-```
+```text
 dots/
 ├── bash/
 │   ├── desc.toml
@@ -109,6 +109,6 @@ Copy apt source:
 #     └── extrepo.sources
 
 name = "apt-sources"
-do = { cmd = [["sudo", "mv", "data/*", "/etc/apt/sources.list.d"]], affected = ["/etc/apt/sources.list.d"]}
+do = { cmd = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]], affected = ["/etc/apt/sources.list.d"]}
 priority = 1000
 ```

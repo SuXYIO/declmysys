@@ -57,11 +57,13 @@ func (sd SubsDef) ApplyPC(s string) (string, error) {
 		return "", err
 	}
 	s = tmp
-	tmp, err = applySpecialHDSubs(s)
-	if err != nil {
-		return "", err
+	if !sd.SpecialHDDisable {
+		tmp, err := applySpecialHDSubs(s)
+		if err != nil {
+			return "", err
+		}
+		s = tmp
 	}
-	s = tmp
 
 	return s, nil
 }

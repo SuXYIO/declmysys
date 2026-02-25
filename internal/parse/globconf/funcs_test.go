@@ -8,15 +8,15 @@ import (
 	"github.com/suxyio/declmysys/internal/parse"
 )
 
-func TestPkgsLoad(t *testing.T) {
+func TestGlobconfLoad(t *testing.T) {
 	usr, err := user.Current()
 	if err != nil {
-		t.Errorf("failed to get username: %v", err)
+		t.Fatalf("failed to get username: %v", err)
 	}
 	username := usr.Username
 	homedir, err := os.UserHomeDir()
 	if err != nil {
-		t.Errorf("failed to get homedir: %v", err)
+		t.Fatalf("failed to get homedir: %v", err)
 	}
 
 	tests := parse.TomlLoadTests{

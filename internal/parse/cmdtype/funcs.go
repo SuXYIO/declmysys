@@ -13,6 +13,10 @@ type CmdRunOptions struct {
 
 // Run runs a command
 func (cmd Cmd) Run(opts CmdRunOptions) error {
+	if len(cmd) == 0 {
+		return nil
+	}
+
 	var c *exec.Cmd
 	if opts.AppendedArgs != nil {
 		// append args

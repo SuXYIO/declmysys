@@ -20,7 +20,7 @@ declmysys do [-d|--dry] [-v|--verbose] [PROCEDURE]
 
 Do all:
 
-```
+```console
 user@host:~$ declmysys do
 Do /home/user/Dotdecl:
     - Actions (250)
@@ -30,13 +30,13 @@ Do /home/user/Dotdecl:
         add flathub source to flatpak
     Done!
     - Packages (200)
-        [apt]: zsh  git  tmux  neofetch  neovim  flatpak  thunderbird  librewolf  kitty
+        [apt]: zsh  git  tmux  fastfetch  neovim  flatpak  thunderbird  librewolf  kitty
     Done!
     - Packages (150)
         [flatpak-system-flathub]: com.valvesoftware.Steam com.visualstudio.code
     Done!
     - Dots (100)
-        zshrc  git  tmux  neofetch  neovim  kitty  apt-sources
+        zshrc  git  tmux  fastfetch neovim  kitty  apt-sources
     Done!
     - Actions (50)
         create ~/Workspace directory
@@ -51,7 +51,7 @@ Do /home/user/Dotdecl:
 
 Dry run:
 
-```
+```console
 user@host:~$ declmysys do -d
 Do /home/user/Dotdecl (dry run):
     - Actions (250)
@@ -66,11 +66,11 @@ Do /home/user/Dotdecl (dry run):
         [flatpak-system-flathub]: com.valvesoftware.Steam com.visualstudio.code
             ["flatpak", "install", "flathub", "--noninteractive", "-y", "--user", "com.valvesoftware.Steam", "com.visualstudio.code"]
     - Dots (100)
-        zshrc  git  tmux  neofetch  neovim  kitty  apt-sources
+        zshrc  git  tmux  fastfetch neovim  kitty  apt-sources
             ["stow", "zshrc"]
             ["stow", "git"]
             ["stow", "tmux"]
-            ["stow", "neofetch"]
+            ["stow", "fastfetch"]
             ["stow", "neovim"]
             ["stow", "kitty"]
             ["stow", "apt-sources"]
@@ -83,10 +83,10 @@ Do /home/user/Dotdecl (dry run):
 
 Running only one procedure:
 
-```
+```console
 user@host:~$ declmysys do actions.add-dialout
 Do /home/user/Dotdecl (actions.add-dialout):
     - Actions (50)
-        create ~/Workspace directory
+        add user to dialout group
     Done!
 ```

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 
 	"github.com/otiai10/copy"
 
@@ -32,12 +31,13 @@ func Init(gc globconf.Globconf, mopts *cmd.MainOpts, opts *InitOpts) {
 	}
 
 	// copy template
-	err := copy.Copy(".", filepath.Dir(mopts.DDDir), copy.Options{
+	err := copy.Copy("Dotdecl", mopts.DDDir, copy.Options{
 		FS:                templates.DDDir,
 		PermissionControl: copy.AddPermission(0664), // damn permissions almost ruined my filesystem
 		Skip: func(srcinfo os.FileInfo, src, dest string) (bool, error) {
+			fname := srcinfo.Name()
 			// exclude .gitkeep
-			return srcinfo.Name() == ".gitkeep", nil
+			return fname == ".gitkeep", nil
 		},
 	})
 	if err != nil {

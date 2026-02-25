@@ -8,15 +8,11 @@ The representation for operations.
 `affected`: List affected files, optional
 
 > [!NOTE]
-> Currently the `affected` has no use other than a note for maintainabiliy, the program won't process on it.
+> [!NOTE]
+> Currently the `affected` has no use other than a note for maintainability, the program won't process on it.
 
 ## Example
 
 Copy foo.txt to bar.txt:
 
-```toml
-opertable = {
-    cmd = ["cp", "foo.txt", "{HOME}/bar.txt"],
-    affected = ["{HOME}/bar.txt"],
-}
-```
+

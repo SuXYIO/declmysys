@@ -18,7 +18,7 @@ Initialize new dotdecldir in default dotdecldir or specified:
 declmysys init
 ```
 
-initialize new dotdecldir in `~/Mydotdecl`:
+initialize new dotdecldir in `~/Mydotdecl` (using global `-D` option):
 
 ```bash
 declmysys init -D ~/Mydotdecl
@@ -34,6 +34,6 @@ Use `git init` for creating `.git/`.
 
 Create empty file for necessary files.
 
-Create empty directory for the user defined sections.
+Create empty directory for the user-defined sections.
 
 See [dotdecldir](../../formats/files/dotdecldir.md) for structure.
