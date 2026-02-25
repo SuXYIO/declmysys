@@ -4,26 +4,25 @@ import (
 	"fmt"
 
 	"github.com/BurntSushi/toml"
+	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
 )
 
 // Load parses the packages.toml data
-func (pkgs *Pkgs) Load(data []byte, sd subs.SubsDef) error {
+func (pkgs *Pkgs) Load(data []byte, sd substoml.SubsDef) error {
 	// toml decode
 	metadat, err := toml.Decode(string(data), pkgs)
 	if err != nil {
 		return err
 	}
 
-	// check required fields
-	// packages defined
+	// replace default fields
 	if !metadat.IsDefined("packages") {
-		return fmt.Errorf("must specify packages (can be empty list though)")
+		pkgs.Packages = []PacksSpec{}
 	}
-	// priority defined
 	if !metadat.IsDefined("priority") {
-		return fmt.Errorf("must specify priority")
+		pkgs.Priority = consts.DefaultPackagesPriority
 	}
 	for i, ps := range pkgs.Packages {
 		// manager defined
@@ -45,7 +44,7 @@ func (pkgs *Pkgs) Load(data []byte, sd subs.SubsDef) error {
 	return nil
 }
 
-func (pkgs *Pkgs) Subs(sd subs.SubsDef) error {
+func (pkgs *Pkgs) Subs(sd substoml.SubsDef) error {
 	for _, ps := range pkgs.Packages {
 		// global subs for all
 		for i := range ps.Packs {

@@ -5,7 +5,8 @@ import (
 	"os/user"
 	"testing"
 
-	"github.com/suxyio/declmysys/internal/parse"
+	"github.com/suxyio/declmysys/internal/consts"
+	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
 )
 
 func TestGlobconfLoad(t *testing.T) {
@@ -18,20 +19,24 @@ func TestGlobconfLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get homedir: %v", err)
 	}
+	defaultDDDir, err := consts.DefaultDDDirPath()
+	if err != nil {
+		t.Fatalf("failed to get default dddir: %v", err)
+	}
 
-	tests := parse.TomlLoadTests{
+	tests := substoml.TomlLoadTests{
 		// common wrong
-		"":                {Result: nil, ExpectErr: true},
 		`dotdecldir = "`:  {Result: nil, ExpectErr: true},
 		`dotdecldir = 0`:  {Result: nil, ExpectErr: true},
 		`dotdecldir = []`: {Result: nil, ExpectErr: true},
 
 		// empty case
+		``:                {Result: &Globconf{DDDir: defaultDDDir}, ExpectErr: false},
 		`dotdecldir = ""`: {Result: &Globconf{DDDir: ""}, ExpectErr: false},
 
 		// subs
 		`dotdecldir = "~/dot_{USERNAME}"`: {Result: &Globconf{DDDir: homedir + "/dot_" + username}},
 	}
 
-	parse.RunTomlLoadTest(t, tests, &Globconf{})
+	substoml.RunTomlLoadTest(t, tests, &Globconf{})
 }

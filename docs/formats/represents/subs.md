@@ -47,10 +47,9 @@ Other:
 
 ### Values
 
-- `subs`: the subs table, overrides default and dotdecldir subs
-  - `disable_homedir_subs`: whether to disable the special homedir substitution feature (won't disable `{HOME}`, don't worry)
-  - `global`: set of subs rules for any string parsed
-  - `paths_cmds`: set of subs rules specific for filepaths and commands
+- `disable_homedir_subs`: whether to disable the special homedir substitution feature (won't disable `{HOME}`, don't worry)
+- `global`: set of subs rules for any string parsed
+- `paths_cmds`: set of subs rules specific for filepaths and commands
 
 Brackets are recommended since they are less commonly used in naming, but not forced.
 
@@ -86,12 +85,11 @@ where after your custom substitution, it will be substituted again by the defaul
 > Cannot represent complex substitutions. Sorry im not a regex fan.
 
 > [!WARNING]
-> Substitutions are not garanteed to be safe, use with causion.
+> Substitutions are not garanteed to be safe, use with caution.
 
 ```toml
-[subs]
 disable_homedir_subs = false
 
-[[global]]
-[[paths_cmds]]
+[global]
+[paths_cmds]
 ```

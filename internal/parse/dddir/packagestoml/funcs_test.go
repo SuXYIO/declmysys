@@ -4,7 +4,8 @@ import (
 	"os/user"
 	"testing"
 
-	"github.com/suxyio/declmysys/internal/parse"
+	"github.com/suxyio/declmysys/internal/consts"
+	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
 )
 
 func TestPkgsLoad(t *testing.T) {
@@ -14,14 +15,10 @@ func TestPkgsLoad(t *testing.T) {
 	}
 	username := usr.Username
 
-	tests := parse.TomlLoadTests{
-		// common wrong cases
-		"":              {Result: nil, ExpectErr: true},
-		"packages = [":  {Result: nil, ExpectErr: true},
-		"packages = []": {Result: nil, ExpectErr: true},
-		"priority = 0":  {Result: nil, ExpectErr: true},
-
-		// empty case
+	tests := substoml.TomlLoadTests{
+		``:              {Result: &Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, ExpectErr: false},
+		`packages = [`:  {Result: nil, ExpectErr: true},
+		`packages = []`: {Result: &Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, ExpectErr: false},
 		`packages = []
 priority = 0`: {Result: &Pkgs{Packages: []PacksSpec{}, Priority: 0}, ExpectErr: false},
 
@@ -55,5 +52,5 @@ priority = 42`: {Result: &Pkgs{Packages: []PacksSpec{
 		}, Priority: 42}, ExpectErr: false},
 	}
 
-	parse.RunTomlLoadTest(t, tests, &Pkgs{})
+	substoml.RunTomlLoadTest(t, tests, &Pkgs{})
 }

@@ -6,8 +6,10 @@ import (
 	"strings"
 )
 
-// applySpecialHDSubs applies the special homedir subs
-func applySpecialHDSubs(str string) (string, error) {
+// these are really shitty naming, but can't think of better ones
+
+// ApplySpecialHDSubs applies the special homedir subs
+func ApplySpecialHDSubs(str string) (string, error) {
 	// prevent index out of range for empty string
 	if len(str) <= 0 {
 		return "", nil
@@ -32,9 +34,9 @@ func applySpecialHDSubs(str string) (string, error) {
 	return str, nil
 }
 
-// applyDefaultGSubs applies the default global subs rules to string
+// ApplyDefaultGSubs applies the default global subs rules to string
 // see no point in using this though, before reading subs.toml, ApplyDefaultPC integrates this, and it won't be used after reading
-func applyDefaultGSubs(str string) (string, error) {
+func ApplyDefaultGSubs(str string) (string, error) {
 	userinfo, err := user.Current()
 	if err != nil {
 		return str, err
@@ -51,10 +53,10 @@ func applyDefaultGSubs(str string) (string, error) {
 	return str, nil
 }
 
-// applyDefaultPCSubs applies the default paths & cmds subs rules to string
-func applyDefaultPCSubs(str string) (string, error) {
+// ApplyDefaultPCSubs applies the default paths & cmds subs rules to string
+func ApplyDefaultPCSubs(str string) (string, error) {
 	// first special homedir
-	str, err := applySpecialHDSubs(str)
+	str, err := ApplySpecialHDSubs(str)
 	if err != nil {
 		return str, err
 	}
@@ -87,12 +89,12 @@ func applyDefaultPCSubs(str string) (string, error) {
 
 // ApplyDefaultPC applies the default paths & cmds subs & global subs to string
 func ApplyDefaultPC(s string) (string, error) {
-	tmp, err := applyDefaultGSubs(s)
+	tmp, err := ApplyDefaultGSubs(s)
 	if err != nil {
 		return "", err
 	}
 	s = tmp
-	tmp, err = applyDefaultPCSubs(s)
+	tmp, err = ApplyDefaultPCSubs(s)
 	if err != nil {
 		return "", err
 	}

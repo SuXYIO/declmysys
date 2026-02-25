@@ -9,9 +9,14 @@ const (
 	Version string = "0.0a1"
 	Author  string = "SuXYIO"
 
-	// defaults
+	// default paths
 	defaultGlobconfPath string = "{CONF}/declmysys/config.toml"
 	defaultDDDirPath    string = "{HOME}/Dotdecl"
+
+	// default priorities
+	DefaultPackagesPriority int = 200
+	DefaultDotsPriority     int = 100
+	DefaultActionsPriority  int = 50
 )
 
 func DefaultGlobconfPath() (string, error) {

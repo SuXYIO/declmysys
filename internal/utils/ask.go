@@ -38,6 +38,4 @@ func AskYN(msg string) bool {
 			continue
 		}
 	}
-	// only to satisfy the compiler, theoretically unreachable
-	return false
 }
