@@ -22,14 +22,14 @@ func main() {
 	parser.ShortDescription = consts.Desc
 	parser.SubcommandsOptional = true
 
-	argDo := &subcmd.DoOpts{}
+	argRun := &subcmd.RunOpts{}
 	argInit := &subcmd.InitOpts{}
 	argList := &subcmd.ListOpts{}
 	argHelp := &subcmd.HelpOpts{}
 	argVersion := &subcmd.VersionOpts{}
 
-	if _, err := parser.AddCommand("do", "Execute defined stuff", "Execute defined stuff", argDo); err != nil {
-		utils.Panic("add subcommand 'do' fail", err, exitcode.SetupError)
+	if _, err := parser.AddCommand("run", "Execute defined stuff", "Execute defined stuff", argRun); err != nil {
+		utils.Panic("add subcommand 'run' fail", err, exitcode.SetupError)
 	}
 	if _, err := parser.AddCommand("init", "Initialize new dotdecldir", "Initialize new dotdecldir", argInit); err != nil {
 		utils.Panic("add subcommand 'init' fail", err, exitcode.SetupError)
@@ -91,8 +91,8 @@ func main() {
 		subcmd.Help(argHelp, parser)
 	case "version":
 		subcmd.Version(argVersion)
-	case "do":
-		subcmd.Do(gc, argMain, argDo)
+	case "run":
+		subcmd.Run(gc, argMain, argRun)
 	case "init":
 		subcmd.Init(gc, argMain, argInit)
 	case "list":

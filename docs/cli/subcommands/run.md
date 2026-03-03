@@ -1,28 +1,24 @@
-# Subcommands-Do
+# Subcommands-Run
 
 Execute defined stuff.
-
-> [!NOTE]
-> Yeah I chose a strange name, but I decided that typing `exec` `execute` or `install` is not descriptive for this project, and too long.
-> What's more, it pairs with `undo` perfectly, although not implemented yet. It's simple, just ordering the program to DO IT.
 
 ## Args
 
 ```bash
-declmysys do [-d|--dry] [-v|--verbose] [PROCEDURE]
+declmysys run [-d|--dry] [-v|--verbose] [PROCEDURE]
 ```
 
-- `-d`: Dry run, only print the procedures out. The difference from `list` subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected
+- `-d`: Dry run, only print the procedures out. The difference from `list` subcommand is that dry run just prints the named structure with command, without redundant information e.g. affected
 - `-v`: Verbose, print verbose information, including procedure outputs and stats
-- `PROCEDURE`: Specify the procedure to do, e.g. `dots.foobar`. See [procedure spec](../../formats/represents/procedure-spec.md)
+- `PROCEDURE`: Specify the procedure to run, e.g. `dots.foobar`. See [procedure spec](../../formats/represents/procedure-spec.md)
 
 ## Example
 
-Do all:
+Run all:
 
 ```console
-user@host:~$ declmysys do
-Do /home/user/Dotdecl:
+user@host:~$ declmysys run
+Run /home/user/Dotdecl:
     - Actions (250)
         apt update
     [sudo] password for user:
@@ -52,8 +48,8 @@ Do /home/user/Dotdecl:
 Dry run:
 
 ```console
-user@host:~$ declmysys do -d
-Do /home/user/Dotdecl (dry run):
+user@host:~$ declmysys run -d
+Run /home/user/Dotdecl (dry run):
     - Actions (250)
         apt update
             ["sudo", "apt", "update"]
@@ -84,8 +80,8 @@ Do /home/user/Dotdecl (dry run):
 Running only one procedure:
 
 ```console
-user@host:~$ declmysys do actions.add-dialout
-Do /home/user/Dotdecl (actions.add-dialout):
+user@host:~$ declmysys run actions.add-dialout
+Run /home/user/Dotdecl (actions.add-dialout):
     - Actions (50)
         add user to dialout group
     Done!

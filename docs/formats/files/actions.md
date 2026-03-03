@@ -20,8 +20,7 @@ actions
 ## Structure (action toml file)
 
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
-- `do`: List of commands. See [cmd](../represents/cmd.md)
-- `undo`: Optional list of commands, that revert the changes
+- `run`: List of commands. See [cmd](../represents/cmd.md)
 - `affected`: Optional list of affected files. No action made yet, maybe add backup feature later
 - `priority`: Default `50` for actions. See [priority](../represents/priority.md)
 
@@ -29,35 +28,24 @@ actions
 
 ```toml
 name = "add flathub source to flatpak"
-do = [
+run = [
     ["flatpak", "remote-add", "--if-not-exists", "flathub", "https://dl.flathub.org/repo/flathub.flatpakrepo"]
-]
-undo = [
-    ["flatpak", "remote-delete", "flathub"]
 ]
 priority = 250
 ```
 
 ```toml
 name = "add user to dialout group"
-do = [
+run = [
     ["sudo", "gpasswd", "-a", "{USERNAME}", "dialout"]
-]
-undo = [
-    ["sudo", "gpasswd", "-d", "{USERNAME}", "dialout"]
 ]
 priority = 50
 ```
 
 ```toml
 name = "create ~/Workspace dir"
-do = [
+run = [
     ["mkdir", "{HOME}/Workspace"]
 ]
-# Not recommended to add
-# undo = [
-#     ["rm", "-rf", "{HOME}/Workspace"]
-# ]
-# since it might be destructive
 affected = ["{HOME}/Workspace"]
 ```

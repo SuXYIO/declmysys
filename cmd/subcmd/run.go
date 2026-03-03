@@ -5,7 +5,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 )
 
-type DoOpts struct {
+type RunOpts struct {
 	Dry        bool `short:"d" long:"dry" description:"Dry run, only print the procedures out" long-description:"Dry run, only print the procedures out. The difference from list subcommand is that dry run just prints the named structure with command, without redundant information e.g. undo, affected"`
 	Verbose    bool `short:"v" long:"verbose" description:"Verbose, print verbose information, including procedure outputs and stats"`
 	Positional struct {
@@ -13,6 +13,6 @@ type DoOpts struct {
 	} `positional-args:"true"`
 }
 
-func Do(gc globconf.Globconf, mopts *cmd.MainOpts, opts *DoOpts) {
+func Run(gc globconf.Globconf, mopts *cmd.MainOpts, opts *RunOpts) {
 	// TODO: Impl
 }
