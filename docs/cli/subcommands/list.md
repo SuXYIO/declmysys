@@ -35,8 +35,6 @@ Procedure list for /home/user/Dotdecl, priority 250:
     - Actions
         apt update
             run: ["sudo", "apt", "update"]
-            affected: []
         add flathub source to flatpak
             run: ["flatpak", "remote-add", "--if-not-exists", "flathub", "https://dl.flathub.org/repo/flathub.flatpakrepo"]
-            affected: []
 ```

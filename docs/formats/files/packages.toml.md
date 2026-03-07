@@ -13,7 +13,7 @@ See example, pretty self-explanatory.
 - `packages`: List of tables of managers, the managers will be executed in this order.
   Each table in the list has the following keys:
   - `manager`: A preset manager name, or put your manager's `install` command here. Note that the manager must support passing multiple packages to command at the same time (e.g. `["manager", "install", "pkg1", "pkg2", "pkg3"]` works), managers that doesn't support this is currently not supported. Do not use something like `["bash", "-c", "manager install"]`, appending packs will not be interpreted by shell correctly
-  - `packs`: The list of package specs
+  - `packs`: The list of package specs, will not be parsed through any subs
 - `priority`: Default 200 for packages. See [priority](../represents/priority.md)
 
 > [!NOTE]

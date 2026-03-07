@@ -34,30 +34,29 @@ dots/
 
 ### desc.toml
 
-#### Structure
-
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
-- `do`: Can be a string of a built-in processor, or a table describing the processing operation needed. See [opertable](../represents/opertable.md)
+- `run`: Can be a name (string) of a preset, or a list of cmds. See [cmd](../represents/cmd.md)
 - `priority`: Default `100` for dots. See [priority](../represents/priority.md)
+- `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
 
-Example for built-in:
+Example for preset:
 
 ```toml
 name = "foobar"
-do = "stow"
+run = "stow"
 priority = 1000
 ```
 
-Example for opertable:
+Example for custom:
 
 ```toml
-do = {cmd = [["cp", "data/foo.txt", "/root/bar.txt"],["rm", "/root/baz"]], affected = ["/root/bar.txt","/root/baz"]}
+run = [["cp", "data/foo.txt", "/root/bar.txt"],["rm", "/root/baz"]]
 ```
 
-Built-in processors:
+Presets:
 
 - `stow`: Processes the `data/` directory with `stow data` command
-- `git`: Copies a repository to certain location, requires `url`, `dest` and `affected` to be set in desc, translates to `git clone {url} {dest}`, see example below
+- `gitclone`: Clones a repository to certain location, requires `url`, `dest` to be set in `run_dat`, translates to `git clone {url} {dest}`, see example below
 
 ### data/
 
@@ -80,7 +79,7 @@ Bashrc via stow:
 #     └── .bashrc
 
 name = ".bashrc dots"
-do = "stow"
+run = "stow"
 priority = 1000
 ```
 
@@ -92,10 +91,11 @@ Clone your own repo:
 # └── desc.toml
 
 name = "clone neovim config"
-do = "git"
+run = "gitclone"
+priority = 500  # Maybe this can wait a little?
+[rundat]
 url = "https://github.com/username/neovim_config"
 dest = "{HOME}/.config/nvim"
-priority = 500  # Maybe this can wait a little?
 ```
 
 Copy apt source:
@@ -109,6 +109,6 @@ Copy apt source:
 #     └── extrepo.sources
 
 name = "apt-sources"
-do = { cmd = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]], affected = ["/etc/apt/sources.list.d"]}
+run = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]]
 priority = 1000
 ```

@@ -20,8 +20,7 @@ actions
 ## Structure (action toml file)
 
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
-- `run`: List of commands. See [cmd](../represents/cmd.md)
-- `affected`: Optional list of affected files. No action made yet, maybe add backup feature later
+- `run`: List of cmds. See [cmd](../represents/cmd.md)
 - `priority`: Default `50` for actions. See [priority](../represents/priority.md)
 
 ## Example
@@ -47,5 +46,4 @@ name = "create ~/Workspace dir"
 run = [
     ["mkdir", "{HOME}/Workspace"]
 ]
-affected = ["{HOME}/Workspace"]
 ```
