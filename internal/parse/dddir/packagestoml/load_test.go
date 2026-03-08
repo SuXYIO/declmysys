@@ -1,7 +1,7 @@
 package packagestoml
 
 import (
-	"os/user"
+	"os"
 	"testing"
 
 	"github.com/suxyio/declmysys/internal/consts"
@@ -9,11 +9,10 @@ import (
 )
 
 func TestPkgsLoad(t *testing.T) {
-	usr, err := user.Current()
+	userhomedir, err := os.UserHomeDir()
 	if err != nil {
-		t.Errorf("failed to get username: %v", err)
+		t.Fatalf("failed to get user home dir: %v", err)
 	}
-	username := usr.Username
 
 	tests := substoml.TomlLoadTests{
 		``:              {Result: &Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, ExpectErr: false},
@@ -40,15 +39,15 @@ priority = 42`: {Result: nil, ExpectErr: true},
     "bar",
     "baz",
   ] },
-  { manager = ["sudo", "apt", "install"], packs = [
+  { manager = ["sudo", "apt", "{HOME}"], packs = [
     "abc",
     "def",
     "ghi",
   ] },
 ]
 priority = 42`: {Result: &Pkgs{Packages: []PacksSpec{
-			{Manager: manSpec{"bar", nil}, Packs: []string{username, "bar", "baz"}},
-			{Manager: manSpec{"", []string{"sudo", "apt", "install"}}, Packs: []string{"abc", "def", "ghi"}},
+			{Manager: manSpec{"bar", nil}, Packs: []string{"{USERNAME}", "bar", "baz"}}, // packs shall not be subed
+			{Manager: manSpec{"", []string{"sudo", "apt", userhomedir}}, Packs: []string{"abc", "def", "ghi"}},
 		}, Priority: 42}, ExpectErr: false},
 	}
 

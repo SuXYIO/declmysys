@@ -45,11 +45,13 @@ Design:
 - [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme
+- [ ] QoL
+  - [ ] Toml autocompletion integration (via taplo)
 
 Implementation:
 
 - [ ] Concurrency support
-- [ ] Multi-system support
+- [ ] Cross-platform support
 
 ## Note
 

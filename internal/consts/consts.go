@@ -1,6 +1,9 @@
 package consts
 
-import "github.com/suxyio/declmysys/internal/parse/subs"
+import (
+	"github.com/suxyio/declmysys/internal/parse/priority"
+	"github.com/suxyio/declmysys/internal/parse/subs"
+)
 
 const (
 	// program metadata
@@ -14,9 +17,12 @@ const (
 	defaultDDDirPath    string = "{HOME}/Dotdecl"
 
 	// default priorities
-	DefaultPackagesPriority int = 200
-	DefaultDotsPriority     int = 100
-	DefaultActionsPriority  int = 50
+	DefaultPackagesPriority priority.Priority = 200
+	DefaultDotsPriority     priority.Priority = 100
+	DefaultActionsPriority  priority.Priority = 50
+
+	// default misc
+	DefaultDotsDataDir string = "data"
 )
 
 func DefaultGlobconfPath() (string, error) {

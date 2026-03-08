@@ -35,28 +35,28 @@ dots/
 ### desc.toml
 
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
-- `run`: Can be a name (string) of a preset, or a list of cmds. See [cmd](../represents/cmd.md)
+- `preset`: Name (string) of a preset
 - `priority`: Default `100` for dots. See [priority](../represents/priority.md)
 - `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
 
-Example for preset:
-
 ```toml
 name = "foobar"
-run = "stow"
+preset = "stow"
 priority = 1000
 ```
 
-Example for custom:
+#### Presets:
 
-```toml
-run = [["cp", "data/foo.txt", "/root/bar.txt"],["rm", "/root/baz"]]
-```
-
-Presets:
-
+- `cmds`: Runs custom commands
+  Required in `rundat`:
+  - `cmds`: list of cmds (`[]Cmd` i.e. `[][]string`) to run, will be parsed through paths & cmds subs
 - `stow`: Processes the `data/` directory with `stow data` command
-- `gitclone`: Clones a repository to certain location, requires `url`, `dest` to be set in `run_dat`, translates to `git clone {url} {dest}`, see example below
+  Optional in `rundat`:
+  - `datadir`: default `data`, string of the directory being stowed, relative path is recommended, but still parsed through paths & cmds subs
+- `gitclone`: Clones a repository to certain location. Translates to `git clone {url} {dest}`, see example below.
+  Required in `rundat`:
+  - `url`: string of the origin url, parsed by global subs
+  - `dest`: string of the destination path, parsed by paths & cmds subs
 
 ### data/
 
@@ -78,8 +78,8 @@ Bashrc via stow:
 # └── data/
 #     └── .bashrc
 
-name = ".bashrc dots"
-run = "stow"
+name = "bashrc"
+preset = "stow"
 priority = 1000
 ```
 
@@ -91,8 +91,8 @@ Clone your own repo:
 # └── desc.toml
 
 name = "clone neovim config"
-run = "gitclone"
-priority = 500  # Maybe this can wait a little?
+preset = "gitclone"
+priority = 500
 [rundat]
 url = "https://github.com/username/neovim_config"
 dest = "{HOME}/.config/nvim"
@@ -109,6 +109,8 @@ Copy apt source:
 #     └── extrepo.sources
 
 name = "apt-sources"
-run = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]]
+preset = "cmds"
 priority = 1000
+[rundat]
+cmds = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]]
 ```

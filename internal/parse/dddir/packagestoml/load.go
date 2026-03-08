@@ -1,0 +1,59 @@
+package packagestoml
+
+import (
+	"fmt"
+
+	"github.com/BurntSushi/toml"
+	"github.com/suxyio/declmysys/internal/consts"
+	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
+)
+
+// Load parses the packages.toml data
+func (pkgs *Pkgs) Load(data []byte, sd substoml.SubsDef) error {
+	// toml decode
+	metadat, err := toml.Decode(string(data), pkgs)
+	if err != nil {
+		return err
+	}
+
+	// replace default fields
+	if !metadat.IsDefined("packages") {
+		pkgs.Packages = []PacksSpec{}
+	}
+	if !metadat.IsDefined("priority") {
+		pkgs.Priority = consts.DefaultPackagesPriority
+	}
+	for i, ps := range pkgs.Packages {
+		// manager defined
+		if len(ps.Manager.CustomCmd) == 0 && ps.Manager.Preset == "" {
+			return fmt.Errorf("must specify manager for every packsspec, missing for packages[%d]", i)
+		}
+		// at least one pack
+		if len(ps.Packs) < 1 {
+			return fmt.Errorf("must specify at least one pack in all packsspec, missing for packages[%d]", i)
+		}
+	}
+
+	// subs
+	err = pkgs.subs(sd)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (pkgs *Pkgs) subs(sd substoml.SubsDef) error {
+	for _, ps := range pkgs.Packages {
+		// paths&cmds & global for self defined cmd
+		for i := range ps.Manager.CustomCmd {
+			tmp, err := sd.ApplyPC(ps.Manager.CustomCmd[i])
+			if err != nil {
+				return err
+			}
+			ps.Manager.CustomCmd[i] = tmp
+		}
+	}
+
+	return nil
+}

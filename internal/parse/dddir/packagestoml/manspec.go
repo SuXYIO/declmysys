@@ -20,13 +20,13 @@ func (m *manSpec) UnmarshalTOML(data any) error {
 		m.CustomCmd = nil
 	case []any:
 		if len(v) == 0 {
-			return fmt.Errorf("cmd list must not be empty list")
+			return fmt.Errorf("cmd must not be empty list")
 		}
 		// might be cmd list
 		for _, p := range v {
 			s, ok := p.(string)
 			if !ok {
-				return fmt.Errorf("if using cmd list, elements must be of type string, got %v of type %T", p, p)
+				return fmt.Errorf("if using cmd, elements must be of type string, got %v of type %T", p, p)
 			}
 			m.CustomCmd = append(m.CustomCmd, s)
 		}
