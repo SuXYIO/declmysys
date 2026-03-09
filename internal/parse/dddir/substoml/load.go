@@ -1,13 +1,27 @@
 package substoml
 
 import (
+	"fmt"
+
 	"github.com/BurntSushi/toml"
 )
 
+func LoadGlobalSD(data []byte) error {
+	if GlobalSubsDef.Initialized {
+		return fmt.Errorf("global subsdef var already initialized")
+	}
+
+	err := GlobalSubsDef.SubsDef.Load(data)
+	if err != nil {
+		return err
+	}
+
+	GlobalSubsDef.Initialized = true
+	return nil
+}
+
 // Load parses the subs.toml data
-// sd option will be ignored, pass whatever you want,
-// subs.toml is not loaded so passing it is meaningless, the argument is just for interface compatability
-func (s *SubsDef) Load(data []byte, _ SubsDef) error {
+func (s *SubsDef) Load(data []byte) error {
 	// toml decode
 	metadata, err := toml.Decode(string(data), s)
 	if err != nil {

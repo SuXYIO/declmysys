@@ -3,14 +3,11 @@ package globconf
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
 	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 // Load parses the global config data
-// sd option will be ignored, pass whatever you want,
-// subs.toml is not loaded so passing it is meaningless, the argument is just for interface compatability
-func (gc *Globconf) Load(data []byte, _ substoml.SubsDef) error {
+func (gc *Globconf) Load(data []byte) error {
 	// toml decode
 	metadat, err := toml.Decode(string(data), gc)
 	if err != nil {
@@ -27,7 +24,7 @@ func (gc *Globconf) Load(data []byte, _ substoml.SubsDef) error {
 	}
 
 	// subs
-	err = gc.Subs()
+	err = gc.subs()
 	if err != nil {
 		return err
 	}
@@ -35,8 +32,8 @@ func (gc *Globconf) Load(data []byte, _ substoml.SubsDef) error {
 	return nil
 }
 
-// Subs substitudes necessary stuff for globconf. No need for subs.SubsDef, since this only uses default subs
-func (gc *Globconf) Subs() error {
+// Subs substitudes necessary stuff for globconf
+func (gc *Globconf) subs() error {
 	tmp, err := subs.ApplyDefaultPC(gc.DDDir)
 	if err != nil {
 		return err

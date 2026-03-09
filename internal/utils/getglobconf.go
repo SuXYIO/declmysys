@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/templates"
@@ -41,7 +40,7 @@ func GetGlobconf(gcpath string) (globconf.Globconf, error) {
 	if err != nil {
 		return gc, err
 	}
-	err = gc.Load(dat, substoml.SubsDef{})
+	err = gc.Load(dat)
 	if err != nil {
 		return gc, err
 	}

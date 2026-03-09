@@ -1,6 +1,6 @@
 package substoml
 
-/*
+/* WARN:
 these functions should ONLY be used in test files!!!
 these functions should ONLY be used in test files!!!
 these functions should ONLY be used in test files!!!
@@ -14,7 +14,7 @@ import (
 )
 
 type Loadable interface {
-	Load([]byte, SubsDef) error
+	Load([]byte) error
 }
 
 type TomlLoadRet struct {
@@ -30,12 +30,15 @@ func RunTomlLoadTest[L Loadable](t *testing.T, tests TomlLoadTests, typeinst L) 
 
 	ltype := reflect.TypeOf(typeinst).Elem()
 
-	// NOTE: Will be tested with default (empty) subsdef
-	sd := SubsDef{}
+	// WARN: Will be only tested with default (empty) subsdef
+	err := LoadGlobalSD([]byte(""))
+	if err != nil {
+		t.Fatalf("unable to initialize new global subsdef: %v", err)
+	}
 
 	for in, out := range tests {
 		inst := reflect.New(ltype).Interface().(L)
-		err := inst.Load([]byte(in), sd)
+		err := inst.Load([]byte(in))
 
 		// check
 		if out.ExpectErr && err == nil {

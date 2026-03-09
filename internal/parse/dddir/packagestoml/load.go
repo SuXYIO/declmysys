@@ -9,7 +9,7 @@ import (
 )
 
 // Load parses the packages.toml data
-func (pkgs *Pkgs) Load(data []byte, sd substoml.SubsDef) error {
+func (pkgs *Pkgs) Load(data []byte) error {
 	// toml decode
 	metadat, err := toml.Decode(string(data), pkgs)
 	if err != nil {
@@ -35,7 +35,7 @@ func (pkgs *Pkgs) Load(data []byte, sd substoml.SubsDef) error {
 	}
 
 	// subs
-	err = pkgs.subs(sd)
+	err = pkgs.subs()
 	if err != nil {
 		return err
 	}
@@ -43,11 +43,11 @@ func (pkgs *Pkgs) Load(data []byte, sd substoml.SubsDef) error {
 	return nil
 }
 
-func (pkgs *Pkgs) subs(sd substoml.SubsDef) error {
+func (pkgs *Pkgs) subs() error {
 	for _, ps := range pkgs.Packages {
 		// paths&cmds & global for self defined cmd
 		for i := range ps.Manager.CustomCmd {
-			tmp, err := sd.ApplyPC(ps.Manager.CustomCmd[i])
+			tmp, err := substoml.ApplyPC(ps.Manager.CustomCmd[i])
 			if err != nil {
 				return err
 			}

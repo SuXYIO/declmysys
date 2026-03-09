@@ -11,7 +11,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
 )
 
-func (dots *Dots) Load(dddir string, sd substoml.SubsDef) error {
+func (dots *Dots) Load(dddir string) error {
 	dotsdir := filepath.Join(dddir, "dots")
 
 	dotsEnt, err := os.ReadDir(dotsdir)
@@ -22,7 +22,7 @@ func (dots *Dots) Load(dddir string, sd substoml.SubsDef) error {
 	for _, ent := range dotsEnt {
 		if ent.IsDir() {
 			var dot Dot
-			err := dot.Load(filepath.Join(dotsdir, ent.Name()), sd)
+			err := dot.Load(filepath.Join(dotsdir, ent.Name()))
 			if err != nil {
 				return err
 			}
@@ -33,13 +33,13 @@ func (dots *Dots) Load(dddir string, sd substoml.SubsDef) error {
 	return nil
 }
 
-func (dot *Dot) Load(path string, sd substoml.SubsDef) error {
+func (dot *Dot) Load(path string) error {
 	// desc.toml
 	descdata, err := os.ReadFile(filepath.Join(path, "desc.toml"))
 	if err != nil {
 		return err
 	}
-	err = dot.Description.Load(descdata, sd)
+	err = dot.Description.Load(descdata)
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func (dot *Dot) Load(path string, sd substoml.SubsDef) error {
 	return nil
 }
 
-func (desc *Desc) Load(data []byte, sd substoml.SubsDef) error {
+func (desc *Desc) Load(data []byte) error {
 	metadat, err := toml.Decode(string(data), desc)
 	if err != nil {
 		return err
@@ -105,7 +105,7 @@ func (desc *Desc) Load(data []byte, sd substoml.SubsDef) error {
 	}
 
 	// subs
-	err = desc.subs(sd)
+	err = desc.subs()
 	if err != nil {
 		return err
 	}
@@ -113,22 +113,22 @@ func (desc *Desc) Load(data []byte, sd substoml.SubsDef) error {
 	return nil
 }
 
-func (desc *Desc) subs(sd substoml.SubsDef) error {
+func (desc *Desc) subs() error {
 	// MUST run this after checking rundat contents, not gonna handle type assertion error again
 	switch desc.Preset {
 	case "stow":
-		tmp, err := sd.ApplyPC(desc.RunDat["datadir"].(string))
+		tmp, err := substoml.ApplyPC(desc.RunDat["datadir"].(string))
 		if err != nil {
 			return err
 		}
 		desc.RunDat["datadir"] = tmp
 	case "gitclone":
-		tmp, err := sd.ApplyG(desc.RunDat["url"].(string))
+		tmp, err := substoml.ApplyG(desc.RunDat["url"].(string))
 		if err != nil {
 			return err
 		}
 		desc.RunDat["url"] = tmp
-		tmp, err = sd.ApplyPC(desc.RunDat["dest"].(string))
+		tmp, err = substoml.ApplyPC(desc.RunDat["dest"].(string))
 		if err != nil {
 			return err
 		}
@@ -136,7 +136,7 @@ func (desc *Desc) subs(sd substoml.SubsDef) error {
 	case "cmds":
 		for _, v := range desc.RunDat["cmds"].([]cmdtype.Cmd) {
 			for j := range v {
-				tmp, err := sd.ApplyPC(v[j])
+				tmp, err := substoml.ApplyPC(v[j])
 				if err != nil {
 					return err
 				}
