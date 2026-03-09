@@ -1,29 +1,51 @@
 package substoml
 
 import (
+	"reflect"
 	"testing"
 )
 
 func TestSubstomlLoad(t *testing.T) {
-	tests := TomlLoadTests{
+	tests := []struct {
+		name    string
+		data    string
+		want    SubsDef
+		wantErr bool
+	}{
 		// common wrong
-		`[global]
-foo = `: {Result: nil, ExpectErr: true},
-		`[global]
-foo = []`: {Result: nil, ExpectErr: true},
+		{"invalid syntax", `[global]
+foo = `, SubsDef{}, true},
+		{"wrong type", `[global]
+foo = []`, SubsDef{}, true},
 
 		// empty case
-		``: {Result: &SubsDef{SpecialHDDisable: false, CustomG: map[string]string{}, CustomPC: map[string]string{}}, ExpectErr: false},
-		`disable_homedir_subs = false
+		{"empty", ``, SubsDef{SpecialHDDisable: false, CustomG: map[string]string{}, CustomPC: map[string]string{}}, false},
+		{"default", `disable_homedir_subs = false
 [global]
-[paths_cmds]`: {Result: &SubsDef{SpecialHDDisable: false, CustomG: map[string]string{}, CustomPC: map[string]string{}}, ExpectErr: false},
+[paths_cmds]`, SubsDef{SpecialHDDisable: false, CustomG: map[string]string{}, CustomPC: map[string]string{}}, false},
 
-		`disable_homedir_subs = true
+		{"subs", `disable_homedir_subs = true
 [global]
 "foo" = "bar"
 [paths_cmds]
-"{~}" = "{HOME}"`: {Result: &SubsDef{SpecialHDDisable: true, CustomG: map[string]string{"foo": "bar"}, CustomPC: map[string]string{"{~}": "{HOME}"}}, ExpectErr: false},
+"{~}" = "{HOME}"`, SubsDef{SpecialHDDisable: true, CustomG: map[string]string{"foo": "bar"}, CustomPC: map[string]string{"{~}": "{HOME}"}}, false},
 	}
 
-	RunTomlLoadTest(t, tests, &SubsDef{})
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var sd SubsDef
+			err := sd.Load([]byte(tt.data))
+			if tt.wantErr != (err != nil) {
+				t.Errorf("wantErr = %v, err = %v", tt.wantErr, err)
+				return
+			}
+			if err != nil {
+				// don't check value if has error
+				return
+			}
+			if !reflect.DeepEqual(sd, tt.want) {
+				t.Errorf("want = %#v, got = %#v", tt.want, sd)
+			}
+		})
+	}
 }

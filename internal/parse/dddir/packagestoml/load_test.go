@@ -2,6 +2,7 @@ package packagestoml
 
 import (
 	"os"
+	"reflect"
 	"testing"
 
 	"github.com/suxyio/declmysys/internal/consts"
@@ -14,15 +15,23 @@ func TestPkgsLoad(t *testing.T) {
 		t.Fatalf("failed to get user home dir: %v", err)
 	}
 
-	tests := substoml.TomlLoadTests{
-		``:              {Result: &Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, ExpectErr: false},
-		`packages = [`:  {Result: nil, ExpectErr: true},
-		`packages = []`: {Result: &Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, ExpectErr: false},
-		`packages = []
-priority = 0`: {Result: &Pkgs{Packages: []PacksSpec{}, Priority: 0}, ExpectErr: false},
+	// test with empty global subsdef var
+	substoml.LoadGlobalSD([]byte(""))
 
-		// missing manager / packs
-		`packages = [
+	tests := []struct {
+		name    string
+		data    string
+		want    Pkgs
+		wantErr bool
+	}{
+		{"empty", ``, Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, false},
+		{"invalid syntax", `packages = [`, Pkgs{}, true},
+		{"empty packages", `packages = []`, Pkgs{Packages: []PacksSpec{}, Priority: consts.DefaultPackagesPriority}, false},
+		{"empty packages and priority", `packages = []
+priority = 0`, Pkgs{Packages: []PacksSpec{}, Priority: 0}, false},
+
+		// missing manager or packs
+		{"missing manager or packs", `packages = [
   { packs = [
     "foo",
     "bar",
@@ -30,10 +39,10 @@ priority = 0`: {Result: &Pkgs{Packages: []PacksSpec{}, Priority: 0}, ExpectErr: 
   ] },
   { manager = ["sudo", "apt", "install"] },
 ]
-priority = 42`: {Result: nil, ExpectErr: true},
+priority = 42`, Pkgs{}, true},
 
 		// normal (preset manager & cmdlist manager spec)
-		`packages = [
+		{"common with subs", `packages = [
   { manager = "bar", packs = [
     "{USERNAME}",
     "bar",
@@ -45,11 +54,29 @@ priority = 42`: {Result: nil, ExpectErr: true},
     "ghi",
   ] },
 ]
-priority = 42`: {Result: &Pkgs{Packages: []PacksSpec{
-			{Manager: manSpec{"bar", nil}, Packs: []string{"{USERNAME}", "bar", "baz"}}, // packs shall not be subed
-			{Manager: manSpec{"", []string{"sudo", "apt", userhomedir}}, Packs: []string{"abc", "def", "ghi"}},
-		}, Priority: 42}, ExpectErr: false},
+priority = 42`,
+			Pkgs{Packages: []PacksSpec{
+				{Manager: manSpec{"bar", nil}, Packs: []string{"{USERNAME}", "bar", "baz"}}, // packs shall not be subed
+				{Manager: manSpec{"", []string{"sudo", "apt", userhomedir}}, Packs: []string{"abc", "def", "ghi"}},
+			}, Priority: 42},
+			false},
 	}
 
-	substoml.RunTomlLoadTest(t, tests, &Pkgs{})
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var pkgs Pkgs
+			err := pkgs.Load([]byte(tt.data))
+			if tt.wantErr != (err != nil) {
+				t.Errorf("wantErr = %v, err = %v", tt.wantErr, err)
+				return
+			}
+			if err != nil {
+				// don't check value if has error
+				return
+			}
+			if !reflect.DeepEqual(pkgs, tt.want) {
+				t.Errorf("want = %#v, got = %#v", tt.want, pkgs)
+			}
+		})
+	}
 }

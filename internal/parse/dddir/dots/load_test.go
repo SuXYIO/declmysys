@@ -2,6 +2,7 @@ package dots
 
 import (
 	"os"
+	"reflect"
 	"testing"
 
 	"github.com/suxyio/declmysys/internal/consts"
@@ -15,18 +16,28 @@ func TestDescLoad(t *testing.T) {
 		t.Fatalf("failed to get user home dir: %v", err)
 	}
 
-	tests := substoml.TomlLoadTests{
-		``:          {Result: nil, ExpectErr: true},
-		`name = "`:  {Result: nil, ExpectErr: true},
-		`name = []`: {Result: nil, ExpectErr: true},
+	// test with empty global subsdef var
+	substoml.LoadGlobalSD([]byte(""))
 
-		`name = "foo"
-preset = "stow"`: {
-			Result:    &Desc{Name: "foo", Preset: "stow", Priority: consts.DefaultDotsPriority, RunDat: map[string]any{"datadir": "data"}},
-			ExpectErr: false,
+	tests := []struct {
+		name    string
+		data    string
+		want    Desc
+		wantErr bool
+	}{
+		{"empty", ``, Desc{}, true},
+		{"invalid syntax", `name = "`, Desc{}, true},
+		{"wrong type", `name = []`, Desc{}, true},
+
+		{"simple",
+			`name = "foo"
+preset = "stow"`,
+			Desc{Name: "foo", Preset: "stow", Priority: consts.DefaultDotsPriority, RunDat: map[string]any{"datadir": "data"}},
+			false,
 		},
 
-		`name = "bar"
+		{"common",
+			`name = "bar"
 preset = "cmds"
 priority = 99
 [rundat]
@@ -34,31 +45,48 @@ cmds = [
 	["sudo", "foo", "{HOME}/Foobar"],
 	["bar", "baz"],
 ]
-`: {
-			Result: &Desc{
+`,
+			Desc{
 				Name:     "bar",
 				Preset:   "cmds",
 				Priority: 99,
 				RunDat:   map[string]any{"cmds": []cmdtype.Cmd{{"sudo", "foo", userhomedir + "/Foobar"}, {"bar", "baz"}}},
 			},
-			ExpectErr: false,
+			false,
 		},
 
-		`name = "bar"
+		{"subs",
+			`name = "bar"
 preset = "gitclone"
 priority = 99
 [rundat]
 url = "github.com/foobar/baz"
-dest = "~/Foobar"`: {
-			Result: &Desc{
+dest = "~/Foobar"`,
+			Desc{
 				Name:     "bar",
 				Preset:   "gitclone",
 				Priority: 99,
 				RunDat:   map[string]any{"url": "github.com/foobar/baz", "dest": userhomedir + "/Foobar"},
 			},
-			ExpectErr: false,
+			false,
 		},
 	}
 
-	substoml.RunTomlLoadTest(t, tests, &Desc{})
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var desc Desc
+			err := desc.Load([]byte(tt.data))
+			if tt.wantErr != (err != nil) {
+				t.Errorf("wantErr = %v, err = %v", tt.wantErr, err)
+				return
+			}
+			if err != nil {
+				// don't check value if has error
+				return
+			}
+			if !reflect.DeepEqual(desc, tt.want) {
+				t.Errorf("want = %#v, got = %#v", tt.want, desc)
+			}
+		})
+	}
 }
