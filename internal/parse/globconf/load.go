@@ -15,12 +15,12 @@ func (gc *Globconf) Load(data []byte) error {
 	}
 
 	// replace default fields
-	if !metadat.IsDefined("dotdecldir") {
-		defaultDDDir, err := consts.DefaultDDDirPath()
+	if !metadat.IsDefined("decldir") {
+		defaultDDir, err := consts.DefaultDDirPath()
 		if err != nil {
 			return err
 		}
-		gc.DDDir = defaultDDDir
+		gc.DDir = defaultDDir
 	}
 
 	// subs
@@ -34,11 +34,11 @@ func (gc *Globconf) Load(data []byte) error {
 
 // Subs substitudes necessary stuff for globconf
 func (gc *Globconf) subs() error {
-	tmp, err := subs.ApplyDefaultPC(gc.DDDir)
+	tmp, err := subs.ApplyDefaultPC(gc.DDir)
 	if err != nil {
 		return err
 	}
-	gc.DDDir = tmp
+	gc.DDir = tmp
 
 	return nil
 }

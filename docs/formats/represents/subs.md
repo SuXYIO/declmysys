@@ -1,6 +1,6 @@
 # Subs
 
-Dotdecldir substitutions.
+Decldir-wise substitutions.
 
 The substitutions are all non-recursive, e.g. rule `{"foo": "bar", "bar": "foo"}` turns string `"foobar"` to `"barfoo"`.
 
@@ -66,7 +66,7 @@ it turns string `{GREET}, {NAME}.` to `Hello, Dave.`
 
 ### Order
 
-The rest of the subs defined in your dotdecldir is applied before the defaults, so that it enables aliases.
+The rest of the subs defined in your decldir is applied before the defaults, so that it enables aliases.
 For example, if you love Windows style homedir specification (it's actually a env var in Windows), you can specify
 
 ```toml

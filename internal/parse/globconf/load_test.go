@@ -19,9 +19,9 @@ func TestGlobconfLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get homedir: %v", err)
 	}
-	defaultDDDir, err := consts.DefaultDDDirPath()
+	defaultDDir, err := consts.DefaultDDirPath()
 	if err != nil {
-		t.Fatalf("failed to get default dddir: %v", err)
+		t.Fatalf("failed to get default ddir: %v", err)
 	}
 
 	tests := []struct {
@@ -31,16 +31,16 @@ func TestGlobconfLoad(t *testing.T) {
 		wantErr bool
 	}{
 		// common wrong
-		{"invalid syntax", `dotdecldir = "`, Globconf{}, true},
-		{"wrong type", `dotdecldir = 0`, Globconf{}, true},
-		{"wrong type", `dotdecldir = []`, Globconf{}, true},
+		{"invalid syntax", `decldir = "`, Globconf{}, true},
+		{"wrong type", `decldir = 0`, Globconf{}, true},
+		{"wrong type", `decldir = []`, Globconf{}, true},
 
 		// empty case
-		{"empty", ``, Globconf{DDDir: defaultDDDir}, false},
-		{"empty value", `dotdecldir = ""`, Globconf{DDDir: ""}, false},
+		{"empty", ``, Globconf{DDir: defaultDDir}, false},
+		{"empty value", `decldir = ""`, Globconf{DDir: ""}, false},
 
 		// subs
-		{"subs", `dotdecldir = "~/dot_{USERNAME}"`, Globconf{DDDir: homedir + "/dot_" + username}, false},
+		{"subs", `decldir = "~/dot_{USERNAME}"`, Globconf{DDir: homedir + "/dot_" + username}, false},
 	}
 
 	for _, tt := range tests {

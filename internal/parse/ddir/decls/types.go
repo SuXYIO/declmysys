@@ -1,12 +1,12 @@
-package dots
+package decls
 
 import "github.com/suxyio/declmysys/internal/parse/priority"
 
-type Dots []Dot
+type Decls []Decl
 
-type Dot struct {
-	Description Desc
-	Data        string // path of the data
+type Decl struct {
+	Desc Desc
+	Data string // path of the data
 }
 
 type Desc struct {

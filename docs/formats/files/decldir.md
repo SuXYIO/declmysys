@@ -1,30 +1,25 @@
-# DotDeclDir
+# DeclDir
 
 It is the directory where the dotfiles and declarations are stored.
 
 ## Default
 
-The default dotdecldir is `~/Dotdecl/`, and the cli should support for modifying this directory.
+The default decldir is `~/Decl`, and the cli should support for modifying this directory.
 
 ## Structure
 
 ```text
-Dotdecl
+Decl/
 ├── .git/
 ├── packages.toml
 ├── subs.toml
-├── dots/
-│   ├── dot1/
-│   ├── dot2/
-│   └── ...
-└── actions/
-    ├── action1/
-    ├── action2/
+└── decls/
+    ├── decl1/
+    ├── decl2/
     └── ...
 ```
 
 - `.git/`: optional regular git directory, for version control. Created via `git init`
 - `subs.toml`: subs table file. See [subs](../represents/subs.md)
 - `packages.toml`: defines package manager to use, and also packages to be installed. See [packages](packages.toml.md)
-- `dots/`: stores dotfile definitions. See [dots](dots.md)
-- `actions/`: stores action definitions. See [actions](actions.md)
+- `decls/`: stores declarations. See [decls](decls.md)

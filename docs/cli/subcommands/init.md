@@ -1,6 +1,6 @@
 # Subcommands-Init
 
-Initialize new dotdecldir.
+Initialize new decldir.
 
 ## Args
 
@@ -12,16 +12,16 @@ declmysys init [--no-git]
 
 ## Example
 
-Initialize new dotdecldir in default dotdecldir or specified:
+Initialize new decldir in default decldir or specified:
 
 ```bash
 declmysys init
 ```
 
-initialize new dotdecldir in `~/Mydotdecl` (using global `-D` option):
+initialize new decldir in `~/Mydecl` (using global `-D` option):
 
 ```bash
-declmysys init -D ~/Mydotdecl
+declmysys init -D ~/Mydecl
 ```
 
 ## Behavior
@@ -36,4 +36,4 @@ Create empty file for necessary files.
 
 Create empty directory for the user-defined sections.
 
-See [dotdecldir](../../formats/files/dotdecldir.md) for structure.
+See [decldir](../../formats/files/decldir.md) for structure.

@@ -5,7 +5,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
 // Load parses the packages.toml data

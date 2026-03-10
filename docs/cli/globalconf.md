@@ -10,10 +10,10 @@ Will add a search order later. If no matches found, create one automatically.
 
 ## Values
 
-- `dotdecldir`, the directory path of _dotdecldir_. Will be parsed through the default paths&cmds subs rules
+- `decldir`, the directory path of \_decldir. Will be parsed through the default paths&cmds subs rules
 
 ## Example
 
 ```toml
-dotdecldir = "~/Dotdecl"
+decldir = "~/Decl"
 ```

@@ -1,8 +1,8 @@
 # Procedure-Spec
 
-A procedure is one of `actions` `dots` `packages`, or a subfile / subdirectory name (without `.toml` for files), e.g. `dots.foobar`.
+A procedure is one of `decls` `packages`, or a subfile / subdirectory name (without `.toml` for files, `.` separated), e.g. `decls.foobar`.
 
-Using the subfile / subdirectory name does not require you to be in the dotdecldir, the `.` is just a separation character.
+Using the subfile / subdirectory name does not require you to be in the decldir, the `.` is just a separation character.
 
 (And yes, you guessed it, names must not contain `.`)
 
@@ -11,6 +11,6 @@ Using the subfile / subdirectory name does not require you to be in the dotdecld
 
 ## Example
 
-`actions` for all actions under `actions/`
+`decls` for all declarations under `decls/`
 
-`actions.do-stuff` for action `actions/do-stuff.toml`
+`decls.do-stuff` for action `decls/do-stuff.toml`

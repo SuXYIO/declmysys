@@ -1,9 +1,9 @@
 package globconf
 
 type Globconf struct {
-	DDDir string `toml:"dotdecldir"`
+	DDir string `toml:"decldir"`
 }
 
 var DefaultGlobconf Globconf = Globconf{
-	DDDir: "~/Dotdecl",
+	DDir: "~/Decl",
 }

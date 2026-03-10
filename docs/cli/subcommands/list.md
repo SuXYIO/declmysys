@@ -14,25 +14,25 @@ declmysys list [PRIORITY]
 
 ```console
 user@host:~$ declmysys list
-Procedure list for /home/user/Dotdecl:
-    - Actions (250)
+Procedure list for /home/user/Decl:
+    - Decls (250)
         apt update
         add flathub source to flatpak
     - Packages (200)
         [apt]: zsh  git  tmux  neofetch  neovim  flatpak  thunderbird  librewolf  kitty
     - Packages (150)
         [flatpak-system-flathub]: com.valvesoftware.Steam com.visualstudio.code
-    - Dots (100)
+    - Decls (100)
         zshrc  git  tmux  neofetch  neovim  kitty  apt-sources
-    - Actions (50)
+    - Decls (50)
         create ~/Workspace directory
         add user to dialout group
 ```
 
 ```console
 user@host:~$ declmysys list 250
-Procedure list for /home/user/Dotdecl, priority 250:
-    - Actions
+Procedure list for /home/user/Decl, priority 250:
+    - Decls
         apt update
             run: ["sudo", "apt", "update"]
         add flathub source to flatpak

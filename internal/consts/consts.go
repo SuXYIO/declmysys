@@ -14,21 +14,20 @@ const (
 
 	// default paths
 	defaultGlobconfPath string = "{CONF}/declmysys/config.toml"
-	defaultDDDirPath    string = "{HOME}/Dotdecl"
+	defaultDDirPath     string = "{HOME}/Decl"
 
 	// default priorities
 	DefaultPackagesPriority priority.Priority = 200
-	DefaultDotsPriority     priority.Priority = 100
-	DefaultActionsPriority  priority.Priority = 50
+	DefaultDeclsPriority    priority.Priority = 100
 
 	// default misc
-	DefaultDotsDataDir string = "data"
+	DefaultDeclsDataDir string = "data"
 )
 
 func DefaultGlobconfPath() (string, error) {
 	return subs.ApplyDefaultPC(defaultGlobconfPath)
 }
 
-func DefaultDDDirPath() (string, error) {
-	return subs.ApplyDefaultPC(defaultDDDirPath)
+func DefaultDDirPath() (string, error) {
+	return subs.ApplyDefaultPC(defaultDDirPath)
 }

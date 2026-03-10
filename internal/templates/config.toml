@@ -1,4 +1,4 @@
 # The global config file
 
-# specifies the default place the program looks for dotdecldir
-dotdecldir = "~/Dotdecl"
+# specifies the default place the program looks for decldir
+decldir = "~/Decl"

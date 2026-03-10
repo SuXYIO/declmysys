@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
 func TestPkgsLoad(t *testing.T) {
@@ -16,7 +16,10 @@ func TestPkgsLoad(t *testing.T) {
 	}
 
 	// test with empty global subsdef var
-	substoml.LoadGlobalSD([]byte(""))
+	err = substoml.LoadGlobalSD([]byte(""))
+	if err != nil {
+		t.Fatalf("failed to load global subsdef: %v", err)
+	}
 
 	tests := []struct {
 		name    string

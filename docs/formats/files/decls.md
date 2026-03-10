@@ -1,18 +1,18 @@
-# dots/
+# decls/
 
-Where the dotfiles are stored.
+Where the declarations are stored.
 
 ## Structure
 
-The top `dots/` directory contains many subdirectories, I'll call them _dotpacks_.
+The top `decls/` directory contains many subdirectories, I'll call them _declpacks_.
 
-Each _dotpack_ consists of two major parts:
+Each _declpack_ consists of two major parts:
 
-1. `desc.toml`: The descriptor, describing what the dotfiles in the pack are for, and also how to operate it (via `stow` by default)
-2. `data/`: The optional content, which is usually a `stow` structure or something the descriptor can operate with
+1. `desc.toml`: The descriptor, describing what the declarations in the pack are for, and also how to operate it
+2. `data/`: The optional content, which is usually a `stow` structure or something the descriptor can operate with. Can change to directories in desc
 
 ```text
-dots/
+decls/
 ├── bash/
 │   ├── desc.toml
 │   └── data/
@@ -36,7 +36,7 @@ dots/
 
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
 - `preset`: Name (string) of a preset
-- `priority`: Default `100` for dots. See [priority](../represents/priority.md)
+- `priority`: Default `100` for decls. See [priority](../represents/priority.md)
 - `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
 
 ```toml
@@ -114,3 +114,20 @@ priority = 1000
 [rundat]
 cmds = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]]
 ```
+
+Add user to dialout group:
+
+```toml
+name = "add user to dialout group"
+preset = "cmds"
+priority = 50
+[rundat]
+cmds = [["sudo", "gpasswd", "-a", "{USERNAME}", "dialout"]]
+```
+
+Create Workspace dir:
+
+name = "create ~/Workspace dir"
+preset = "cmds"
+[rundat]
+cmds = [["mkdir", "{HOME}/Workspace"]]

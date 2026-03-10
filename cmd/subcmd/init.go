@@ -24,15 +24,15 @@ func Init(gc globconf.Globconf, mopts *cmd.MainOpts, opts *InitOpts) {
 		if !gitAvail() {
 			utils.Panic("Git is not available, please ensure dependencies are installed correctly", nil, exitcode.SetupError)
 		}
-		err := gitInit(mopts.DDDir)
+		err := gitInit(mopts.DDir)
 		if err != nil {
 			utils.Panic("Git initialize failed", err, exitcode.ExecError)
 		}
 	}
 
 	// copy template
-	err := copy.Copy("Dotdecl", mopts.DDDir, copy.Options{
-		FS:                templates.DDDir,
+	err := copy.Copy("Decl", mopts.DDir, copy.Options{
+		FS:                templates.DDir,
 		PermissionControl: copy.AddPermission(0664), // damn permissions almost ruined my filesystem
 		Skip: func(srcinfo os.FileInfo, src, dest string) (bool, error) {
 			fname := srcinfo.Name()
@@ -43,8 +43,8 @@ func Init(gc globconf.Globconf, mopts *cmd.MainOpts, opts *InitOpts) {
 	if err != nil {
 		utils.Panic("copy template to path fail", err, exitcode.FileError)
 	}
-	fmt.Println("Copied template files to", mopts.DDDir)
-	fmt.Println("Successfully initialized dotdecldir in", mopts.DDDir)
+	fmt.Println("Copied template files to", mopts.DDir)
+	fmt.Println("Successfully initialized decldir in", mopts.DDir)
 }
 
 func gitInit(path string) error {

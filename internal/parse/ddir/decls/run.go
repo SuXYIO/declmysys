@@ -1,3 +1,3 @@
-package dots
+package decls
 
 //TODO: Impl

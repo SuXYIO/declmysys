@@ -1,4 +1,4 @@
-# Dotdecldir specific substitutions
+# Decldir specific substitutions
 
 [subs]
 
@@ -6,7 +6,7 @@
 # set true for safety, and use "{HOME}" for homedir
 disable_homedir_subs = false
 
-# global substitutions applied for all strings in toml files
+# global substitutions applied for most strings in toml files
 # subs list example:
 # "foo" = "bar"
 [[global]]

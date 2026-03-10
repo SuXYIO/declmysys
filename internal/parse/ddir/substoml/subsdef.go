@@ -6,7 +6,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
-// Implies that the first file parsed in dddir should be subs.toml, since parsing others need it
+// Implies that the first file parsed in ddir should be subs.toml, since parsing others need it
 type SubsDef struct {
 	SpecialHDDisable bool           `toml:"disable_homedir_subs"`
 	CustomG          subs.SubsRules `toml:"global"`

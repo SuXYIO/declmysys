@@ -1,4 +1,4 @@
-package dots
+package decls
 
 import (
 	"fmt"
@@ -8,38 +8,38 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
-func (dots *Dots) Load(dddir string) error {
-	dotsdir := filepath.Join(dddir, "dots")
+func (decls *Decls) Load(ddir string) error {
+	declspath := filepath.Join(ddir, "decls")
 
-	dotsEnt, err := os.ReadDir(dotsdir)
+	declsEnt, err := os.ReadDir(declspath)
 	if err != nil {
 		return err
 	}
 
-	for _, ent := range dotsEnt {
+	for _, ent := range declsEnt {
 		if ent.IsDir() {
-			var dot Dot
-			err := dot.Load(filepath.Join(dotsdir, ent.Name()))
+			var decl Decl
+			err := decl.Load(filepath.Join(declspath, ent.Name()))
 			if err != nil {
 				return err
 			}
-			*dots = append(*dots, dot)
+			*decls = append(*decls, decl)
 		}
 	}
 
 	return nil
 }
 
-func (dot *Dot) Load(path string) error {
+func (dot *Decl) Load(path string) error {
 	// desc.toml
 	descdata, err := os.ReadFile(filepath.Join(path, "desc.toml"))
 	if err != nil {
 		return err
 	}
-	err = dot.Description.Load(descdata)
+	err = dot.Desc.Load(descdata)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func (desc *Desc) Load(data []byte) error {
 		return fmt.Errorf("must specify preset for dot desc")
 	}
 	if !metadat.IsDefined("priority") {
-		desc.Priority = consts.DefaultDotsPriority
+		desc.Priority = consts.DefaultDeclsPriority
 	}
 	// check custom rundat fields for presets
 	if desc.RunDat == nil {
@@ -74,7 +74,7 @@ func (desc *Desc) Load(data []byte) error {
 	case "stow":
 		// stow
 		if !metadat.IsDefined("rundat", "datadir") {
-			desc.RunDat["datadir"] = consts.DefaultDotsDataDir
+			desc.RunDat["datadir"] = consts.DefaultDeclsDataDir
 		}
 
 	case "gitclone":

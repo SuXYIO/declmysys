@@ -31,7 +31,7 @@ func main() {
 	if _, err := parser.AddCommand("run", "Execute defined stuff", "Execute defined stuff", argRun); err != nil {
 		utils.Panic("add subcommand 'run' fail", err, exitcode.SetupError)
 	}
-	if _, err := parser.AddCommand("init", "Initialize new dotdecldir", "Initialize new dotdecldir", argInit); err != nil {
+	if _, err := parser.AddCommand("init", "Initialize new decldir", "Initialize new decldir", argInit); err != nil {
 		utils.Panic("add subcommand 'init' fail", err, exitcode.SetupError)
 	}
 	if _, err := parser.AddCommand("list", "List the procedure defined by order", "List the procedure defined by order (descending priority)", argList); err != nil {
@@ -77,11 +77,11 @@ func main() {
 	if err != nil {
 		utils.Panic("read/create global config fail", err, exitcode.ConfigError)
 	}
-	// replace argmain dddir with default in globconf if empty
-	if argMain.DDDir == "" {
-		argMain.DDDir, err = subs.ApplyDefaultPC(gc.DDDir)
+	// replace argmain ddir with default in globconf if empty
+	if argMain.DDir == "" {
+		argMain.DDir, err = subs.ApplyDefaultPC(gc.DDir)
 		if err != nil {
-			utils.Panic("apply default paths&cmds subs to main arg dddir fail", err, exitcode.Unknown)
+			utils.Panic("apply default paths&cmds subs to main arg ddir fail", err, exitcode.Unknown)
 		}
 	}
 

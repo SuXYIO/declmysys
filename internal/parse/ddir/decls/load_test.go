@@ -1,4 +1,4 @@
-package dots
+package decls
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/dddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
 func TestDescLoad(t *testing.T) {
@@ -32,7 +32,7 @@ func TestDescLoad(t *testing.T) {
 		{"simple",
 			`name = "foo"
 preset = "stow"`,
-			Desc{Name: "foo", Preset: "stow", Priority: consts.DefaultDotsPriority, RunDat: map[string]any{"datadir": "data"}},
+			Desc{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclsPriority, RunDat: map[string]any{"datadir": "data"}},
 			false,
 		},
 
