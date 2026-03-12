@@ -1,7 +1,6 @@
-package subcmd
+package subcmds
 
 import (
-	"github.com/suxyio/declmysys/cmd"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 )
 
@@ -11,6 +10,6 @@ type ListOpts struct {
 	} `positional-args:"true"`
 }
 
-func List(gc globconf.Globconf, mopts *cmd.MainOpts, opts *ListOpts) {
+func List(gc globconf.Globconf, mopts *MainOpts, opts *ListOpts) {
 	// TODO: Impl
 }

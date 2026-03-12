@@ -6,27 +6,26 @@ import (
 
 	"github.com/jessevdk/go-flags"
 
-	"github.com/suxyio/declmysys/cmd"
-	"github.com/suxyio/declmysys/cmd/subcmd"
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/subcmds"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
 func main() {
 	// parser setup
-	argMain := &cmd.MainOpts{}
+	argMain := &subcmds.MainOpts{}
 	parser := flags.NewParser(argMain, flags.PrintErrors|flags.HelpFlag)
 	parser.Name = consts.Name
 	parser.ShortDescription = consts.Desc
 	parser.SubcommandsOptional = true
 
-	argRun := &subcmd.RunOpts{}
-	argInit := &subcmd.InitOpts{}
-	argList := &subcmd.ListOpts{}
-	argHelp := &subcmd.HelpOpts{}
-	argVersion := &subcmd.VersionOpts{}
+	argRun := &subcmds.RunOpts{}
+	argInit := &subcmds.InitOpts{}
+	argList := &subcmds.ListOpts{}
+	argHelp := &subcmds.HelpOpts{}
+	argVersion := &subcmds.VersionOpts{}
 
 	if _, err := parser.AddCommand("run", "Execute defined stuff", "Execute defined stuff", argRun); err != nil {
 		utils.Panic("add subcommand 'run' fail", err, exitcode.SetupError)
@@ -52,7 +51,7 @@ func main() {
 
 	// version
 	if argMain.Version {
-		subcmd.Version(argVersion)
+		subcmds.Version(argVersion)
 		os.Exit(exitcode.Success)
 	}
 
@@ -88,15 +87,15 @@ func main() {
 	switch parser.Active.Name {
 	// not gonna design error capture for subcommands, just panic in the subcmd function if anything goes wrong
 	case "help":
-		subcmd.Help(argHelp, parser)
+		subcmds.Help(argHelp, parser)
 	case "version":
-		subcmd.Version(argVersion)
+		subcmds.Version(argVersion)
 	case "run":
-		subcmd.Run(gc, argMain, argRun)
+		subcmds.Run(gc, argMain, argRun)
 	case "init":
-		subcmd.Init(gc, argMain, argInit)
+		subcmds.Init(gc, argMain, argInit)
 	case "list":
-		subcmd.List(gc, argMain, argList)
+		subcmds.List(gc, argMain, argList)
 	default:
 		utils.Panic(fmt.Sprintf("unknown subcommand: %v", parser.Active.Name), nil, exitcode.InvalidArgs)
 	}

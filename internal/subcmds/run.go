@@ -1,7 +1,6 @@
-package subcmd
+package subcmds
 
 import (
-	"github.com/suxyio/declmysys/cmd"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 )
 
@@ -13,6 +12,6 @@ type RunOpts struct {
 	} `positional-args:"true"`
 }
 
-func Run(gc globconf.Globconf, mopts *cmd.MainOpts, opts *RunOpts) {
+func Run(gc globconf.Globconf, mopts *MainOpts, opts *RunOpts) {
 	// TODO: Impl
 }

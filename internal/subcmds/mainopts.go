@@ -1,4 +1,4 @@
-package cmd
+package subcmds
 
 type MainOpts struct {
 	DDir     string `short:"D" long:"decldir" description:"the decldir path to operate"`

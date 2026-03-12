@@ -1,4 +1,4 @@
-package subcmd
+package subcmds
 
 import (
 	"os"

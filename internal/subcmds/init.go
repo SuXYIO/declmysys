@@ -1,4 +1,4 @@
-package subcmd
+package subcmds
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 
 	"github.com/otiai10/copy"
 
-	"github.com/suxyio/declmysys/cmd"
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 	"github.com/suxyio/declmysys/internal/templates"
@@ -18,7 +17,7 @@ type InitOpts struct {
 	NoGit bool `long:"no-git" description:"Won't create the .git directory (via git init)"`
 }
 
-func Init(gc globconf.Globconf, mopts *cmd.MainOpts, opts *InitOpts) {
+func Init(gc globconf.Globconf, mopts *MainOpts, opts *InitOpts) {
 	if !opts.NoGit {
 		// init git
 		if !gitAvail() {
