@@ -46,11 +46,13 @@ Basic:
 Design:
 
 - [ ] Update docs (i mean, at least make it _readable_)
+  - [ ] Add docs site via github pages
 - [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme
 - [ ] QoL
   - [ ] Toml autocompletion integration (via taplo)
+  - [ ] Locales
 
 Implementation:
 

@@ -7,8 +7,6 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
 func (decls *Decls) Load(ddir string) error {
@@ -70,111 +68,28 @@ func (desc *Desc) Load(data []byte) error {
 	if desc.RunDat == nil {
 		desc.RunDat = make(map[string]any)
 	}
-	switch desc.Preset {
-	case "stow":
-		// stow
-		if !metadat.IsDefined("rundat", "datadir") {
-			desc.RunDat["datadir"] = consts.DefaultDeclsDataDir
-		}
 
-	case "gitclone":
-		// url
-		if !metadat.IsDefined("rundat", "url") {
-			return fmt.Errorf("must specify rundat.url for preset gitclone")
-		}
-		if _, ok := desc.RunDat["url"].(string); !ok {
-			return fmt.Errorf("rundat.url must be of type string for preset gitclone")
-		}
-		// dest
-		if !metadat.IsDefined("rundat", "dest") {
-			return fmt.Errorf("must specify rundat.dest for preset gitclone")
-		}
-		if _, ok := desc.RunDat["dest"].(string); !ok {
-			return fmt.Errorf("rundat.dest must be of type string for preset gitclone")
-		}
-
-	case "cmds":
-		// cmds
-		if !metadat.IsDefined("rundat", "cmds") {
-			return fmt.Errorf("must specify rundat.cmds for preset cmds")
-		}
-		desc.RunDat["cmds"], err = convertCmds(desc.RunDat["cmds"])
-		if err != nil {
-			return err
-		}
+	// match preset
+	preset, exists := Presets[desc.Preset]
+	if !exists {
+		return fmt.Errorf("preset not found for preset name: %s", desc.Preset)
+	}
+	if preset.DescIsValidFunc == nil {
+		return fmt.Errorf("DescIsValidFunc not defined for preset %s", desc.Preset)
+	}
+	err = preset.DescIsValidFunc(*desc, metadat)
+	if err != nil {
+		return err
 	}
 
 	// subs
-	err = desc.subs()
+	if preset.DescIsValidFunc == nil {
+		return fmt.Errorf("DescSubsFunc not defined for preset %s", desc.Preset)
+	}
+	err = preset.DescSubsFunc(desc)
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func (desc *Desc) subs() error {
-	// MUST run this after checking rundat contents, not gonna handle type assertion error again
-	switch desc.Preset {
-	case "stow":
-		tmp, err := substoml.ApplyPC(desc.RunDat["datadir"].(string))
-		if err != nil {
-			return err
-		}
-		desc.RunDat["datadir"] = tmp
-	case "gitclone":
-		tmp, err := substoml.ApplyG(desc.RunDat["url"].(string))
-		if err != nil {
-			return err
-		}
-		desc.RunDat["url"] = tmp
-		tmp, err = substoml.ApplyPC(desc.RunDat["dest"].(string))
-		if err != nil {
-			return err
-		}
-		desc.RunDat["dest"] = tmp
-	case "cmds":
-		for _, v := range desc.RunDat["cmds"].([]cmdtype.Cmd) {
-			for j := range v {
-				tmp, err := substoml.ApplyPC(v[j])
-				if err != nil {
-					return err
-				}
-				v[j] = tmp
-			}
-		}
-	}
-	return nil
-}
-
-// convert rundat.cmds from any to []cmdtype.Cmd
-func convertCmds(incmds any) ([]cmdtype.Cmd, error) {
-	var res []cmdtype.Cmd
-
-	// first layer: any slice
-	slice1, ok := incmds.([]any)
-	if !ok {
-		return nil, fmt.Errorf("rundat.cmds must be of type []any for preset cmds, got cmds %v of type %T", incmds, incmds)
-	}
-	for _, v := range slice1 {
-		// second layer: slice of any slice
-		slice2, ok := v.([]any)
-		if !ok {
-			return nil, fmt.Errorf("rundat.cmds[i] must be of type []any for preset cmds, got %v of type %T", v, v)
-		}
-
-		var cmd cmdtype.Cmd
-		for _, t := range slice2 {
-			// third layer: slice of string slice
-			cmdElem, ok := t.(string)
-			if !ok {
-				return nil, fmt.Errorf("rundat.cmds[i][j] must be of type string for preset cmds, got %v of type %T", t, t)
-			}
-			cmd = append(cmd, cmdElem)
-		}
-
-		res = append(res, cmd)
-	}
-
-	return res, nil
 }
