@@ -9,17 +9,17 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
-// Preset behavior definition
+// Preset defines behaviors of a preset
 type Preset struct {
-	DescIsValidFunc func(Desc, toml.MetaData) error // return nil if isvalid
-	DescSubsFunc    func(*Desc) error               // do subs, ASSUMES that valid check is ran before
-	RunFunc         func(Decl) error                // self-explanatory, ASSUMES that valid check & subs are ran before
+	IsValidFunc func(Decl, toml.MetaData) error // return nil if isvalid
+	SubsFunc    func(*Decl) error               // do subs, ASSUMES that valid check is ran before
+	RunFunc     func(Decl) error                // self-explanatory, ASSUMES that valid check & subs are ran before
 }
 
-// Maps preset name to preset definition, shall not be modified
+// Presets maps preset name to preset definition, shall not be modified
 var Presets = map[string]Preset{
 	"gitclone": {
-		DescIsValidFunc: func(d Desc, md toml.MetaData) error {
+		IsValidFunc: func(d Decl, md toml.MetaData) error {
 			// url
 			if !md.IsDefined("rundat", "url") {
 				return fmt.Errorf("must specify rundat.url for preset gitclone")
@@ -36,7 +36,7 @@ var Presets = map[string]Preset{
 			}
 			return nil
 		},
-		DescSubsFunc: func(d *Desc) error {
+		SubsFunc: func(d *Decl) error {
 			if url, err := substoml.ApplyG(d.RunDat["url"].(string)); err != nil {
 				return err
 			} else {
@@ -57,7 +57,7 @@ var Presets = map[string]Preset{
 	},
 
 	"stow": {
-		DescIsValidFunc: func(d Desc, md toml.MetaData) error {
+		IsValidFunc: func(d Decl, md toml.MetaData) error {
 			if !md.IsDefined("rundat", "datadir") {
 				d.RunDat["datadir"] = consts.DefaultDeclsDataDir
 			} else {
@@ -67,7 +67,7 @@ var Presets = map[string]Preset{
 			}
 			return nil
 		},
-		DescSubsFunc: func(d *Desc) error {
+		SubsFunc: func(d *Decl) error {
 			if datadir, err := substoml.ApplyPC(d.RunDat["datadir"].(string)); err != nil {
 				return err
 			} else {
@@ -82,7 +82,7 @@ var Presets = map[string]Preset{
 	},
 
 	"cmds": {
-		DescIsValidFunc: func(d Desc, md toml.MetaData) error {
+		IsValidFunc: func(d Decl, md toml.MetaData) error {
 			if !md.IsDefined("rundat", "cmds") {
 				return fmt.Errorf("must specify rundat.cmds for preset cmds")
 			}
@@ -94,7 +94,7 @@ var Presets = map[string]Preset{
 			}
 			return nil
 		},
-		DescSubsFunc: func(d *Desc) error {
+		SubsFunc: func(d *Decl) error {
 			for _, v := range d.RunDat["cmds"].([]cmdtype.Cmd) {
 				for j := range v {
 					if tmp, err := substoml.ApplyPC(v[j]); err != nil {

@@ -5,6 +5,7 @@ import (
 	"os/exec"
 )
 
+// CmdRunOptions defines options for running a command
 type CmdRunOptions struct {
 	RedirectStdout bool      // if to redirect cmd.Stdout to os.Stdout
 	RedirectStderr bool      // if to redirect cmd.Stderr to os.Stderr

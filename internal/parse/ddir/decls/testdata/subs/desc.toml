@@ -1,0 +1,6 @@
+name = "bar"
+preset = "gitclone"
+priority = 99
+[rundat]
+url = "github.com/foobar/baz"
+dest = "~/Foobar"

@@ -2,6 +2,7 @@ package decls
 
 import (
 	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
-func TestDescLoad(t *testing.T) {
+func TestDeclsLoad(t *testing.T) {
 	userhomedir, err := os.UserHomeDir()
 	if err != nil {
 		t.Fatalf("failed to get user home dir: %v", err)
@@ -20,33 +21,24 @@ func TestDescLoad(t *testing.T) {
 	substoml.LoadGlobalSD([]byte(""))
 
 	tests := []struct {
-		name    string
-		data    string
-		want    Desc
-		wantErr bool
+		name     string
+		datapath string // name of decl dir under testdata directory, e.g. "foo" for "testdata/foo"
+		want     Decl
+		wantErr  bool
 	}{
-		{"empty", ``, Desc{}, true},
-		{"invalid syntax", `name = "`, Desc{}, true},
-		{"wrong type", `name = []`, Desc{}, true},
+		{"empty", "empty", Decl{}, true},
+		{"invalid syntax", "invalid-syntax", Decl{}, true},
+		{"wrong type", "wrong-type", Decl{}, true},
 
 		{"simple",
-			`name = "foo"
-preset = "stow"`,
-			Desc{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclsPriority, RunDat: map[string]any{"datadir": "data"}},
+			"simple",
+			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclsPriority, RunDat: map[string]any{"datadir": "data"}},
 			false,
 		},
 
 		{"common",
-			`name = "bar"
-preset = "cmds"
-priority = 99
-[rundat]
-cmds = [
-	["sudo", "foo", "{HOME}/Foobar"],
-	["bar", "baz"],
-]
-`,
-			Desc{
+			"common",
+			Decl{
 				Name:     "bar",
 				Preset:   "cmds",
 				Priority: 99,
@@ -56,13 +48,8 @@ cmds = [
 		},
 
 		{"subs",
-			`name = "bar"
-preset = "gitclone"
-priority = 99
-[rundat]
-url = "github.com/foobar/baz"
-dest = "~/Foobar"`,
-			Desc{
+			"subs",
+			Decl{
 				Name:     "bar",
 				Preset:   "gitclone",
 				Priority: 99,
@@ -74,8 +61,8 @@ dest = "~/Foobar"`,
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var desc Desc
-			err := desc.Load([]byte(tt.data))
+			var decl Decl
+			err := decl.Load(filepath.Join("testdata", tt.datapath))
 			if tt.wantErr != (err != nil) {
 				t.Errorf("wantErr = %v, err = %v", tt.wantErr, err)
 				return
@@ -84,8 +71,8 @@ dest = "~/Foobar"`,
 				// don't check value if has error
 				return
 			}
-			if !reflect.DeepEqual(desc, tt.want) {
-				t.Errorf("want = %#v, got = %#v", tt.want, desc)
+			if !reflect.DeepEqual(decl, tt.want) {
+				t.Errorf("want = %#v, got = %#v", tt.want, decl)
 			}
 		})
 	}

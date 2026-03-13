@@ -28,6 +28,7 @@ var (
 )
 
 func init() {
+	// initializes the two vars, to adapt directories
 	if ddirpath, err := subs.ApplyDefaultPC(DefaultDDirPath); err != nil {
 		utils.Panic("unable to parse DefaultDDirPath via subs.ApplyDefaultPC", err, exitcode.SetupError)
 	} else {

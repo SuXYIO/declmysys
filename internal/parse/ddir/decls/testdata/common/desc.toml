@@ -1,0 +1,5 @@
+name = "bar"
+preset = "cmds"
+priority = 99
+[rundat]
+cmds = [["sudo", "foo", "{HOME}/Foobar"], ["bar", "baz"]]

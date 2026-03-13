@@ -30,25 +30,22 @@ func (decls *Decls) Load(ddir string) error {
 	return nil
 }
 
-func (dot *Decl) Load(path string) error {
+func (decl *Decl) Load(path string) error {
 	// desc.toml
 	descdata, err := os.ReadFile(filepath.Join(path, "desc.toml"))
 	if err != nil {
 		return err
 	}
-	err = dot.Desc.Load(descdata)
+	err = decl.loadDesc(descdata)
 	if err != nil {
 		return err
 	}
 
-	// data/
-	dot.Data = filepath.Join(path, "data")
-
 	return nil
 }
 
-func (desc *Desc) Load(data []byte) error {
-	metadat, err := toml.Decode(string(data), desc)
+func (decl *Decl) loadDesc(data []byte) error {
+	metadat, err := toml.Decode(string(data), decl)
 	if err != nil {
 		return err
 	}
@@ -61,31 +58,31 @@ func (desc *Desc) Load(data []byte) error {
 		return fmt.Errorf("must specify preset for dot desc")
 	}
 	if !metadat.IsDefined("priority") {
-		desc.Priority = consts.DefaultDeclsPriority
+		decl.Priority = consts.DefaultDeclsPriority
 	}
 	// check custom rundat fields for presets
-	if desc.RunDat == nil {
-		desc.RunDat = make(map[string]any)
+	if decl.RunDat == nil {
+		decl.RunDat = make(map[string]any)
 	}
 
 	// match preset
-	preset, exists := Presets[desc.Preset]
+	preset, exists := Presets[decl.Preset]
 	if !exists {
-		return fmt.Errorf("preset not found for preset name: %s", desc.Preset)
+		return fmt.Errorf("preset not found for preset name: %s", decl.Preset)
 	}
-	if preset.DescIsValidFunc == nil {
-		return fmt.Errorf("DescIsValidFunc not defined for preset %s", desc.Preset)
+	if preset.IsValidFunc == nil {
+		return fmt.Errorf("IsValidFunc not defined for preset %s", decl.Preset)
 	}
-	err = preset.DescIsValidFunc(*desc, metadat)
+	err = preset.IsValidFunc(*decl, metadat)
 	if err != nil {
 		return err
 	}
 
 	// subs
-	if preset.DescIsValidFunc == nil {
-		return fmt.Errorf("DescSubsFunc not defined for preset %s", desc.Preset)
+	if preset.IsValidFunc == nil {
+		return fmt.Errorf("SubsFunc not defined for preset %s", decl.Preset)
 	}
-	err = preset.DescSubsFunc(desc)
+	err = preset.SubsFunc(decl)
 	if err != nil {
 		return err
 	}
