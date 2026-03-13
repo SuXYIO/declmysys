@@ -1,8 +1,10 @@
 package consts
 
 import (
+	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/priority"
 	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/utils"
 )
 
 const (
@@ -12,10 +14,6 @@ const (
 	Version string = "0.0.1-alpha"
 	Author  string = "SuXYIO"
 
-	// default paths
-	defaultGlobconfPath string = "{CONF}/declmysys/config.toml"
-	defaultDDirPath     string = "{HOME}/Decl"
-
 	// default priorities
 	DefaultPackagesPriority priority.Priority = 200
 	DefaultDeclsPriority    priority.Priority = 100
@@ -24,10 +22,21 @@ const (
 	DefaultDeclsDataDir string = "data"
 )
 
-func DefaultGlobconfPath() (string, error) {
-	return subs.ApplyDefaultPC(defaultGlobconfPath)
-}
+var (
+	// default paths, must be processed by ApplyDefaultPC
+	DefaultGlobconfPath string = "{CONF}/declmysys/config.toml"
+	DefaultDDirPath     string = "{HOME}/Decl"
+)
 
-func DefaultDDirPath() (string, error) {
-	return subs.ApplyDefaultPC(defaultDDirPath)
+func init() {
+	if ddirpath, err := subs.ApplyDefaultPC(DefaultDDirPath); err != nil {
+		utils.Panic("unable to parse DefaultDDirPath via subs.ApplyDefaultPC", err, exitcode.SetupError)
+	} else {
+		DefaultDDirPath = ddirpath
+	}
+	if gcpath, err := subs.ApplyDefaultPC(DefaultGlobconfPath); err != nil {
+		utils.Panic("unable to parse DefaultGlobconfPath via subs.ApplyDefaultPC", err, exitcode.SetupError)
+	} else {
+		DefaultGlobconfPath = gcpath
+	}
 }
