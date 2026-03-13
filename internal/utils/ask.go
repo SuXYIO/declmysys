@@ -22,8 +22,7 @@ func AskYN(msg string) bool {
 	for {
 		var str string
 		fmt.Print(msg + " [y/n]: ")
-		_, scanErr := fmt.Scanln(&str)
-		if scanErr != nil {
+		if _, err := fmt.Scanln(&str); err != nil {
 			// EOF or read error — treat as "no"
 			return false
 		}

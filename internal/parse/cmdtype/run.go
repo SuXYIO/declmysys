@@ -33,8 +33,7 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 		c.Stderr = os.Stderr
 	}
 
-	err := c.Run()
-	if err != nil {
+	if err := c.Run(); err != nil {
 		return err
 	}
 

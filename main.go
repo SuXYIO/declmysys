@@ -8,6 +8,7 @@ import (
 
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/exitcode"
+	"github.com/suxyio/declmysys/internal/parse/globconf"
 	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/subcmds"
 	"github.com/suxyio/declmysys/internal/utils"
@@ -43,8 +44,7 @@ func main() {
 		utils.Panic("add subcommand 'version' fail", err, exitcode.SetupError)
 	}
 
-	_, err := parser.Parse()
-	if err != nil {
+	if _, err := parser.Parse(); err != nil {
 		// PrintErrors flag is set so no need to print manually
 		os.Exit(exitcode.InvalidArgs)
 	}
@@ -66,21 +66,19 @@ func main() {
 
 	// parse argmain.globconf (default case)
 	if argMain.GlobConf == "" {
-		argMain.GlobConf, err = consts.DefaultGlobconfPath()
-		if err != nil {
-			utils.Panic("get default globconf path fail", err, exitcode.Unknown)
-		}
+		argMain.GlobConf = consts.DefaultGlobconfPath
 	}
 	// get globconf
-	gc, err := utils.GetGlobconf(argMain.GlobConf)
+	gc, err := globconf.GetGlobconf(argMain.GlobConf)
 	if err != nil {
 		utils.Panic("read/create global config fail", err, exitcode.ConfigError)
 	}
 	// replace argmain ddir with default in globconf if empty
 	if argMain.DDir == "" {
-		argMain.DDir, err = subs.ApplyDefaultPC(gc.DDir)
-		if err != nil {
+		if ddir, err := subs.ApplyDefaultPC(gc.DDir); err != nil {
 			utils.Panic("apply default paths&cmds subs to main arg ddir fail", err, exitcode.Unknown)
+		} else {
+			argMain.DDir = ddir
 		}
 	}
 

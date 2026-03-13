@@ -37,16 +37,16 @@ var Presets = map[string]Preset{
 			return nil
 		},
 		DescSubsFunc: func(d *Desc) error {
-			tmp, err := substoml.ApplyG(d.RunDat["url"].(string))
-			if err != nil {
+			if url, err := substoml.ApplyG(d.RunDat["url"].(string)); err != nil {
 				return err
+			} else {
+				d.RunDat["url"] = url
 			}
-			d.RunDat["url"] = tmp
-			tmp, err = substoml.ApplyPC(d.RunDat["dest"].(string))
-			if err != nil {
+			if dest, err := substoml.ApplyPC(d.RunDat["dest"].(string)); err != nil {
 				return err
+			} else {
+				d.RunDat["dest"] = dest
 			}
-			d.RunDat["dest"] = tmp
 
 			return nil
 		},
@@ -68,11 +68,11 @@ var Presets = map[string]Preset{
 			return nil
 		},
 		DescSubsFunc: func(d *Desc) error {
-			tmp, err := substoml.ApplyPC(d.RunDat["datadir"].(string))
-			if err != nil {
+			if datadir, err := substoml.ApplyPC(d.RunDat["datadir"].(string)); err != nil {
 				return err
+			} else {
+				d.RunDat["datadir"] = datadir
 			}
-			d.RunDat["datadir"] = tmp
 			return nil
 		},
 		RunFunc: func(d Decl) error {
@@ -86,21 +86,22 @@ var Presets = map[string]Preset{
 			if !md.IsDefined("rundat", "cmds") {
 				return fmt.Errorf("must specify rundat.cmds for preset cmds")
 			}
-			tmp, err := convertCmds(d.RunDat["cmds"])
-			if err != nil {
+
+			if cmds, err := convertCmds(d.RunDat["cmds"]); err != nil {
 				return err
+			} else {
+				d.RunDat["cmds"] = cmds
 			}
-			d.RunDat["cmds"] = tmp
 			return nil
 		},
 		DescSubsFunc: func(d *Desc) error {
 			for _, v := range d.RunDat["cmds"].([]cmdtype.Cmd) {
 				for j := range v {
-					tmp, err := substoml.ApplyPC(v[j])
-					if err != nil {
+					if tmp, err := substoml.ApplyPC(v[j]); err != nil {
 						return err
+					} else {
+						v[j] = tmp
 					}
-					v[j] = tmp
 				}
 			}
 			return nil

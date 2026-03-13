@@ -1,23 +1,24 @@
-package utils
+package globconf
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/suxyio/declmysys/internal/parse/globconf"
 	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/templates"
+	"github.com/suxyio/declmysys/internal/utils"
 )
 
-func GetGlobconf(gcpath string) (globconf.Globconf, error) {
+func GetGlobconf(gcpath string) (Globconf, error) {
 	// parse path with paths&cmds subs first
-	gcpath, err := subs.ApplyDefaultPC(gcpath)
-	if err != nil {
-		return globconf.Globconf{}, err
+	if gcp, err := subs.ApplyDefaultPC(gcpath); err != nil {
+		return Globconf{}, err
+	} else {
+		gcpath = gcp
 	}
 
 	// Get global config, create one if not exist
-	var gc globconf.Globconf
+	var gc Globconf
 	if _, err := os.Stat(gcpath); err == nil {
 		// exists, no action
 	} else if !os.IsNotExist(err) {
@@ -26,11 +27,11 @@ func GetGlobconf(gcpath string) (globconf.Globconf, error) {
 	} else {
 		// not exist, create one
 		fmt.Printf("Global config file not found at %s. Will load default config if not created.\n", gcpath)
-		docreate := AskYN("create default there?")
+		docreate := utils.AskYN("create default there?")
 		if !docreate {
-			return globconf.DefaultGlobconf, nil
+			return DefaultGlobconf, nil
 		}
-		err = CreateFile(gcpath, templates.Globconf)
+		err = utils.CreateFile(gcpath, templates.Globconf)
 		if err != nil {
 			return gc, err
 		}

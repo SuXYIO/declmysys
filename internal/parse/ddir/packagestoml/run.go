@@ -25,12 +25,12 @@ func (ps PacksSpec) Run() error {
 		}
 	} else {
 		// self defined manager command
-		err := m.CustomCmd.Run(cmdtype.CmdRunOptions{
+
+		if err := m.CustomCmd.Run(cmdtype.CmdRunOptions{
 			RedirectStdout: true,
 			RedirectStderr: true,
 			AppendedArgs:   &ps.Packs,
-		})
-		if err != nil {
+		}); err != nil {
 			return err
 		}
 	}
@@ -40,8 +40,7 @@ func (ps PacksSpec) Run() error {
 // Pkgs.Run installs all packages in a pkg
 func (p Pkgs) Run() error {
 	for _, ps := range p.Packages {
-		err := ps.Run()
-		if err != nil {
+		if err := ps.Run(); err != nil {
 			return err
 		}
 	}

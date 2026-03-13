@@ -47,11 +47,11 @@ func (pkgs *Pkgs) subs() error {
 	for _, ps := range pkgs.Packages {
 		// paths&cmds & global for self defined cmd
 		for i := range ps.Manager.CustomCmd {
-			tmp, err := substoml.ApplyPC(ps.Manager.CustomCmd[i])
-			if err != nil {
+			if cmdelem, err := substoml.ApplyPC(ps.Manager.CustomCmd[i]); err != nil {
 				return err
+			} else {
+				ps.Manager.CustomCmd[i] = cmdelem
 			}
-			ps.Manager.CustomCmd[i] = tmp
 		}
 	}
 

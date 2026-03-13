@@ -19,10 +19,6 @@ func TestGlobconfLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to get homedir: %v", err)
 	}
-	defaultDDir, err := consts.DefaultDDirPath()
-	if err != nil {
-		t.Fatalf("failed to get default ddir: %v", err)
-	}
 
 	tests := []struct {
 		name    string
@@ -36,7 +32,7 @@ func TestGlobconfLoad(t *testing.T) {
 		{"wrong type", `decldir = []`, Globconf{}, true},
 
 		// empty case
-		{"empty", ``, Globconf{DDir: defaultDDir}, false},
+		{"empty", ``, Globconf{DDir: consts.DefaultDDirPath}, false},
 		{"empty value", `decldir = ""`, Globconf{DDir: ""}, false},
 
 		// subs

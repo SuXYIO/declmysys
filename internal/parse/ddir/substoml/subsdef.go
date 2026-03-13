@@ -35,18 +35,18 @@ func ApplyG(s string) (string, error) {
 	s = subs.ApplySubs(s, &grepl)
 
 	// Defaults
-	tmp, err := subs.ApplyDefaultGSubs(s)
-	if err != nil {
+	if tmp, err := subs.ApplyDefaultGSubs(s); err != nil {
 		return "", err
+	} else {
+		s = tmp
 	}
-	s = tmp
 	// special hd
 	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
-		tmp, err := subs.ApplySpecialHDSubs(s)
-		if err != nil {
+		if tmp, err := subs.ApplySpecialHDSubs(s); err != nil {
 			return "", err
+		} else {
+			s = tmp
 		}
-		s = tmp
 	}
 
 	return s, nil
@@ -66,22 +66,22 @@ func ApplyPC(s string) (string, error) {
 	s = subs.ApplySubs(s, &pcRepl)
 
 	// Defaults
-	tmp, err := subs.ApplyDefaultGSubs(s)
-	if err != nil {
+	if tmp, err := subs.ApplyDefaultGSubs(s); err != nil {
 		return "", err
-	}
-	s = tmp
-	tmp, err = subs.ApplyDefaultPCSubs(s)
-	if err != nil {
-		return "", err
-	}
-	s = tmp
-	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
-		tmp, err := subs.ApplySpecialHDSubs(s)
-		if err != nil {
-			return "", err
-		}
+	} else {
 		s = tmp
+	}
+	if tmp, err := subs.ApplyDefaultPCSubs(s); err != nil {
+		return "", err
+	} else {
+		s = tmp
+	}
+	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
+		if tmp, err := subs.ApplySpecialHDSubs(s); err != nil {
+			return "", err
+		} else {
+			s = tmp
+		}
 	}
 
 	return s, nil

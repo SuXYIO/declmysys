@@ -23,14 +23,13 @@ func Init(gc globconf.Globconf, mopts *MainOpts, opts *InitOpts) {
 		if !gitAvail() {
 			utils.Panic("Git is not available, please ensure dependencies are installed correctly", nil, exitcode.SetupError)
 		}
-		err := gitInit(mopts.DDir)
-		if err != nil {
+		if err := gitInit(mopts.DDir); err != nil {
 			utils.Panic("Git initialize failed", err, exitcode.ExecError)
 		}
 	}
 
 	// copy template
-	err := copy.Copy("Decl", mopts.DDir, copy.Options{
+	if err := copy.Copy("Decl", mopts.DDir, copy.Options{
 		FS:                templates.DDir,
 		PermissionControl: copy.AddPermission(0664), // damn permissions almost ruined my filesystem
 		Skip: func(srcinfo os.FileInfo, src, dest string) (bool, error) {
@@ -38,8 +37,7 @@ func Init(gc globconf.Globconf, mopts *MainOpts, opts *InitOpts) {
 			// exclude .gitkeep
 			return fname == ".gitkeep", nil
 		},
-	})
-	if err != nil {
+	}); err != nil {
 		utils.Panic("copy template to path fail", err, exitcode.FileError)
 	}
 	fmt.Println("Copied template files to", mopts.DDir)
@@ -52,8 +50,7 @@ func gitInit(path string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Run()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		return err
 	}
 	return nil
@@ -61,8 +58,7 @@ func gitInit(path string) error {
 
 func gitAvail() bool {
 	cmd := exec.Command("git", "version")
-	err := cmd.Run()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		return false
 	}
 	return true

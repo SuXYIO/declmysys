@@ -20,8 +20,7 @@ func (decls *Decls) Load(ddir string) error {
 	for _, ent := range declsEnt {
 		if ent.IsDir() {
 			var decl Decl
-			err := decl.Load(filepath.Join(declspath, ent.Name()))
-			if err != nil {
+			if err := decl.Load(filepath.Join(declspath, ent.Name())); err != nil {
 				return err
 			}
 			*decls = append(*decls, decl)

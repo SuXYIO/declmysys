@@ -11,8 +11,7 @@ func LoadGlobalSD(data []byte) error {
 		return fmt.Errorf("global subsdef var already initialized")
 	}
 
-	err := GlobalSubsDef.SubsDef.Load(data)
-	if err != nil {
+	if err := GlobalSubsDef.SubsDef.Load(data); err != nil {
 		return err
 	}
 
