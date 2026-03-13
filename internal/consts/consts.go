@@ -9,10 +9,9 @@ import (
 
 const (
 	// program metadata
-	Name    string = "declmysys"
-	Desc    string = "DeclMySys (Declare My System), the simple, declarative, system config manager."
-	Version string = "0.0.1-alpha"
-	Author  string = "SuXYIO"
+	Name   string = "declmysys"
+	Desc   string = "DeclMySys (Declare My System), the simple, declarative, system config manager."
+	Author string = "SuXYIO"
 
 	// default priorities
 	DefaultPackagesPriority priority.Priority = 200
