@@ -7,9 +7,10 @@ import (
 
 // CmdRunOptions defines options for running a command
 type CmdRunOptions struct {
-	RedirectStdout bool      // if to redirect cmd.Stdout to os.Stdout
-	RedirectStderr bool      // if to redirect cmd.Stderr to os.Stderr
-	AppendedArgs   *[]string // useful for package install append package spec
+	RedirectStdout bool     // if to redirect cmd.Stdout to os.Stdout
+	RedirectStderr bool     // if to redirect cmd.Stderr to os.Stderr
+	AppendedArgs   []string // useful for package install append package spec, []string{} for none
+	WorkingDir     string   // change working directory, "" for use default
 }
 
 // Run runs a command
@@ -19,11 +20,17 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 	}
 
 	var c *exec.Cmd
-	if opts.AppendedArgs != nil {
+
+	if len(opts.AppendedArgs) > 0 {
 		// append args
-		c = exec.Command(cmd[0], append(cmd[1:], *opts.AppendedArgs...)...)
+		c = exec.Command(cmd[0], append(cmd[1:], opts.AppendedArgs...)...)
 	} else {
 		c = exec.Command(cmd[0], cmd[1:]...)
+	}
+
+	// change dir
+	if opts.WorkingDir != "" {
+		c.Dir = opts.WorkingDir
 	}
 
 	// redirect

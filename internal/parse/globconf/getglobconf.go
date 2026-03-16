@@ -35,6 +35,7 @@ func GetGlobconf(gcpath string) (Globconf, error) {
 		if err != nil {
 			return gc, err
 		}
+		fmt.Println("Global config file created")
 	}
 	// read & parse
 	dat, err := os.ReadFile(gcpath)

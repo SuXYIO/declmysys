@@ -10,7 +10,7 @@ func (decls Decls) Run() error {
 		case "gitclone":
 		case "cmds":
 		default:
-			return fmt.Errorf("unrecognized preset name: %s", decl.Preset)
+			return fmt.Errorf("unrecognized preset name: %q", decl.Preset)
 		}
 	}
 

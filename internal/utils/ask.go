@@ -23,8 +23,9 @@ func AskYN(msg string) bool {
 		var str string
 		fmt.Print(msg + " [y/n]: ")
 		if _, err := fmt.Scanln(&str); err != nil {
-			// EOF or read error — treat as "no"
-			return false
+			// treat as "no"
+			fmt.Printf("Got error, please try again: %v\n", err)
+			continue
 		}
 
 		switch strings.ToLower(str) {

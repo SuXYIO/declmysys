@@ -68,10 +68,10 @@ func (decl *Decl) loadDesc(data []byte) error {
 	// match preset
 	preset, exists := Presets[decl.Preset]
 	if !exists {
-		return fmt.Errorf("preset not found for preset name: %s", decl.Preset)
+		return fmt.Errorf("preset not found for preset name: %q", decl.Preset)
 	}
 	if preset.IsValidFunc == nil {
-		return fmt.Errorf("IsValidFunc not defined for preset %s", decl.Preset)
+		return fmt.Errorf("IsValidFunc not defined for preset %q", decl.Preset)
 	}
 	err = preset.IsValidFunc(*decl, metadat)
 	if err != nil {
@@ -80,7 +80,7 @@ func (decl *Decl) loadDesc(data []byte) error {
 
 	// subs
 	if preset.IsValidFunc == nil {
-		return fmt.Errorf("SubsFunc not defined for preset %s", decl.Preset)
+		return fmt.Errorf("SubsFunc not defined for preset %q", decl.Preset)
 	}
 	err = preset.SubsFunc(decl)
 	if err != nil {

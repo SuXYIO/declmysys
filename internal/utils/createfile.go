@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 )
 
+// CreateFile ensures the top dirs and creates a file
 func CreateFile(fpath string, data []byte) error {
 	EnsureDir(filepath.Dir(fpath))
 
