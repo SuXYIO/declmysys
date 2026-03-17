@@ -16,20 +16,15 @@ func (ps PacksSpec) Run() error {
 		}
 
 		err = cmd.Run(cmdtype.CmdRunOptions{
-			RedirectStdout: true,
-			RedirectStderr: true,
-			AppendedArgs:   ps.Packs,
+			AppendedArgs: ps.Packs,
 		})
 		if err != nil {
 			return err
 		}
 	} else {
 		// self defined manager command
-
 		if err := m.CustomCmd.Run(cmdtype.CmdRunOptions{
-			RedirectStdout: true,
-			RedirectStderr: true,
-			AppendedArgs:   ps.Packs,
+			AppendedArgs: ps.Packs,
 		}); err != nil {
 			return err
 		}

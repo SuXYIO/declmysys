@@ -1,7 +1,6 @@
 package decls
 
 import (
-	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -12,11 +11,6 @@ import (
 )
 
 func TestDeclsLoad(t *testing.T) {
-	userhomedir, err := os.UserHomeDir()
-	if err != nil {
-		t.Fatalf("failed to get user home dir: %v", err)
-	}
-
 	// test with empty global subsdef var
 	substoml.LoadGlobalSD([]byte(""))
 
@@ -42,18 +36,33 @@ func TestDeclsLoad(t *testing.T) {
 				Name:     "bar",
 				Preset:   "cmds",
 				Priority: 99,
-				RunDat:   map[string]any{"cmds": []cmdtype.Cmd{{"sudo", "foo", userhomedir + "/Foobar"}, {"bar", "baz"}}},
+				RunDat:   map[string]any{"cmds": []cmdtype.Cmd{{"sudo", "foo", "{HOME}/Foobar"}, {"bar", "baz"}}},
 			},
 			false,
 		},
 
-		{"subs",
+		{"subs", // changed subs to be done with run, so no subs for load
 			"subs",
 			Decl{
 				Name:     "bar",
 				Preset:   "gitclone",
 				Priority: 99,
-				RunDat:   map[string]any{"url": "github.com/foobar/baz", "dest": userhomedir + "/Foobar"},
+				RunDat:   map[string]any{"url": "github.com/foobar/baz", "dest": "~/Foobar"},
+			},
+			false,
+		},
+		{"touch",
+			"touch",
+			Decl{
+				Name:     "foobar",
+				Preset:   "cmds",
+				Priority: 0,
+				RunDat: map[string]any{
+					"cmds": []cmdtype.Cmd{
+						{"touch", "foo"},
+						{"touch", "bar", "baz_{USERNAME}"},
+					},
+				},
 			},
 			false,
 		},

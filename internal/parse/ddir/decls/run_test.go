@@ -1,4 +1,4 @@
-package cmdtype
+package decls
 
 import (
 	"errors"
@@ -7,27 +7,33 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/cmdtype"
 )
 
-func TestCmdRun(t *testing.T) {
+func TestDeclsRun(t *testing.T) {
 	t.Run("create-file", func(t *testing.T) {
 		userinfo, err := user.Current()
 		if err != nil {
 			t.Fatalf("failed to get user info: %v", err)
 		}
-
-		// test with empty global subsdef var
-		substoml.LoadGlobalSD([]byte(""))
-
 		tmpdir := t.TempDir()
-		fnames := []string{"foo", "bar", "baz_{USERNAME}"}
 		expected := []string{"foo", "bar", "baz_" + userinfo.Username}
-		cmd := Cmd{"touch"}
 
-		if err := cmd.Run(CmdRunOptions{
+		// run
+		decl := Decl{
+			Name:     "foobar",
+			Preset:   "cmds",
+			Priority: 0,
+			RunDat: map[string]any{
+				"cmds": []cmdtype.Cmd{
+					{"touch", "foo"},
+					{"touch", "bar", "baz_{USERNAME}"},
+				},
+			},
+		}
+
+		if err := decl.Run(cmdtype.CmdRunOptions{
 			WorkingDir:        tmpdir,
-			AppendedArgs:      fnames,
 			DoSubsForAppended: true,
 		}); err != nil {
 			t.Errorf("unexpected error: %v", err)

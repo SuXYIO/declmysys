@@ -1,7 +1,6 @@
 package packagestoml
 
 import (
-	"os"
 	"reflect"
 	"testing"
 
@@ -10,13 +9,8 @@ import (
 )
 
 func TestPkgsLoad(t *testing.T) {
-	userhomedir, err := os.UserHomeDir()
-	if err != nil {
-		t.Fatalf("failed to get user home dir: %v", err)
-	}
-
 	// test with empty global subsdef var
-	err = substoml.LoadGlobalSD([]byte(""))
+	err := substoml.LoadGlobalSD([]byte(""))
 	if err != nil {
 		t.Fatalf("failed to load global subsdef: %v", err)
 	}
@@ -59,8 +53,8 @@ priority = 42`, Pkgs{}, true},
 ]
 priority = 42`,
 			Pkgs{Packages: []PacksSpec{
-				{Manager: manSpec{"bar", nil}, Packs: []string{"{USERNAME}", "bar", "baz"}}, // packs shall not be subed
-				{Manager: manSpec{"", []string{"sudo", "apt", userhomedir}}, Packs: []string{"abc", "def", "ghi"}},
+				{Manager: manSpec{"bar", nil}, Packs: []string{"{USERNAME}", "bar", "baz"}},                     // packs shall not be subed
+				{Manager: manSpec{"", []string{"sudo", "apt", "{HOME}"}}, Packs: []string{"abc", "def", "ghi"}}, // cmds are not subed til run
 			}, Priority: 42},
 			false},
 	}

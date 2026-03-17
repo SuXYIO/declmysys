@@ -2,9 +2,6 @@ package decls
 
 import "github.com/suxyio/declmysys/internal/parse/priority"
 
-// Decls is a slice of Decl
-type Decls []Decl
-
 // Decl is the info for a single declaration
 type Decl struct {
 	Name     string            `toml:"name"`

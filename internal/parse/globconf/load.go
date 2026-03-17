@@ -30,7 +30,6 @@ func (gc *Globconf) Load(data []byte) error {
 
 // Subs substitudes necessary stuff for globconf
 func (gc *Globconf) subs() error {
-
 	if tmp, err := subs.ApplyDefaultPC(gc.DDir); err != nil {
 		return err
 	} else {

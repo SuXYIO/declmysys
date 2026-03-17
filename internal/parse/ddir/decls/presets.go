@@ -10,16 +10,19 @@ import (
 )
 
 // Preset defines behaviors of a preset
-type Preset struct {
-	IsValidFunc func(Decl, toml.MetaData) error // return nil if isvalid
-	SubsFunc    func(*Decl) error               // do subs, ASSUMES that valid check is ran before
-	RunFunc     func(Decl) error                // self-explanatory, ASSUMES that valid check & subs are ran before
+type preset struct {
+	IsValidFunc func(Decl, toml.MetaData) error         // return nil if isvalid
+	RunFunc     func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that valid checks are ran before, also does subs
 }
 
 // Presets maps preset name to preset definition, shall not be modified
-var Presets = map[string]Preset{
+var presets = map[string]preset{
 	"gitclone": {
 		IsValidFunc: func(d Decl, md toml.MetaData) error {
+			if d.RunDat == nil {
+				d.RunDat = make(map[string]any)
+			}
+
 			// url
 			if !md.IsDefined("rundat", "url") {
 				return fmt.Errorf("must specify rundat.url for preset gitclone")
@@ -36,7 +39,8 @@ var Presets = map[string]Preset{
 			}
 			return nil
 		},
-		SubsFunc: func(d *Decl) error {
+		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
+			// subs
 			if url, err := substoml.ApplyG(d.RunDat["url"].(string)); err != nil {
 				return err
 			} else {
@@ -47,10 +51,6 @@ var Presets = map[string]Preset{
 			} else {
 				d.RunDat["dest"] = dest
 			}
-
-			return nil
-		},
-		RunFunc: func(d Decl) error {
 			//TODO: impl
 			return nil
 		},
@@ -58,6 +58,10 @@ var Presets = map[string]Preset{
 
 	"stow": {
 		IsValidFunc: func(d Decl, md toml.MetaData) error {
+			if d.RunDat == nil {
+				d.RunDat = make(map[string]any)
+			}
+
 			if !md.IsDefined("rundat", "datadir") {
 				d.RunDat["datadir"] = consts.DefaultDeclsDataDir
 			} else {
@@ -67,15 +71,13 @@ var Presets = map[string]Preset{
 			}
 			return nil
 		},
-		SubsFunc: func(d *Decl) error {
+		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
+			// subs
 			if datadir, err := substoml.ApplyPC(d.RunDat["datadir"].(string)); err != nil {
 				return err
 			} else {
 				d.RunDat["datadir"] = datadir
 			}
-			return nil
-		},
-		RunFunc: func(d Decl) error {
 			//TODO: impl
 			return nil
 		},
@@ -83,6 +85,10 @@ var Presets = map[string]Preset{
 
 	"cmds": {
 		IsValidFunc: func(d Decl, md toml.MetaData) error {
+			if d.RunDat == nil {
+				d.RunDat = make(map[string]any)
+			}
+
 			if !md.IsDefined("rundat", "cmds") {
 				return fmt.Errorf("must specify rundat.cmds for preset cmds")
 			}
@@ -94,20 +100,17 @@ var Presets = map[string]Preset{
 			}
 			return nil
 		},
-		SubsFunc: func(d *Decl) error {
-			for _, v := range d.RunDat["cmds"].([]cmdtype.Cmd) {
-				for j := range v {
-					if tmp, err := substoml.ApplyPC(v[j]); err != nil {
-						return err
-					} else {
-						v[j] = tmp
-					}
-				}
+		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
+			// turn to cmd
+			cmds, err := convertCmds(d.RunDat["cmds"])
+			if err != nil {
+				return err
 			}
-			return nil
-		},
-		RunFunc: func(d Decl) error {
-			//TODO: impl
+
+			// run
+			for _, cmd := range cmds {
+				cmd.Run(opts)
+			}
 			return nil
 		},
 	},
@@ -116,6 +119,10 @@ var Presets = map[string]Preset{
 // convert rundat.cmds from any to []cmdtype.Cmd
 func convertCmds(incmds any) ([]cmdtype.Cmd, error) {
 	// and watch these error msgs, if you don't know whats "verbose" lmao
+	if cmds, ok := incmds.([]cmdtype.Cmd); ok {
+		return cmds, nil
+	}
+
 	var res []cmdtype.Cmd
 
 	// first layer: any slice
@@ -124,24 +131,37 @@ func convertCmds(incmds any) ([]cmdtype.Cmd, error) {
 		return nil, fmt.Errorf("rundat.cmds must be of type []any for preset cmds, got cmds %v of type %T", incmds, incmds)
 	}
 	for _, v := range slice1 {
-		// second layer: slice of any slice
-		slice2, ok := v.([]any)
-		if !ok {
-			return nil, fmt.Errorf("rundat.cmds[i] must be of type []any for preset cmds, got %v of type %T", v, v)
-		}
-
-		var cmd cmdtype.Cmd
-		for _, t := range slice2 {
-			// third layer: slice of string slice
-			cmdElem, ok := t.(string)
-			if !ok {
-				return nil, fmt.Errorf("rundat.cmds[i][j] must be of type string for preset cmds, got %v of type %T", t, t)
-			}
-			cmd = append(cmd, cmdElem)
+		cmd, err := convertCmd(v)
+		if err != nil {
+			return nil, err
 		}
 
 		res = append(res, cmd)
 	}
 
 	return res, nil
+}
+
+func convertCmd(v any) (cmdtype.Cmd, error) {
+	if cmd, ok := v.(cmdtype.Cmd); ok {
+		return cmd, nil
+	}
+
+	// second layer: slice of any slice
+	slice2, ok := v.([]any)
+	if !ok {
+		return nil, fmt.Errorf("rundat.cmds[i] must be of type []any for preset cmds, got %v of type %T", v, v)
+	}
+
+	var cmd cmdtype.Cmd
+	for _, t := range slice2 {
+		// third layer: slice of string slice
+		cmdElem, ok := t.(string)
+		if !ok {
+			return nil, fmt.Errorf("rundat.cmds[i][j] must be of type string for preset cmds, got %v of type %T", t, t)
+		}
+		cmd = append(cmd, cmdElem)
+	}
+
+	return cmd, nil
 }

@@ -1,3 +1,3 @@
 package priority
 
-type Priority uint
+type Priority = int

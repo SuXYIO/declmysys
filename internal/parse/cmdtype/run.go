@@ -3,14 +3,17 @@ package cmdtype
 import (
 	"os"
 	"os/exec"
+
+	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
 )
 
 // CmdRunOptions defines options for running a command
 type CmdRunOptions struct {
-	RedirectStdout bool     // if to redirect cmd.Stdout to os.Stdout
-	RedirectStderr bool     // if to redirect cmd.Stderr to os.Stderr
-	AppendedArgs   []string // useful for package install append package spec, []string{} for none
-	WorkingDir     string   // change working directory, "" for use default
+	RedirectStdout    bool     // if to redirect cmd.Stdout to os.Stdout
+	RedirectStderr    bool     // if to redirect cmd.Stderr to os.Stderr
+	AppendedArgs      []string // useful for package install append package spec, []string{} or nil for none
+	DoSubsForAppended bool     // the design for packages requires no subs for appended packs
+	WorkingDir        string   // change working directory, "" for use default
 }
 
 // Run runs a command
@@ -20,6 +23,12 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 	}
 
 	var c *exec.Cmd
+
+	// do subs
+	err := cmd.subs(&opts)
+	if err != nil {
+		return err
+	}
 
 	if len(opts.AppendedArgs) > 0 {
 		// append args
@@ -43,6 +52,30 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	if err := c.Run(); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (cmd *Cmd) subs(opts *CmdRunOptions) error {
+	// paths&cmds for cmd
+	for i := range *cmd {
+		if elem, err := substoml.ApplyPC((*cmd)[i]); err != nil {
+			return err
+		} else {
+			(*cmd)[i] = elem
+		}
+	}
+
+	// and also for appended args, changes opts directly
+	if opts.DoSubsForAppended {
+		for i := range opts.AppendedArgs {
+			if elem, err := substoml.ApplyPC(opts.AppendedArgs[i]); err != nil {
+				return err
+			} else {
+				opts.AppendedArgs[i] = elem
+			}
+		}
 	}
 
 	return nil

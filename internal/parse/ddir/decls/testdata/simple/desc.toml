@@ -1,2 +1,4 @@
 name = "foo"
 preset = "stow"
+[rundat]
+datadir = "data"

@@ -1,0 +1,5 @@
+name = "foobar"
+preset = "cmds"
+priority = 0
+[rundat]
+cmds = [["touch", "foo"], ["touch", "bar", "baz_{USERNAME}"]]
