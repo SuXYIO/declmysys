@@ -26,9 +26,9 @@ func TestCmdRun(t *testing.T) {
 		cmd := Cmd{"touch"}
 
 		if err := cmd.Run(CmdRunOptions{
-			WorkingDir:        tmpdir,
-			AppendedArgs:      fnames,
-			DoSubsForAppended: true,
+			WorkingDir:   tmpdir,
+			AppendedArgs: fnames,
+			DoPCSubs:     true,
 		}); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

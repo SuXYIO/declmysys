@@ -9,11 +9,11 @@ import (
 
 // CmdRunOptions defines options for running a command
 type CmdRunOptions struct {
-	RedirectStdout    bool     // if to redirect cmd.Stdout to os.Stdout
-	RedirectStderr    bool     // if to redirect cmd.Stderr to os.Stderr
-	AppendedArgs      []string // useful for package install append package spec, []string{} or nil for none
-	DoSubsForAppended bool     // the design for packages requires no subs for appended packs
-	WorkingDir        string   // change working directory, "" for use default
+	RedirectStdout bool     // if to redirect cmd.Stdout to os.Stdout
+	RedirectStderr bool     // if to redirect cmd.Stderr to os.Stderr
+	AppendedArgs   []string // useful for package install append package spec, []string{} or nil for none
+	WorkingDir     string   // change working directory, "" for use default
+	DoPCSubs       bool     // whether to do default PC subs
 }
 
 // Run runs a command
@@ -24,10 +24,12 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	var c *exec.Cmd
 
-	// do subs
-	err := cmd.subs(&opts)
-	if err != nil {
-		return err
+	if opts.DoPCSubs {
+		// do subs
+		err := cmd.subs(&opts)
+		if err != nil {
+			return err
+		}
 	}
 
 	if len(opts.AppendedArgs) > 0 {
@@ -68,13 +70,11 @@ func (cmd *Cmd) subs(opts *CmdRunOptions) error {
 	}
 
 	// and also for appended args, changes opts directly
-	if opts.DoSubsForAppended {
-		for i := range opts.AppendedArgs {
-			if elem, err := subs.ApplyPC(opts.AppendedArgs[i]); err != nil {
-				return err
-			} else {
-				opts.AppendedArgs[i] = elem
-			}
+	for i := range opts.AppendedArgs {
+		if elem, err := subs.ApplyPC(opts.AppendedArgs[i]); err != nil {
+			return err
+		} else {
+			opts.AppendedArgs[i] = elem
 		}
 	}
 

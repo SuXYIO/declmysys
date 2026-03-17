@@ -11,53 +11,127 @@ import (
 
 // Preset defines behaviors of a preset
 type preset struct {
-	IsValidFunc func(Decl, toml.MetaData) error         // return nil if isvalid
-	RunFunc     func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that valid checks are ran before, also does subs
+	PreFunc func(Decl, toml.MetaData) error         // does the validation and parsing work
+	RunFunc func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before, also does subs
 }
 
 // Presets maps preset name to preset definition, shall not be modified
 var presets = map[string]preset{
+	"packages": {
+		PreFunc: func(d Decl, md toml.MetaData) error {
+			if d.RunDat == nil {
+				d.RunDat = make(map[string]any)
+			}
+
+			// manager
+			if !md.IsDefined("rundat", "manager") {
+				return fmt.Errorf("must specify rundat.manager for preset \"packages\"")
+			}
+			var man manSpec
+			if err := man.toManspec(d.RunDat["manager"]); err != nil {
+				return err
+			}
+			d.RunDat["manager"] = man
+
+			// packs
+			if !md.IsDefined("rundat", "packs") {
+				return fmt.Errorf("must specify rundat.packs for preset \"packages\"")
+			}
+
+			return nil
+		},
+		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
+			// subs
+			// manager
+			man, ok := d.RunDat["manager"].(manSpec)
+			if !ok {
+				return fmt.Errorf("rundat.manager must be of type manSpec for preset \"packages\" (in run, maybe forgot to run PreFunc before RunFunc? %s)", consts.NotYourFault)
+			}
+			var rawcmd []string
+			if man.Preset != "" {
+				// preset
+				if cmd, exists := manPresets[man.Preset]; !exists {
+					return fmt.Errorf("manager preset not found for preset name %q", man.Preset)
+				} else {
+					rawcmd = cmd
+				}
+			} else {
+				rawcmd = man.CustomCmd
+			}
+			var mancmd []string
+			for _, elem := range rawcmd {
+				tmp, err := subs.ApplyPC(elem)
+				if err != nil {
+					return err
+				} else {
+					mancmd = append(mancmd, tmp)
+				}
+			}
+			// no subs for packs
+			packs, ok := d.RunDat["packs"].([]string)
+			if !ok {
+				return fmt.Errorf("packs must be of type []string for preset \"packages\", got %v of type %T", d.RunDat["packs"], d.RunDat["packs"])
+			}
+
+			// override opts
+			opts.AppendedArgs = packs
+			opts.DoPCSubs = false
+
+			// run
+			cmd := cmdtype.Cmd(mancmd)
+			if err := cmd.Run(opts); err != nil {
+				return err
+			}
+
+			return nil
+		},
+	},
+
 	"gitclone": {
-		IsValidFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}
 
 			// url
 			if !md.IsDefined("rundat", "url") {
-				return fmt.Errorf("must specify rundat.url for preset gitclone")
+				return fmt.Errorf("must specify rundat.url for preset \"gitclone\"")
 			}
 			if _, ok := d.RunDat["url"].(string); !ok {
-				return fmt.Errorf("rundat.url must be of type string for preset gitclone")
+				return fmt.Errorf("rundat.url must be of type string for preset \"gitclone\", got %v of type %T", d.RunDat["url"], d.RunDat["url"])
 			}
 			// dest
 			if !md.IsDefined("rundat", "dest") {
-				return fmt.Errorf("must specify rundat.dest for preset gitclone")
+				return fmt.Errorf("must specify rundat.dest for preset \"gitclone\"")
 			}
 			if _, ok := d.RunDat["dest"].(string); !ok {
-				return fmt.Errorf("rundat.dest must be of type string for preset gitclone")
+				return fmt.Errorf("rundat.dest must be of type string for preset \"gitclone\", got %v of type %T", d.RunDat["dest"], d.RunDat["dest"])
 			}
 			return nil
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
-			if url, err := subs.ApplyG(d.RunDat["url"].(string)); err != nil {
+			url, err := subs.ApplyG(d.RunDat["url"].(string))
+			if err != nil {
 				return err
-			} else {
-				d.RunDat["url"] = url
 			}
-			if dest, err := subs.ApplyPC(d.RunDat["dest"].(string)); err != nil {
+			dest, err := subs.ApplyPC(d.RunDat["dest"].(string))
+			if err != nil {
 				return err
-			} else {
-				d.RunDat["dest"] = dest
 			}
-			//TODO: impl
+			opts.DoPCSubs = false
+
+			// run
+			cmd := cmdtype.Cmd{"git", "clone", url, dest}
+			if err := cmd.Run(opts); err != nil {
+				return err
+			}
 			return nil
 		},
 	},
 
 	"stow": {
-		IsValidFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}
@@ -66,34 +140,39 @@ var presets = map[string]preset{
 				d.RunDat["datadir"] = consts.DefaultDeclsDataDir
 			} else {
 				if _, ok := d.RunDat["datadir"].(string); !ok {
-					return fmt.Errorf("rundat.datadir must be of type string for preset stow")
+					return fmt.Errorf("rundat.datadir must be of type string for preset \"stow\", got %v of type %T", d.RunDat["datadir"], d.RunDat["datadir"])
 				}
 			}
 			return nil
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
-			if datadir, err := subs.ApplyPC(d.RunDat["datadir"].(string)); err != nil {
+			datadir, err := subs.ApplyPC(d.RunDat["datadir"].(string))
+			if err != nil {
 				return err
-			} else {
-				d.RunDat["datadir"] = datadir
 			}
-			//TODO: impl
+			opts.DoPCSubs = false
+
+			// run
+			cmd := cmdtype.Cmd{"stow", datadir}
+			if err := cmd.Run(opts); err != nil {
+				return err
+			}
 			return nil
 		},
 	},
 
 	"cmds": {
-		IsValidFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}
 
 			if !md.IsDefined("rundat", "cmds") {
-				return fmt.Errorf("must specify rundat.cmds for preset cmds")
+				return fmt.Errorf("must specify rundat.cmds for preset \"cmds\"")
 			}
 
-			if cmds, err := convertCmds(d.RunDat["cmds"]); err != nil {
+			if cmds, err := cmdtype.ToCmds(d.RunDat["cmds"]); err != nil {
 				return err
 			} else {
 				d.RunDat["cmds"] = cmds
@@ -102,66 +181,19 @@ var presets = map[string]preset{
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// turn to cmd
-			cmds, err := convertCmds(d.RunDat["cmds"])
+			cmds, err := cmdtype.ToCmds(d.RunDat["cmds"])
 			if err != nil {
 				return err
 			}
+			opts.DoPCSubs = true
 
 			// run
 			for _, cmd := range cmds {
-				cmd.Run(opts)
+				if err := cmd.Run(opts); err != nil {
+					return err
+				}
 			}
 			return nil
 		},
 	},
-}
-
-// convert rundat.cmds from any to []cmdtype.Cmd
-func convertCmds(incmds any) ([]cmdtype.Cmd, error) {
-	// and watch these error msgs, if you don't know whats "verbose" lmao
-	if cmds, ok := incmds.([]cmdtype.Cmd); ok {
-		return cmds, nil
-	}
-
-	var res []cmdtype.Cmd
-
-	// first layer: any slice
-	slice1, ok := incmds.([]any)
-	if !ok {
-		return nil, fmt.Errorf("rundat.cmds must be of type []any for preset cmds, got cmds %v of type %T", incmds, incmds)
-	}
-	for _, v := range slice1 {
-		cmd, err := convertCmd(v)
-		if err != nil {
-			return nil, err
-		}
-
-		res = append(res, cmd)
-	}
-
-	return res, nil
-}
-
-func convertCmd(v any) (cmdtype.Cmd, error) {
-	if cmd, ok := v.(cmdtype.Cmd); ok {
-		return cmd, nil
-	}
-
-	// second layer: slice of any slice
-	slice2, ok := v.([]any)
-	if !ok {
-		return nil, fmt.Errorf("rundat.cmds[i] must be of type []any for preset cmds, got %v of type %T", v, v)
-	}
-
-	var cmd cmdtype.Cmd
-	for _, t := range slice2 {
-		// third layer: slice of string slice
-		cmdElem, ok := t.(string)
-		if !ok {
-			return nil, fmt.Errorf("rundat.cmds[i][j] must be of type string for preset cmds, got %v of type %T", t, t)
-		}
-		cmd = append(cmd, cmdElem)
-	}
-
-	return cmd, nil
 }

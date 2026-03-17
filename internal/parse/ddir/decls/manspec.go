@@ -1,4 +1,4 @@
-package packages
+package decls
 
 import (
 	"fmt"
@@ -6,13 +6,19 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
 )
 
+// so complex that it deserves its own file
+
 // designed for custom multi-type unmarshal
 type manSpec struct {
 	Preset    string
 	CustomCmd cmdtype.Cmd
 }
 
-func (m *manSpec) UnmarshalTOML(data any) error {
+var manPresets = map[string][]string{
+	"apt": {"sudo", "apt", "install"},
+}
+
+func (m *manSpec) toManspec(data any) error {
 	switch v := data.(type) {
 	case string:
 		// preset
@@ -22,6 +28,7 @@ func (m *manSpec) UnmarshalTOML(data any) error {
 		if len(v) == 0 {
 			return fmt.Errorf("cmd must not be empty list")
 		}
+		m.CustomCmd = nil
 		// might be cmd list
 		for _, p := range v {
 			s, ok := p.(string)

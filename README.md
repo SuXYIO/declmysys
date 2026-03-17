@@ -50,8 +50,11 @@ Design:
 - [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme
+- [ ] Logic
+  - [ ] Ablility to specify which decl to run
 - [ ] QoL
   - [ ] Toml autocompletion integration (via taplo)
+  - [ ] Pre-install command for `packages` decl (e.g. `sudo apt update`)
   - [ ] Locales
 
 Implementation:

@@ -57,6 +57,17 @@ priority = 1000
   Required in `rundat`:
   - `url`: string of the origin url, parsed by global subs
   - `dest`: string of the destination path, parsed by paths & cmds subs
+- `packages`: Runs a single command, but appends arguments, also includes presets, useful for installing packages.
+  - `manager`: string for a preset name, or a list of strings for a custom manager command, will be parsed through paths & cmds subs if custom cmd, through global subs otherwise
+  - `packs`: list of strings (cmd, see [cmd](represents/cmd.md)) for package names, will be appended after the `manager` command, will not be parsed through any subs, I don't see the need here
+
+Presets for `packages`:
+| Name | Manager Command |
+| ---- | --------------- |
+| `apt` | `["sudo", "apt", "install"]`
+
+> [!NOTE]
+> I'm not really familiar with other package managers, so I welcome you to contribute your favorate manager's command here!
 
 ### data/
 
@@ -127,7 +138,29 @@ cmds = [["sudo", "gpasswd", "-a", "{USERNAME}", "dialout"]]
 
 Create Workspace dir:
 
+```toml
 name = "create ~/Workspace dir"
 preset = "cmds"
 [rundat]
 cmds = [["mkdir", "{HOME}/Workspace"]]
+```
+
+Install packages via apt:
+
+```toml
+name = "apt"
+preset = "packages"
+[rundat]
+manager = "apt"
+packs = ["neovim", "tmux", "alacritty"]
+```
+
+Install packages with your own manager:
+
+```toml
+name = "foopm"
+preset = "packages"
+[rundat]
+manager = ["foopm", "-i"]
+packs = ["foo", "bar", "baz"]
+```

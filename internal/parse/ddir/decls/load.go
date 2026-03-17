@@ -42,10 +42,10 @@ func (decl *Decl) loadDesc(data []byte) error {
 	if !exists {
 		return fmt.Errorf("preset not found for preset name: %q", decl.Preset)
 	}
-	if preset.IsValidFunc == nil {
-		return fmt.Errorf("IsValidFunc not defined for preset %q", decl.Preset)
+	if preset.PreFunc == nil {
+		return fmt.Errorf("PreFunc not defined for preset %q", decl.Preset)
 	}
-	err = preset.IsValidFunc(*decl, md)
+	err = preset.PreFunc(*decl, md)
 	if err != nil {
 		return err
 	}

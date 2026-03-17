@@ -33,8 +33,7 @@ func TestDeclsRun(t *testing.T) {
 		}
 
 		if err := decl.Run(cmdtype.CmdRunOptions{
-			WorkingDir:        tmpdir,
-			DoSubsForAppended: true,
+			WorkingDir: tmpdir,
 		}); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
@@ -60,4 +59,6 @@ func TestDeclsRun(t *testing.T) {
 			}
 		}
 	})
+
+	//TODO: Add more cases
 }

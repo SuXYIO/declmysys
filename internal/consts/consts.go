@@ -14,11 +14,11 @@ const (
 	Author string = "SuXYIO"
 
 	// default priorities
-	DefaultPackagesPriority priority.Priority = 200
-	DefaultDeclsPriority    priority.Priority = 100
+	DefaultDeclsPriority priority.Priority = 100
 
 	// default misc
 	DefaultDeclsDataDir string = "data"
+	NotYourFault        string = "If you, as a user, see this message, it's probably not your fault. Please open a GitHub issue or contact the author for help."
 )
 
 var (
