@@ -1,4 +1,4 @@
-package substoml
+package subs
 
 import (
 	"fmt"

@@ -4,7 +4,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 )
 
 // CmdRunOptions defines options for running a command
@@ -60,7 +60,7 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 func (cmd *Cmd) subs(opts *CmdRunOptions) error {
 	// paths&cmds for cmd
 	for i := range *cmd {
-		if elem, err := substoml.ApplyPC((*cmd)[i]); err != nil {
+		if elem, err := subs.ApplyPC((*cmd)[i]); err != nil {
 			return err
 		} else {
 			(*cmd)[i] = elem
@@ -70,7 +70,7 @@ func (cmd *Cmd) subs(opts *CmdRunOptions) error {
 	// and also for appended args, changes opts directly
 	if opts.DoSubsForAppended {
 		for i := range opts.AppendedArgs {
-			if elem, err := substoml.ApplyPC(opts.AppendedArgs[i]); err != nil {
+			if elem, err := subs.ApplyPC(opts.AppendedArgs[i]); err != nil {
 				return err
 			} else {
 				opts.AppendedArgs[i] = elem

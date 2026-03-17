@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 )
 
 func TestCmdRun(t *testing.T) {
@@ -18,7 +18,7 @@ func TestCmdRun(t *testing.T) {
 		}
 
 		// test with empty global subsdef var
-		substoml.LoadGlobalSD([]byte(""))
+		subs.LoadGlobalSD([]byte(""))
 
 		tmpdir := t.TempDir()
 		fnames := []string{"foo", "bar", "baz_{USERNAME}"}

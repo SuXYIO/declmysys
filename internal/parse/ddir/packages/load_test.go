@@ -1,16 +1,16 @@
-package packagestoml
+package packages
 
 import (
 	"reflect"
 	"testing"
 
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 )
 
 func TestPkgsLoad(t *testing.T) {
 	// test with empty global subsdef var
-	err := substoml.LoadGlobalSD([]byte(""))
+	err := subs.LoadGlobalSD([]byte(""))
 	if err != nil {
 		t.Fatalf("failed to load global subsdef: %v", err)
 	}

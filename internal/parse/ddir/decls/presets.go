@@ -6,7 +6,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/ddir/substoml"
+	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 )
 
 // Preset defines behaviors of a preset
@@ -41,12 +41,12 @@ var presets = map[string]preset{
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
-			if url, err := substoml.ApplyG(d.RunDat["url"].(string)); err != nil {
+			if url, err := subs.ApplyG(d.RunDat["url"].(string)); err != nil {
 				return err
 			} else {
 				d.RunDat["url"] = url
 			}
-			if dest, err := substoml.ApplyPC(d.RunDat["dest"].(string)); err != nil {
+			if dest, err := subs.ApplyPC(d.RunDat["dest"].(string)); err != nil {
 				return err
 			} else {
 				d.RunDat["dest"] = dest
@@ -73,7 +73,7 @@ var presets = map[string]preset{
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
-			if datadir, err := substoml.ApplyPC(d.RunDat["datadir"].(string)); err != nil {
+			if datadir, err := subs.ApplyPC(d.RunDat["datadir"].(string)); err != nil {
 				return err
 			} else {
 				d.RunDat["datadir"] = datadir

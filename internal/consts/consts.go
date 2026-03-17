@@ -2,8 +2,8 @@ package consts
 
 import (
 	"github.com/suxyio/declmysys/internal/exitcode"
+	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 	"github.com/suxyio/declmysys/internal/parse/priority"
-	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 

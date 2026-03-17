@@ -1,4 +1,4 @@
-package packagestoml
+package packages
 
 import (
 	"errors"

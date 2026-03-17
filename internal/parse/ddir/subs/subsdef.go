@@ -1,16 +1,14 @@
-package substoml
+package subs
 
 import (
 	"fmt"
-
-	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 // Implies that the first file parsed in ddir should be subs.toml, since parsing others need it
 type SubsDef struct {
-	SpecialHDDisable bool           `toml:"disable_homedir_subs"`
-	CustomG          subs.SubsRules `toml:"global"`
-	CustomPC         subs.SubsRules `toml:"paths_cmds"`
+	SpecialHDDisable bool      `toml:"disable_homedir_subs"`
+	CustomG          SubsRules `toml:"global"`
+	CustomPC         SubsRules `toml:"paths_cmds"`
 }
 
 // The global var that stores subsdef
@@ -32,17 +30,17 @@ func ApplyG(s string) (string, error) {
 	// Custom
 	// global
 	grepl := GlobalSubsDef.SubsDef.CustomG.ToReplacer()
-	s = subs.ApplySubs(s, &grepl)
+	s = ApplySubs(s, &grepl)
 
 	// Defaults
-	if tmp, err := subs.ApplyDefaultGSubs(s); err != nil {
+	if tmp, err := ApplyDefaultGSubs(s); err != nil {
 		return "", err
 	} else {
 		s = tmp
 	}
 	// special hd
 	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
-		if tmp, err := subs.ApplySpecialHDSubs(s); err != nil {
+		if tmp, err := ApplySpecialHDSubs(s); err != nil {
 			return "", err
 		} else {
 			s = tmp
@@ -61,23 +59,23 @@ func ApplyPC(s string) (string, error) {
 	// can't just call ApplyG here, cuz must follow "apply custom before default" order
 	// Custom
 	gRepl := GlobalSubsDef.SubsDef.CustomG.ToReplacer()
-	s = subs.ApplySubs(s, &gRepl)
+	s = ApplySubs(s, &gRepl)
 	pcRepl := GlobalSubsDef.SubsDef.CustomPC.ToReplacer()
-	s = subs.ApplySubs(s, &pcRepl)
+	s = ApplySubs(s, &pcRepl)
 
 	// Defaults
-	if tmp, err := subs.ApplyDefaultGSubs(s); err != nil {
+	if tmp, err := ApplyDefaultGSubs(s); err != nil {
 		return "", err
 	} else {
 		s = tmp
 	}
-	if tmp, err := subs.ApplyDefaultPCSubs(s); err != nil {
+	if tmp, err := ApplyDefaultPCSubs(s); err != nil {
 		return "", err
 	} else {
 		s = tmp
 	}
 	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
-		if tmp, err := subs.ApplySpecialHDSubs(s); err != nil {
+		if tmp, err := ApplySpecialHDSubs(s); err != nil {
 			return "", err
 		} else {
 			s = tmp

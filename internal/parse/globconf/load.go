@@ -3,7 +3,7 @@ package globconf
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 )
 
 // Load parses the global config data
