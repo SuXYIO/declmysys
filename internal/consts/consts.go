@@ -3,7 +3,6 @@ package consts
 import (
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
-	"github.com/suxyio/declmysys/internal/parse/priority"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
@@ -14,7 +13,9 @@ const (
 	Author string = "SuXYIO"
 
 	// default priorities
-	DefaultDeclsPriority priority.Priority = 100
+	// gonna use int here, since Priority is just an alias,
+	// avoids cycle-import shit
+	DefaultDeclsPriority int = 100
 
 	// default misc
 	DefaultDeclsDataDir string = "data"

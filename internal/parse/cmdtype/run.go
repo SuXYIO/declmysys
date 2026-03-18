@@ -9,8 +9,8 @@ import (
 
 // CmdRunOptions defines options for running a command
 type CmdRunOptions struct {
-	RedirectStdout bool     // if to redirect cmd.Stdout to os.Stdout
-	RedirectStderr bool     // if to redirect cmd.Stderr to os.Stderr
+	RedirectStdout *os.File
+	RedirectStderr *os.File
 	AppendedArgs   []string // useful for package install append package spec, []string{} or nil for none
 	WorkingDir     string   // change working directory, "" for use default
 	DoPCSubs       bool     // whether to do default PC subs
@@ -45,11 +45,11 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 	}
 
 	// redirect
-	if opts.RedirectStdout {
-		c.Stdout = os.Stdout
+	if opts.RedirectStdout != nil {
+		c.Stdout = opts.RedirectStdout
 	}
-	if opts.RedirectStderr {
-		c.Stderr = os.Stderr
+	if opts.RedirectStderr != nil {
+		c.Stderr = opts.RedirectStderr
 	}
 
 	if err := c.Run(); err != nil {
