@@ -33,14 +33,14 @@ func ApplyG(s string) (string, error) {
 	s = ApplySubs(s, &grepl)
 
 	// Defaults
-	if tmp, err := ApplyDefaultGSubs(s); err != nil {
+	if tmp, err := applyDefaultGSubs(s); err != nil {
 		return "", err
 	} else {
 		s = tmp
 	}
 	// special hd
 	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
-		if tmp, err := ApplySpecialHDSubs(s); err != nil {
+		if tmp, err := applySpecialHDSubs(s); err != nil {
 			return "", err
 		} else {
 			s = tmp
@@ -64,18 +64,18 @@ func ApplyPC(s string) (string, error) {
 	s = ApplySubs(s, &pcRepl)
 
 	// Defaults
-	if tmp, err := ApplyDefaultGSubs(s); err != nil {
+	if tmp, err := applyDefaultGSubs(s); err != nil {
 		return "", err
 	} else {
 		s = tmp
 	}
-	if tmp, err := ApplyDefaultPCSubs(s); err != nil {
+	if tmp, err := applyDefaultPCSubs(s); err != nil {
 		return "", err
 	} else {
 		s = tmp
 	}
 	if !GlobalSubsDef.SubsDef.SpecialHDDisable {
-		if tmp, err := ApplySpecialHDSubs(s); err != nil {
+		if tmp, err := applySpecialHDSubs(s); err != nil {
 			return "", err
 		} else {
 			s = tmp

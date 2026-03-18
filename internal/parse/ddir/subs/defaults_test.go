@@ -19,7 +19,7 @@ func TestApplySpecialHDSubs(t *testing.T) {
 		"~/foo ~ ~~baz~~ ~/foobar ~/barbaz": {homedir + "/foo " + homedir + " ~~baz~~ " + homedir + "/foobar " + homedir + "/barbaz", false},
 	}
 
-	tests.run(t, ApplySpecialHDSubs)
+	tests.run(t, applySpecialHDSubs)
 }
 
 func TestApplyDefaultGSubs(t *testing.T) {
@@ -41,7 +41,7 @@ func TestApplyDefaultGSubs(t *testing.T) {
 		"foo{HOSTNAME}bar": {"foo" + hostname + "bar", false},
 	}
 
-	tests.run(t, ApplyDefaultGSubs)
+	tests.run(t, applyDefaultGSubs)
 }
 
 func TestApplyDefaultPCSubs(t *testing.T) {
@@ -67,5 +67,5 @@ func TestApplyDefaultPCSubs(t *testing.T) {
 		tests["foo"+from+"/bar"] = subsFuncRet{"foo" + to + "/bar", false}
 	}
 
-	tests.run(t, ApplyDefaultPCSubs)
+	tests.run(t, applyDefaultPCSubs)
 }
