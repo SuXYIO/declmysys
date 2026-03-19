@@ -8,13 +8,17 @@ List the procedure defined by order (descending priority).
 declmysys list [PRIORITY]
 ```
 
-- `PRIORITY`: Show the specific procedures for a certain priority, shows them more verbosely by default
+- `PRIORITY`: Show the specific procedures for a certain priority
+
+> [!WARNING]
+> `go-flags` lib does not support default value for positionals,
+> so program assumes `0` is not user input, and `0` means priority not specified (list all priorities)
 
 ## Example
 
 ```console
 user@host:~$ declmysys list
-Procedure list for /home/user/Decl:
+Listing /home/user/Decl:
     (250)
         cmds[apt update]
         cmds[add flathub source to flatpak]
@@ -23,7 +27,13 @@ Procedure list for /home/user/Decl:
     (150)
         packages[flatpak-system-flathub]: com.valvesoftware.Steam com.visualstudio.code
     (100)
-        stow[dotfiles]: zshrc  git  tmux  neofetch  neovim  kitty  apt-sources
+        stow[dotfiles]: zshrc
+        stow[dotfiles]: git
+        stow[dotfiles]: tmux
+        stow[dotfiles]: neofetch
+        stow[dotfiles]: neovim  kitty  apt-sources
+        stow[dotfiles]: kitty
+        stow[dotfiles]: apt-sources
     (50)
         cmds[create ~/Workspace directory]
         cmds[add user to dialout group]
@@ -31,9 +41,7 @@ Procedure list for /home/user/Decl:
 
 ```console
 user@host:~$ declmysys list 250
-Procedure list for /home/user/Decl (priority 250):
+Listing /home/user/Decl (priority 250):
     cmds[apt update]
-        run: ["sudo", "apt", "update"]
     cmds[add flathub source to flatpak]
-        run: ["flatpak", "remote-add", "--if-not-exists", "flathub", "https://dl.flathub.org/repo/flathub.flatpakrepo"]
 ```

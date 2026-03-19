@@ -51,7 +51,7 @@ func main() {
 
 	// version
 	if argMain.Version {
-		subcmds.Version(argVersion)
+		subcmds.Version(*argVersion)
 		os.Exit(exitcode.Success)
 	}
 
@@ -63,7 +63,7 @@ func main() {
 	}
 
 	// parse argmain.globconf (default case)
-	if argMain.GlobConf == "" {
+	if parser.FindOptionByLongName("config").IsSetDefault() {
 		argMain.GlobConf = consts.DefaultGlobconfPath
 	}
 	// get globconf
@@ -72,7 +72,7 @@ func main() {
 		utils.Panic("read/create global config fail", err, exitcode.ConfigError)
 	}
 	// replace argmain ddir with default in globconf if empty
-	if argMain.DDir == "" {
+	if parser.FindOptionByLongName("decldir").IsSetDefault() {
 		if ddir, err := subs.ApplyDefaultPC(gc.DDir); err != nil {
 			utils.Panic("apply default paths&cmds subs to main arg ddir fail", err, exitcode.Unknown)
 		} else {
@@ -83,15 +83,15 @@ func main() {
 	switch parser.Active.Name {
 	// not gonna design error capture for subcommands, just panic in the subcmd function if anything goes wrong
 	case "help":
-		subcmds.Help(argHelp, parser)
+		subcmds.Help(*parser, *argHelp)
 	case "version":
-		subcmds.Version(argVersion)
+		subcmds.Version(*argVersion)
 	case "run":
-		subcmds.Run(gc, argMain, argRun)
+		subcmds.Run(gc, *argMain, *argRun)
 	case "init":
-		subcmds.Init(gc, argMain, argInit)
+		subcmds.Init(gc, *argMain, *argInit)
 	case "list":
-		subcmds.List(gc, argMain, argList)
+		subcmds.List(gc, *argMain, *argList)
 	default:
 		utils.Panic(fmt.Sprintf("unknown subcommand: %v", parser.Active.Name), nil, exitcode.InvalidArgs)
 	}

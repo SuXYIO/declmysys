@@ -55,6 +55,8 @@ Design:
   - [ ] Add logging
 - [ ] QoL
   - [ ] Toml autocompletion integration (via taplo)
+  - [ ] Shell completion integration
+  - [ ] Dry run for `run` subcmd, verbose for `list` subcmd
   - [ ] Pre-install command for `packages` decl (e.g. `sudo apt update`)
   - [ ] Locales
 

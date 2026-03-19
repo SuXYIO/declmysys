@@ -2,6 +2,7 @@ package decls
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
@@ -9,10 +10,16 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 )
 
+const (
+	ToStringModeList = iota
+	ToStringModeRun
+)
+
 // Preset defines behaviors of a preset
 type preset struct {
-	PreFunc func(Decl, toml.MetaData) error         // does the validation and parsing work
-	RunFunc func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before, also does subs
+	PreFunc  func(Decl, toml.MetaData) error         // does the validation and parsing work
+	ToString func(Decl, int8, string) string         // turns into readable string, ASSUMES that prefunc is ran before
+	RunFunc  func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before, also does subs
 }
 
 // Presets maps preset name to preset definition, shall not be modified
@@ -39,6 +46,20 @@ var presets = map[string]preset{
 			}
 
 			return nil
+		},
+		ToString: func(d Decl, mode int8, prestr string) string {
+			// indent is the level of indents
+			switch mode {
+			case ToStringModeRun:
+				return fmt.Sprintf("%spackages[%s]", prestr, d.Name)
+			default:
+				// ToStringModeList
+				var packsSB strings.Builder
+				for _, p := range d.RunDat["packs"].([]string) {
+					packsSB.Write([]byte(p))
+				}
+				return fmt.Sprintf("%spackages[%s]: %s", prestr, d.Name, packsSB.String())
+			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
@@ -109,6 +130,15 @@ var presets = map[string]preset{
 			}
 			return nil
 		},
+		ToString: func(d Decl, mode int8, prestr string) string {
+			switch mode {
+			case ToStringModeRun:
+				return fmt.Sprintf("%sgitclone[%s]", prestr, d.Name)
+			default:
+				// ToStringModeList
+				return fmt.Sprintf("%sgitclone[%s]: url %s dest %s", prestr, d.Name, d.RunDat["url"], d.RunDat["dest"])
+			}
+		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
 			url, err := subs.ApplyG(d.RunDat["url"].(string))
@@ -145,6 +175,15 @@ var presets = map[string]preset{
 			}
 			return nil
 		},
+		ToString: func(d Decl, mode int8, prestr string) string {
+			switch mode {
+			case ToStringModeRun:
+				return fmt.Sprintf("%sstow[%s]", prestr, d.Name)
+			default:
+				// ToStringModeList
+				return fmt.Sprintf("%sstow[%s]", prestr, d.Name)
+			}
+		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
 			datadir, err := subs.ApplyPC(d.RunDat["datadir"].(string))
@@ -178,6 +217,15 @@ var presets = map[string]preset{
 				d.RunDat["cmds"] = cmds
 			}
 			return nil
+		},
+		ToString: func(d Decl, mode int8, prestr string) string {
+			switch mode {
+			case ToStringModeRun:
+				return fmt.Sprintf("%scmds[%s]", prestr, d.Name)
+			default:
+				// ToStringModeList
+				return fmt.Sprintf("%scmds[%s]", prestr, d.Name)
+			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// turn to cmd

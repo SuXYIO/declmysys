@@ -17,7 +17,7 @@ type InitOpts struct {
 	NoGit bool `long:"no-git" description:"Won't create the .git directory (via git init)"`
 }
 
-func Init(gc globconf.Globconf, mopts *MainOpts, opts *InitOpts) {
+func Init(gc globconf.Globconf, mopts MainOpts, opts InitOpts) {
 	if !opts.NoGit {
 		// init git
 		if !gitAvail() {

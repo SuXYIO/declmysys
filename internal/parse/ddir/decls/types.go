@@ -1,5 +1,8 @@
 package decls
 
+// Decls is a slice of Decl, just for []Decl to be receiver type
+type Decls []Decl
+
 // Decl is the info for a single declaration
 type Decl struct {
 	Name     string         `toml:"name"`

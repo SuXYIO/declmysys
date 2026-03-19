@@ -23,7 +23,7 @@ You are the Vessel.
 You are ` + userinfo.Username + ".\n")
 
 		// run
-		decls := []Decl{
+		decls := Decls{
 			{
 				Name:     "create foo.txt",
 				Preset:   "cmds",
@@ -77,7 +77,11 @@ You are ` + userinfo.Username + ".\n")
 			},
 		}
 
-		if err := RunDecls(decls, cmdtype.CmdRunOptions{WorkingDir: tmpdir}); err != nil {
+		if err := decls.Run(DeclsRunOpts{
+			Cmdopts:  cmdtype.CmdRunOptions{WorkingDir: tmpdir},
+			DoPrint:  false,
+			Priority: nil,
+		}); err != nil {
 			t.Errorf("unexpected error running RunDecls: %v", err)
 		}
 

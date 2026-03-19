@@ -10,7 +10,7 @@ import (
 
 type VersionOpts struct{}
 
-func Version(opts *VersionOpts) {
+func Version(opts VersionOpts) {
 	// get version
 	info, ok := debug.ReadBuildInfo()
 	version := info.Main.Version
