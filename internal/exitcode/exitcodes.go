@@ -9,5 +9,5 @@ const (
 	ConfigError int = 2
 	SetupError  int = 2
 	ExecError   int = 2
-	Unknown     int = -1
+	Unknown     int = 3
 )

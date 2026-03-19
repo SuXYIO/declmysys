@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	ToStringModeList = iota
+	ToStringModeList int8 = iota
 	ToStringModeRun
 )
 
@@ -53,12 +53,12 @@ var presets = map[string]preset{
 			case ToStringModeRun:
 				return fmt.Sprintf("%spackages[%s]", prestr, d.Name)
 			default:
-				// ToStringModeList
-				var packsSB strings.Builder
-				for _, p := range d.RunDat["packs"].([]string) {
-					packsSB.Write([]byte(p))
-				}
-				return fmt.Sprintf("%spackages[%s]: %s", prestr, d.Name, packsSB.String())
+			// ToStringModeList
+			packs, ok := d.RunDat["packs"].([]string)
+			if !ok {
+				return fmt.Sprintf("%spackages[%s]: <invalid packs>", prestr, d.Name)
+			}
+			return fmt.Sprintf("%spackages[%s]: %s", prestr, d.Name, strings.Join(packs, " "))
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {

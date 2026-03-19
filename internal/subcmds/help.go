@@ -17,10 +17,7 @@ func Help(parser flags.Parser, opts HelpOpts) {
 	// otherwise shows help for `help` subcmd
 	// HACK: this is really awkward code, changing the values of parser and all
 	// I was expecting something like someSubcmd.WriteHelp() instead of this
-	a := parser.Active
 	parser.Active = parser.Find(opts.Args.Subcommand)
 
 	parser.WriteHelp(os.Stdout)
-
-	parser.Active = a
 }

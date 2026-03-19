@@ -29,6 +29,7 @@ func (decls Decls) List(opts DeclsListOpts) error {
 	for _, d := range decls {
 		if d.Priority != prevPri {
 			priGroups = append(priGroups, currentgrp)
+			currentgrp = []Decl{}
 			prevPri = d.Priority
 		}
 		currentgrp = append(currentgrp, d)

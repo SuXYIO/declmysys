@@ -14,7 +14,9 @@ func GetDecls(ddir string) (Decls, error) {
 			if f.IsDir() {
 				// is decl
 				var d Decl
-				d.Load(filepath.Join(ddir, "decls", f.Name()))
+				if err := d.Load(filepath.Join(ddir, "decls", f.Name())); err != nil {
+					return nil, err
+				}
 				decls = append(decls, d)
 			}
 		}

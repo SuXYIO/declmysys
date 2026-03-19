@@ -12,7 +12,7 @@ type Priority = uint
 type DeclsRunOpts struct {
 	Cmdopts  cmdtype.CmdRunOptions
 	DoPrint  bool
-	Indent   int
+	Indent   uint
 	Priority *Priority
 }
 
@@ -28,7 +28,7 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 		return decls[i].Priority > decls[j].Priority
 	})
 
-	indent := strings.Repeat("\t", opts.Indent)
+	indent := strings.Repeat("\t", int(opts.Indent))
 	for _, d := range decls {
 		// filter by priority
 		if opts.Priority == nil || (opts.Priority != nil && d.Priority == *opts.Priority) {

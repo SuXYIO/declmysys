@@ -13,7 +13,7 @@ const (
 	Author string = "SuXYIO"
 
 	// default priorities
-	// gonna use int here, since Priority is just an alias,
+	// gonna use uint here, since Priority is just an alias,
 	// avoids cycle-import shit
 	DefaultDeclsPriority uint = 100
 

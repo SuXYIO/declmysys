@@ -63,7 +63,7 @@ func main() {
 	}
 
 	// parse argmain.globconf (default case)
-	if parser.FindOptionByLongName("config").IsSetDefault() {
+	if option := parser.FindOptionByLongName("config"); option != nil && option.IsSetDefault() {
 		argMain.GlobConf = consts.DefaultGlobconfPath
 	}
 	// get globconf
@@ -72,7 +72,7 @@ func main() {
 		utils.Panic("read/create global config fail", err, exitcode.ConfigError)
 	}
 	// replace argmain ddir with default in globconf if empty
-	if parser.FindOptionByLongName("decldir").IsSetDefault() {
+	if option := parser.FindOptionByLongName("decldir"); option != nil && option.IsSetDefault() {
 		if ddir, err := subs.ApplyDefaultPC(gc.DDir); err != nil {
 			utils.Panic("apply default paths&cmds subs to main arg ddir fail", err, exitcode.Unknown)
 		} else {
