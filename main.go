@@ -55,8 +55,6 @@ func main() {
 		os.Exit(exitcode.Success)
 	}
 
-	//TODO: Setup logger here
-
 	// if not using -v or -h, and no subcommand given
 	if parser.Command.Active == nil {
 		parser.WriteHelp(os.Stdout)

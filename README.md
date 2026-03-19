@@ -52,6 +52,7 @@ Design:
   - [ ] Colorscheme
 - [ ] Logic
   - [ ] Ablility to specify which decl to run
+  - [ ] Add logging
 - [ ] QoL
   - [ ] Toml autocompletion integration (via taplo)
   - [ ] Pre-install command for `packages` decl (e.g. `sudo apt update`)

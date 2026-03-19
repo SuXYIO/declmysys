@@ -1,7 +1,6 @@
 package decls
 
 import (
-	"context"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -78,8 +77,7 @@ You are ` + userinfo.Username + ".\n")
 			},
 		}
 
-		ctx := context.Background()
-		if err := RunDecls(ctx, decls, cmdtype.CmdRunOptions{WorkingDir: tmpdir}); err != nil {
+		if err := RunDecls(decls, cmdtype.CmdRunOptions{WorkingDir: tmpdir}); err != nil {
 			t.Errorf("unexpected error running RunDecls: %v", err)
 		}
 
