@@ -1,6 +1,7 @@
 package decls
 
 import (
+	"os"
 	"sort"
 	"strings"
 
@@ -33,7 +34,7 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 		// filter by priority
 		if opts.Priority == nil || (opts.Priority != nil && d.Priority == *opts.Priority) {
 			if opts.DoPrint {
-				d.List(ToStringModeRun, indent)
+				d.List(os.Stdout, ToStringModeRun, indent)
 			}
 			if err := d.Run(opts.Cmdopts); err != nil {
 				return err

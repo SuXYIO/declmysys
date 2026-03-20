@@ -57,8 +57,7 @@ func main() {
 
 	// if not using -v or -h, and no subcommand given
 	if parser.Command.Active == nil {
-		parser.WriteHelp(os.Stdout)
-		fmt.Println()
+		subcmds.Help(*parser, *argHelp)
 		utils.Panic("no subcommand specified", nil, exitcode.InvalidArgs)
 	}
 

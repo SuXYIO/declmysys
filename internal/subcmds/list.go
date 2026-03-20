@@ -1,6 +1,7 @@
 package subcmds
 
 import (
+	"bytes"
 	"fmt"
 
 	"github.com/suxyio/declmysys/internal/exitcode"
@@ -32,18 +33,23 @@ func List(gc globconf.Globconf, mopts MainOpts, opts ListOpts) {
 	// list
 	// BUG: since go-flags doesn't support default for positionals yet,
 	// can only assume that default value 0 is not user input
+	var w bytes.Buffer
 	var priority *uint
 	if opts.Args.Priority == 0 {
-		fmt.Printf("Listing %s:\n", gc.DDir)
+		fmt.Fprintf(&w, "Listing %s:\n", gc.DDir)
 		priority = nil
 	} else {
-		fmt.Printf("Listing %s (priority %d):\n", gc.DDir, opts.Args.Priority)
+		fmt.Fprintf(&w, "Listing %s (priority %d):\n", gc.DDir, opts.Args.Priority)
 		priority = &opts.Args.Priority
 	}
-	if err := declss.List(decls.DeclsListOpts{
+	if err := declss.List(&w, decls.DeclsListOpts{
 		Indent:   1,
 		Priority: priority,
 	}); err != nil {
 		utils.Panic("error listing decls", err, exitcode.ExecError)
+	}
+
+	if err := utils.AutoPager(w.Bytes()); err != nil {
+		utils.Panic("error autopaging", err, exitcode.ExecError)
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func LoadGlobalSD(data []byte) error {
-	if GlobalSubsDef.Initialized {
+	if GlobalSubsDef.initialized {
 		return fmt.Errorf("global subsdef var already initialized")
 	}
 
@@ -15,7 +15,7 @@ func LoadGlobalSD(data []byte) error {
 		return err
 	}
 
-	GlobalSubsDef.Initialized = true
+	GlobalSubsDef.initialized = true
 	return nil
 }
 

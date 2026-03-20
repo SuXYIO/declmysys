@@ -1,9 +1,11 @@
 package subcmds
 
 import (
-	"os"
+	"bytes"
 
 	"github.com/jessevdk/go-flags"
+	"github.com/suxyio/declmysys/internal/exitcode"
+	"github.com/suxyio/declmysys/internal/utils"
 )
 
 type HelpOpts struct {
@@ -19,5 +21,10 @@ func Help(parser flags.Parser, opts HelpOpts) {
 	// I was expecting something like someSubcmd.WriteHelp() instead of this
 	parser.Active = parser.Find(opts.Args.Subcommand)
 
-	parser.WriteHelp(os.Stdout)
+	var buf bytes.Buffer
+	parser.WriteHelp(&buf)
+
+	if err := utils.AutoPager(buf.Bytes()); err != nil {
+		utils.Panic("error autopaging", err, exitcode.ExecError)
+	}
 }

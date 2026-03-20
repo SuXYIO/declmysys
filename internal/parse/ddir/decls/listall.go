@@ -2,6 +2,7 @@ package decls
 
 import (
 	"fmt"
+	"io"
 	"sort"
 	"strings"
 
@@ -13,7 +14,7 @@ type DeclsListOpts struct {
 	Priority *Priority
 }
 
-func (decls Decls) List(opts DeclsListOpts) error {
+func (decls Decls) List(w io.Writer, opts DeclsListOpts) error {
 	if len(decls) == 0 {
 		return nil
 	}
@@ -39,9 +40,9 @@ func (decls Decls) List(opts DeclsListOpts) error {
 	indent := strings.Repeat(consts.Indent, opts.Indent)
 	for _, grp := range priGroups {
 		if opts.Priority == nil || (opts.Priority != nil && grp[0].Priority == *opts.Priority) {
-			fmt.Printf("%s(%d)\n", indent, grp[0].Priority)
+			fmt.Fprintf(w, "%s(%d)\n", indent, grp[0].Priority)
 			for _, d := range grp {
-				d.List(ToStringModeList, indent+consts.Indent)
+				d.List(w, ToStringModeList, indent+consts.Indent)
 			}
 		}
 	}

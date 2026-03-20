@@ -14,7 +14,7 @@ type SubsDef struct {
 // The global var that stores subsdef
 var GlobalSubsDef struct {
 	SubsDef     SubsDef
-	Initialized bool
+	initialized bool
 }
 
 // ApplyG applies global subs
@@ -22,7 +22,7 @@ func ApplyG(s string) (string, error) {
 	// PERF: converting replacers every time is not optimal, (and performance is the reason for creating replacers in the first place),
 	// maybe implement a function that takes a batch of strings and replaces them with only one replacer conversion
 
-	if !GlobalSubsDef.Initialized {
+	if !GlobalSubsDef.initialized {
 		return "", fmt.Errorf("global subsdef var not initialized")
 	}
 
@@ -52,7 +52,7 @@ func ApplyG(s string) (string, error) {
 
 // ApplyPC applies paths&cmds (including globals)
 func ApplyPC(s string) (string, error) {
-	if !GlobalSubsDef.Initialized {
+	if !GlobalSubsDef.initialized {
 		return "", fmt.Errorf("global subsdef var not initialized")
 	}
 
