@@ -17,7 +17,7 @@ import (
 func main() {
 	// parser setup
 	argMain := &subcmds.MainOpts{}
-	parser := flags.NewParser(argMain, flags.PrintErrors|flags.HelpFlag)
+	parser := flags.NewParser(argMain, flags.PrintErrors)
 	parser.Name = consts.Name
 	parser.ShortDescription = consts.Desc
 	parser.SubcommandsOptional = true
@@ -49,9 +49,13 @@ func main() {
 		os.Exit(exitcode.InvalidArgs)
 	}
 
-	// version
+	// version & help (-V or -h)
 	if argMain.Version {
 		subcmds.Version(*argVersion)
+		os.Exit(exitcode.Success)
+	}
+	if argMain.Help {
+		subcmds.Help(*parser, *argHelp)
 		os.Exit(exitcode.Success)
 	}
 

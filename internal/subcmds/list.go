@@ -18,6 +18,11 @@ type ListOpts struct {
 }
 
 func List(gc globconf.Globconf, mopts MainOpts, opts ListOpts) {
+	// ddir doesn't exist
+	if !DDirExist(mopts.DDir) {
+		utils.Panic(fmt.Sprintf("ddir %s does not exist, you can create via \"init\" subcommand", mopts.DDir), nil, exitcode.FileError)
+	}
+
 	// subs.toml
 	if err := subs.GetSubsToml(mopts.DDir); err != nil {
 		utils.Panic("error getting subs.toml", err, exitcode.ConfigError)

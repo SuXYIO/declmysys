@@ -18,6 +18,17 @@ type InitOpts struct {
 }
 
 func Init(gc globconf.Globconf, mopts MainOpts, opts InitOpts) {
+	// ddir doesn't exist
+	if DDirExist(mopts.DDir) {
+		if dir, err := os.ReadDir(mopts.DDir); err != nil {
+			utils.Panic(fmt.Sprintf("failed to read ddir %s", mopts.DDir), nil, exitcode.FileError)
+		} else {
+			if len(dir) > 0 {
+				utils.Panic(fmt.Sprintf("ddir already %s exists and is not empty", mopts.DDir), nil, exitcode.FileError)
+			}
+		}
+	}
+
 	if !opts.NoGit {
 		// init git
 		if !gitAvail() {

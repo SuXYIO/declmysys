@@ -17,6 +17,11 @@ type RunOpts struct {
 }
 
 func Run(gc globconf.Globconf, mopts MainOpts, opts RunOpts) {
+	// ddir doesn't exist
+	if !DDirExist(mopts.DDir) {
+		utils.Panic(fmt.Sprintf("ddir %s does not exist, you can create via \"init\" subcommand", mopts.DDir), nil, exitcode.FileError)
+	}
+
 	// subs.toml
 	if err := subs.GetSubsToml(mopts.DDir); err != nil {
 		utils.Panic("error getting subs.toml", err, exitcode.ConfigError)
@@ -34,10 +39,10 @@ func Run(gc globconf.Globconf, mopts MainOpts, opts RunOpts) {
 	// can only assume that default value 0 is not user input
 	var priority *uint
 	if opts.Args.Priority == 0 {
-		fmt.Printf("Listing %s:\n", gc.DDir)
+		fmt.Printf("Running %s:\n", gc.DDir)
 		priority = nil
 	} else {
-		fmt.Printf("Listing %s (priority %d):\n", gc.DDir, opts.Args.Priority)
+		fmt.Printf("Running %s (priority %d):\n", gc.DDir, opts.Args.Priority)
 		priority = &opts.Args.Priority
 	}
 	if err := declss.Run(decls.DeclsRunOpts{

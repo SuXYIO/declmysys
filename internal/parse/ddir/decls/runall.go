@@ -1,10 +1,12 @@
 package decls
 
 import (
+	"fmt"
 	"os"
 	"sort"
 	"strings"
 
+	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
 )
 
@@ -29,7 +31,7 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 		return decls[i].Priority > decls[j].Priority
 	})
 
-	indent := strings.Repeat("\t", int(opts.Indent))
+	indent := strings.Repeat(consts.Indent, int(opts.Indent))
 	for _, d := range decls {
 		// filter by priority
 		if opts.Priority == nil || (opts.Priority != nil && d.Priority == *opts.Priority) {
@@ -39,6 +41,7 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 			if err := d.Run(opts.Cmdopts); err != nil {
 				return err
 			}
+			fmt.Printf("%s%sDone!\n", indent, consts.Indent)
 		}
 	}
 
