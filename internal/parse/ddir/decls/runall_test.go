@@ -41,7 +41,7 @@ You are ` + userinfo.Username + ".\n")
 				RunDat: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						// used redirect here, so must use shell
-						{"bash", "-c", "echo 'Born of God and Void.' >> foo.txt"},
+						{"sh", "-c", "echo 'Born of God and Void.' >> foo.txt"},
 					},
 				},
 			},
@@ -51,7 +51,7 @@ You are ` + userinfo.Username + ".\n")
 				Priority: 7,
 				RunDat: map[string]any{
 					"cmds": []cmdtype.Cmd{
-						{"bash", "-c", "echo 'You shall seal the blinding light that plagues their dreams.' >> foo.txt"},
+						{"sh", "-c", "echo 'You shall seal the blinding light that plagues their dreams.' >> foo.txt"},
 					},
 				},
 			},
@@ -61,7 +61,7 @@ You are ` + userinfo.Username + ".\n")
 				Priority: 6,
 				RunDat: map[string]any{
 					"cmds": []cmdtype.Cmd{
-						{"bash", "-c", "echo 'You are the Vessel.' >> foo.txt"},
+						{"sh", "-c", "echo 'You are the Vessel.' >> foo.txt"},
 					},
 				},
 			},
@@ -71,7 +71,7 @@ You are ` + userinfo.Username + ".\n")
 				Priority: 5,
 				RunDat: map[string]any{
 					"cmds": []cmdtype.Cmd{
-						{"bash", "-c", "echo 'You are {USERNAME}.' >> foo.txt"},
+						{"sh", "-c", "echo 'You are {USERNAME}.' >> foo.txt"},
 					},
 				},
 			},

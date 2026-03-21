@@ -33,20 +33,87 @@ I wish to build a manager, not only limited to dotfiles, but can also describe a
 
 I'm afraid it won't be as intuitive as **Stow**, but I promise using it will be easy.
 
+## Requirements
+
+- OS: Linux
+- Architecture: amd64
+
+Cross-platform support is not guaranteed, but works on any Linux distro and any architecture theoretically.
+
+> [!NOTE]
+> All manual integration tests are done in an Alpine Virtual Machine (Alpine 3.23.3 Virtual `Linux 6.18.9-0-virt x86_64` on VirtualBox)
+
+## Install
+
+Dependencies:
+
+- `git` (`2.52.0` in the testing machine)
+
+### Go-install
+
+Run:
+
+```bash
+go install github.com/suxyio/declmysys
+```
+
+And the executable will be put to `GOPATH/bin`.
+If you do not know where `GOPATH` is (usually `~/go`), try `go env GOPATH`.
+
+### Manual build
+
+Needs [goreleaser](https://goreleaser.com/) installed.
+
+Run:
+
+```bash
+git clone https://github.com/suxyio/declmysys.git
+cd declmysys
+goreleaser build
+```
+
+The results are in `./dest` directory.
+
+Alternatively, build without goreleaser:
+
+```bash
+git clone https://github.com/suxyio/declmysys.git
+cd declmysys
+go build
+```
+
+The result is `./declmysys` binary.
+
+Add custom build options for your own need.
+
+### Uninstall
+
+If you installed it via go-install, remove the binary under `GOPATH/bin` (usually `~/go/bin`).
+
+The program also asks to create config file under default config dir (usually `~/.config/declmysys`), you can also remove that directory.
+
+## Usage
+
+See docs under `./docs`.
+
+I'll improve the documentation later, sorry for the inconvenience.
+
 ## TODO
 
 Basic:
 
 - [x] Design config formats
-- [ ] Basic implementation
+- [x] Basic implementation
   - [x] Cmdline args
-  - [ ] Parsing stuff
-  - [ ] Executing stuff
+  - [x] Parsing stuff
+  - [x] Executing stuff
 
 Design:
 
 - [ ] Update docs (i mean, at least make it _readable_)
-  - [ ] Add docs site via github pages
+  - [ ] Write quickstart and stuff
+  - [ ] Add docs site via github pages (try docsify?)
+- [ ] Use better cli framework (try `github.com/urfave/cli`?)
 - [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme
