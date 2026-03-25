@@ -5,9 +5,10 @@ Execute defined stuff.
 ## Args
 
 ```bash
-declmysys run [PRIORITY]
+declmysys run [-d|--dry] [PRIORITY]
 ```
 
+- `-d` or `--dry`: Dry run, only prints out the command to run
 - `PRIORITY`: Run the specific procedures for a certain priority
 
 > [!WARNING]

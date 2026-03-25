@@ -11,6 +11,7 @@ import (
 )
 
 type RunOpts struct {
+	Dry  bool `short:"d" long:"dry" description:"Dry run, only prints out the command to run"`
 	Args struct {
 		Priority uint `positional-arg-name:"priority" description:"Run the specific procedures for a certain priority" long-description:"Run the specific procedures for a certain priority"`
 	} `positional-args:"yes"`
@@ -45,11 +46,16 @@ func Run(gc globconf.Globconf, mopts MainOpts, opts RunOpts) {
 		fmt.Printf("Running %s (priority %d):\n", gc.DDir, opts.Args.Priority)
 		priority = &opts.Args.Priority
 	}
-	if err := declss.Run(decls.DeclsRunOpts{
-		DoPrint:  true,
-		Indent:   1,
-		Priority: priority,
-	}); err != nil {
+
+	declopts := decls.DeclsRunOpts{
+		Indent:         1,
+		FilterPriority: priority,
+	}
+	if opts.Dry {
+		declopts.Dry = true
+	}
+
+	if err := declss.Run(declopts); err != nil {
 		utils.Panic("error running decls", err, exitcode.ExecError)
 	}
 }

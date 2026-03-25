@@ -2,7 +2,8 @@
 
 Priority is described via an `uint` (unsigned int / positive int).
 The higher the priority value, the earlier it gets executed, vice versa.
-Sharing priority value defines that the operations run with random order.
+
+When operations share a priority value, they run in random order.
 
 The default priority value for decls is 100.
 

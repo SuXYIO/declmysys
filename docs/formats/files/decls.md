@@ -64,7 +64,7 @@ priority = 1000
 Presets for `packages`:
 | Name | Manager Command |
 | ---- | --------------- |
-| `apt` | `["sudo", "apt", "install"]`
+| `apt` | `["sudo", "apt", "install"]` |
 
 > [!NOTE]
 > I'm not really familiar with other package managers, so I welcome you to contribute your favorate manager's command here!

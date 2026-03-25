@@ -17,7 +17,8 @@ import (
 func main() {
 	// parser setup
 	argMain := &subcmds.MainOpts{}
-	parser := flags.NewParser(argMain, flags.PrintErrors)
+	// HACK: Inconsistent help with no autopaging (via HelpFlag)
+	parser := flags.NewParser(argMain, flags.PrintErrors|flags.HelpFlag)
 	parser.Name = consts.Name
 	parser.ShortDescription = consts.Desc
 	parser.SubcommandsOptional = true
@@ -49,13 +50,9 @@ func main() {
 		os.Exit(exitcode.InvalidArgs)
 	}
 
-	// version & help (-V or -h)
+	// version (-V)
 	if argMain.Version {
 		subcmds.Version(*argVersion)
-		os.Exit(exitcode.Success)
-	}
-	if argMain.Help {
-		subcmds.Help(*parser, *argHelp)
 		os.Exit(exitcode.Success)
 	}
 

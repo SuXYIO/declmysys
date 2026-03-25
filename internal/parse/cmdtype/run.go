@@ -1,6 +1,8 @@
 package cmdtype
 
 import (
+	"fmt"
+	"io"
 	"os"
 	"os/exec"
 
@@ -8,13 +10,15 @@ import (
 )
 
 // CmdRunOptions defines options for running a command
+
 type CmdRunOptions struct {
-	RedirectStdin  *os.File // default os.Stdin
-	RedirectStdout *os.File // default os.Stdout
-	RedirectStderr *os.File // default os.Stderr
-	AppendedArgs   []string // useful for package install append package spec, []string{} or nil for none
-	WorkingDir     string   // change working directory, "" for use default
-	DoPCSubs       bool     // whether to do default PC subs
+	RedirectStdin  io.Reader // default os.Stdin
+	RedirectStdout io.Writer // default os.Stdout
+	RedirectStderr io.Writer // default os.Stderr
+	AppendedArgs   []string  // useful for package install append package spec, []string{} or nil for none
+	WorkingDir     string    // change working directory, "" for use default
+	DoPCSubs       bool      // whether to do default PC subs
+	DryRun         io.Writer // won't run, only prints command to run to writer, nil for normal run
 }
 
 // Run runs a command
@@ -40,11 +44,19 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 		c = exec.Command(cmd[0], cmd[1:]...)
 	}
 
+	if opts.DryRun != nil {
+		// dry run
+		if opts.WorkingDir != "" {
+			fmt.Fprintf(opts.DryRun, "[workdir: %s] ", opts.WorkingDir)
+		}
+		_, err := fmt.Fprint(opts.DryRun, c)
+		return err
+	}
+
 	// change dir
 	if opts.WorkingDir != "" {
 		c.Dir = opts.WorkingDir
 	}
-
 	// redirect
 	if opts.RedirectStdin != nil {
 		c.Stdin = opts.RedirectStdin
@@ -62,6 +74,7 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 		c.Stderr = os.Stderr
 	}
 
+	// run
 	if err := c.Run(); err != nil {
 		return err
 	}

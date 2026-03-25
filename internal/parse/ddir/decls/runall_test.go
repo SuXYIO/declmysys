@@ -1,6 +1,7 @@
 package decls
 
 import (
+	"io"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -10,7 +11,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
 )
 
-func TestRunDecls(t *testing.T) {
+func TestDeclsRun(t *testing.T) {
 	t.Run("echo order test", func(t *testing.T) {
 		userinfo, err := user.Current()
 		if err != nil {
@@ -78,9 +79,9 @@ You are ` + userinfo.Username + ".\n")
 		}
 
 		if err := decls.Run(DeclsRunOpts{
-			Cmdopts:  cmdtype.CmdRunOptions{WorkingDir: tmpdir},
-			DoPrint:  false,
-			Priority: nil,
+			noPrint:        true,
+			WorkingDir:     tmpdir,
+			FilterPriority: nil,
 		}); err != nil {
 			t.Errorf("unexpected error running RunDecls: %v", err)
 		}
@@ -91,4 +92,33 @@ You are ` + userinfo.Username + ".\n")
 			t.Errorf("file contents does not match, want %q, got %q", expected, got)
 		}
 	})
+}
+
+// BenchmarkDeclsRunParse benchmarks the speed of parsing decls
+func BenchmarkDeclsRunParse(b *testing.B) {
+	decls := Decls{}
+	for _, s := range []string{"foo", "bar", "baz", "quz"} {
+		decls = append(decls, Decl{
+			Name:     s,
+			Preset:   "cmds",
+			Priority: 42,
+			RunDat: map[string]any{
+				"cmds": []cmdtype.Cmd{
+					{"touch", s},
+				},
+			},
+		})
+	}
+
+	for b.Loop() {
+		tmpdir := b.TempDir()
+		if err := decls.Run(DeclsRunOpts{
+			RedirectStdout: io.Discard,
+			RedirectStderr: io.Discard,
+			WorkingDir:     tmpdir,
+			noPrint:        true,
+		}); err != nil {
+			b.Errorf("unexpected error running RunDecls: %v", err)
+		}
+	}
 }

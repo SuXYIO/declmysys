@@ -2,6 +2,7 @@ package decls
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"sort"
 	"strings"
@@ -13,10 +14,13 @@ import (
 type Priority = uint
 
 type DeclsRunOpts struct {
-	Cmdopts  cmdtype.CmdRunOptions
-	DoPrint  bool
-	Indent   uint
-	Priority *Priority
+	Indent         uint
+	WorkingDir     string
+	FilterPriority *Priority
+	Dry            bool
+	RedirectStdout io.Writer
+	RedirectStderr io.Writer
+	noPrint        bool // convenient for testing, only works for Dry == false
 }
 
 // RunDecls runs the decls by their priority, from high to low.
@@ -26,6 +30,7 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 		return nil
 	}
 
+	// sort in order
 	sort.Slice(decls, func(i, j int) bool {
 		// ">" for high to low sort
 		return decls[i].Priority > decls[j].Priority
@@ -34,14 +39,39 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 	indent := strings.Repeat(consts.Indent, int(opts.Indent))
 	for _, d := range decls {
 		// filter by priority
-		if opts.Priority == nil || (opts.Priority != nil && d.Priority == *opts.Priority) {
-			if opts.DoPrint {
-				d.List(os.Stdout, ToStringModeRun, indent)
+		if opts.FilterPriority == nil || (opts.FilterPriority != nil && d.Priority == *opts.FilterPriority) {
+			if opts.Dry {
+				// dry run
+				if err := d.List(os.Stdout, ToStringModeRun, indent); err != nil {
+					return err
+				}
+				fmt.Println()
+				fmt.Print(indent + consts.Indent)
+				if err := d.Run(cmdtype.CmdRunOptions{
+					WorkingDir: opts.WorkingDir,
+					DryRun:     os.Stdout,
+				}); err != nil {
+					return err
+				}
+			} else {
+				if !opts.noPrint {
+					if err := d.List(os.Stdout, ToStringModeRun, indent); err != nil {
+						return err
+					}
+					fmt.Println()
+				}
+				if err := d.Run(cmdtype.CmdRunOptions{
+					RedirectStdout: opts.RedirectStdout,
+					RedirectStderr: opts.RedirectStderr,
+					WorkingDir:     opts.WorkingDir,
+					DryRun:         nil,
+				}); err != nil {
+					return err
+				}
+				if !opts.noPrint {
+					fmt.Printf("%s%sDone!\n", indent, consts.Indent)
+				}
 			}
-			if err := d.Run(opts.Cmdopts); err != nil {
-				return err
-			}
-			fmt.Printf("%s%sDone!\n", indent, consts.Indent)
 		}
 	}
 

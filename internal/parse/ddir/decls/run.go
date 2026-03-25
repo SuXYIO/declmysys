@@ -7,6 +7,7 @@ import (
 )
 
 func (decl Decl) Run(opts cmdtype.CmdRunOptions) error {
+	// note that opts.AppendedArgs will be ignored
 	// subs
 	preset, exists := presets[decl.Preset]
 	if !exists {

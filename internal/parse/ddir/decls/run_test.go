@@ -10,7 +10,7 @@ import (
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
 )
 
-func TestDeclsRun(t *testing.T) {
+func TestDeclRun(t *testing.T) {
 	t.Run("create-file", func(t *testing.T) {
 		userinfo, err := user.Current()
 		if err != nil {

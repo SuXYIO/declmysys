@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -60,6 +61,6 @@ func pager(data []byte) error {
 }
 
 func direct(data []byte) error {
-	_, err := os.Stdout.Write(data)
+	_, err := fmt.Print(string(data))
 	return err
 }
