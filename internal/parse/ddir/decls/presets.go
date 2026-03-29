@@ -2,7 +2,6 @@ package decls
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
@@ -17,15 +16,17 @@ const (
 
 // Preset defines behaviors of a preset
 type preset struct {
-	PreFunc  func(Decl, toml.MetaData) error         // does the validation and parsing work
+	PreFunc  func(*Decl, toml.MetaData) error        // does the validation and parsing work
 	ToString func(Decl, int8, string) string         // turns into readable string, ASSUMES that prefunc is ran before
 	RunFunc  func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before, also does subs
 }
 
+//TODO: Change slice-printing work to "%v", or define cmdtype.Cmd to string
+
 // Presets maps preset name to preset definition, shall not be modified
 var presets = map[string]preset{
 	"packages": {
-		PreFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d *Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}
@@ -53,12 +54,12 @@ var presets = map[string]preset{
 			case ToStringModeRun:
 				return fmt.Sprintf("%spackages[%s]", prestr, d.Name)
 			default:
-			// ToStringModeList
-			packs, ok := d.RunDat["packs"].([]string)
-			if !ok {
-				return fmt.Sprintf("%spackages[%s]: <invalid packs>", prestr, d.Name)
-			}
-			return fmt.Sprintf("%spackages[%s]: %s", prestr, d.Name, strings.Join(packs, " "))
+				// ToStringModeList
+				if packs, exists := d.RunDat["packs"]; !exists {
+					return fmt.Sprintf("%spackages[%s]: <not found>", prestr, d.Name)
+				} else {
+					return fmt.Sprintf("%spackages[%s]: %v", prestr, d.Name, packs)
+				}
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
@@ -89,9 +90,18 @@ var presets = map[string]preset{
 				}
 			}
 			// no subs for packs
-			packs, ok := d.RunDat["packs"].([]string)
+			packany, ok := d.RunDat["packs"].([]any)
 			if !ok {
-				return fmt.Errorf("packs must be of type []string for preset \"packages\", got %v of type %T", d.RunDat["packs"], d.RunDat["packs"])
+				return fmt.Errorf("packs must be of type []any for preset \"packages\", got %v of type %T", d.RunDat["packs"], d.RunDat["packs"])
+			}
+
+			var packs []string
+			for i := range packany {
+				pack, ok := packany[i].(string)
+				if !ok {
+					return fmt.Errorf("pack in packs must be of type string, got %v of type %T at index %d", packany[i], packany[i], i)
+				}
+				packs = append(packs, pack)
 			}
 
 			// override opts
@@ -109,7 +119,7 @@ var presets = map[string]preset{
 	},
 
 	"gitclone": {
-		PreFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d *Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}
@@ -161,7 +171,7 @@ var presets = map[string]preset{
 	},
 
 	"stow": {
-		PreFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d *Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}
@@ -186,7 +196,11 @@ var presets = map[string]preset{
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
-			datadir, err := subs.ApplyPC(d.RunDat["datadir"].(string))
+			raw, ok := d.RunDat["datadir"].(string)
+			if !ok {
+				return fmt.Errorf("invalid datadir: %v", d.RunDat["datadir"])
+			}
+			datadir, err := subs.ApplyPC(raw)
 			if err != nil {
 				return err
 			}
@@ -202,7 +216,7 @@ var presets = map[string]preset{
 	},
 
 	"cmds": {
-		PreFunc: func(d Decl, md toml.MetaData) error {
+		PreFunc: func(d *Decl, md toml.MetaData) error {
 			if d.RunDat == nil {
 				d.RunDat = make(map[string]any)
 			}

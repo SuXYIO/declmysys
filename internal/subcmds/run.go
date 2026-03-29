@@ -40,11 +40,19 @@ func Run(gc globconf.Globconf, mopts MainOpts, opts RunOpts) {
 	// can only assume that default value 0 is not user input
 	var priority *uint
 	if opts.Args.Priority == 0 {
-		fmt.Printf("Running %s:\n", gc.DDir)
-		priority = nil
+		if opts.Dry {
+			fmt.Printf("Running %s (dry):\n", gc.DDir)
+		} else {
+			fmt.Printf("Running %s:\n", gc.DDir)
+			priority = nil
+		}
 	} else {
-		fmt.Printf("Running %s (priority %d):\n", gc.DDir, opts.Args.Priority)
-		priority = &opts.Args.Priority
+		if opts.Dry {
+			fmt.Printf("Running %s (dry, priority %d):\n", gc.DDir, opts.Args.Priority)
+		} else {
+			fmt.Printf("Running %s (priority %d):\n", gc.DDir, opts.Args.Priority)
+			priority = &opts.Args.Priority
+		}
 	}
 
 	declopts := decls.DeclsRunOpts{

@@ -45,7 +45,6 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 				if err := d.List(os.Stdout, ToStringModeRun, indent); err != nil {
 					return err
 				}
-				fmt.Println()
 				fmt.Print(indent + consts.Indent)
 				if err := d.Run(cmdtype.CmdRunOptions{
 					WorkingDir: opts.WorkingDir,
@@ -54,11 +53,12 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 					return err
 				}
 			} else {
+				// normal run
 				if !opts.noPrint {
 					if err := d.List(os.Stdout, ToStringModeRun, indent); err != nil {
 						return err
 					}
-					fmt.Println()
+					fmt.Print(indent + consts.Indent)
 				}
 				if err := d.Run(cmdtype.CmdRunOptions{
 					RedirectStdout: opts.RedirectStdout,

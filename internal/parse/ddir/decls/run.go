@@ -21,6 +21,9 @@ func (decl Decl) Run(opts cmdtype.CmdRunOptions) error {
 	if err := preset.RunFunc(decl, opts); err != nil {
 		return err
 	}
+	if opts.DryRun != nil {
+		fmt.Fprintln(opts.DryRun)
+	}
 
 	return nil
 }

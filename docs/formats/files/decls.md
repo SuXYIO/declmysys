@@ -6,17 +6,14 @@ Where the declarations are stored.
 
 The top `decls/` directory contains many subdirectories, I'll call them _declpacks_.
 
-Each _declpack_ consists of two major parts:
+Files:
 
 1. `desc.toml`: The descriptor, describing what the declarations in the pack are for, and also how to operate it
-2. `data/`: The optional content, which is usually a `stow` structure or something the descriptor can operate with. Can change to directories in desc
 
 ```text
 decls/
-├── bash/
-│   ├── desc.toml
-│   └── data/
-│       └── .bashrc
+├── workdir/
+│   └── desc.toml
 ├── nvim/
 │   ├── desc.toml
 │   └── data/

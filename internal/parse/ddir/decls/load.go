@@ -45,7 +45,7 @@ func (decl *Decl) loadDesc(data []byte) error {
 	if preset.PreFunc == nil {
 		return fmt.Errorf("PreFunc not defined for preset %q", decl.Preset)
 	}
-	err = preset.PreFunc(*decl, md)
+	err = preset.PreFunc(decl, md)
 	if err != nil {
 		return err
 	}

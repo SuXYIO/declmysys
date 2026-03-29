@@ -62,6 +62,11 @@ If you do not know where `GOPATH` is (usually `~/go`), try `go env GOPATH`.
 
 ### Manual build
 
+> [!TIP]
+> Try `git clone --branch=main --depth=1 https://github.com/suxyio/declmysys.git` if network is slow.
+
+#### GoReleaser
+
 Needs [goreleaser](https://goreleaser.com/) installed.
 
 Run:
@@ -73,6 +78,8 @@ goreleaser build
 ```
 
 The results are in `./dest` directory.
+
+#### Go-Install
 
 Alternatively, build without goreleaser:
 
@@ -119,6 +126,8 @@ Design:
   - [ ] Colorscheme
 - [ ] Logic
   - [ ] Ablility to specify which decl to run
+  - [ ] Better error messages (show which operation went wrong)
+  - [ ] Less nested file structure
   - [ ] Add logging
 - [ ] QoL
   - [ ] Toml autocompletion integration (via taplo)

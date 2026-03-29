@@ -48,8 +48,8 @@ func List(gc globconf.Globconf, mopts MainOpts, opts ListOpts) {
 		priority = &opts.Args.Priority
 	}
 	if err := declss.List(&w, decls.DeclsListOpts{
-		Indent:   1,
-		Priority: priority,
+		Indent:         1,
+		FilterPriority: priority,
 	}); err != nil {
 		utils.Panic("error listing decls", err, exitcode.ExecError)
 	}

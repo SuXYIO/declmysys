@@ -15,6 +15,7 @@ func (decl Decl) List(w io.Writer, mode int8, prestr string) error {
 			return fmt.Errorf("ToString function does not exist for preset %q. %s", decl.Preset, consts.NotYourFault)
 		}
 		fmt.Fprint(w, preset.ToString(decl, mode, prestr))
+		fmt.Fprintln(w)
 		return nil
 	}
 }
