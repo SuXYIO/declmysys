@@ -26,7 +26,7 @@ func TestDeclsLoad(t *testing.T) {
 
 		{"simple",
 			"simple",
-			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclsPriority, RunDat: map[string]any{"datadir": "data"}},
+			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclsPriority, Pwd: "testdata/simple", RunDat: map[string]any{"datadir": "data"}},
 			false,
 		},
 
@@ -36,6 +36,7 @@ func TestDeclsLoad(t *testing.T) {
 				Name:     "bar",
 				Preset:   "cmds",
 				Priority: 99,
+				Pwd:      "~/foo",
 				RunDat:   map[string]any{"cmds": []cmdtype.Cmd{{"sudo", "foo", "{HOME}/Foobar"}, {"bar", "baz"}}},
 			},
 			false,
@@ -47,6 +48,7 @@ func TestDeclsLoad(t *testing.T) {
 				Name:     "bar",
 				Preset:   "gitclone",
 				Priority: 99,
+				Pwd:      "testdata/subs",
 				RunDat:   map[string]any{"url": "github.com/foobar/baz", "dest": "~/Foobar"},
 			},
 			false,
@@ -57,6 +59,7 @@ func TestDeclsLoad(t *testing.T) {
 				Name:     "foobar",
 				Preset:   "cmds",
 				Priority: 0,
+				Pwd:      "testdata/touch",
 				RunDat: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						{"touch", "foo"},
@@ -80,9 +83,18 @@ func TestDeclsLoad(t *testing.T) {
 				// don't check value if has error
 				return
 			}
-			if !reflect.DeepEqual(decl, tt.want) {
+			if !declEqual(decl, tt.want) {
 				t.Errorf("want = %#v, got = %#v", tt.want, decl)
 			}
 		})
 	}
+}
+
+func declEqual(a Decl, b Decl) bool {
+	// can't just use DeepEqual since it'll check descPath field
+	return (a.Name == b.Name &&
+		a.Preset == b.Preset &&
+		a.Priority == b.Priority &&
+		a.Pwd == b.Pwd &&
+		reflect.DeepEqual(a.RunDat, b.RunDat))
 }

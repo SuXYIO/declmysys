@@ -24,6 +24,7 @@ func TestDeclRun(t *testing.T) {
 			Name:     "foobar",
 			Preset:   "cmds",
 			Priority: 0,
+			Pwd:      tmpdir,
 			RunDat: map[string]any{
 				"cmds": []cmdtype.Cmd{
 					{"touch", "foo"},
@@ -32,9 +33,7 @@ func TestDeclRun(t *testing.T) {
 			},
 		}
 
-		if err := decl.Run(cmdtype.CmdRunOptions{
-			WorkingDir: tmpdir,
-		}); err != nil {
+		if err := decl.Run(cmdtype.CmdRunOptions{}); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
 

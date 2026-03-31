@@ -34,12 +34,15 @@ decls/
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
 - `preset`: Name (string) of a preset
 - `priority`: Default `100` for decls. See [priority](../represents/priority.md)
+- `pwd`: Optional present working directory, default is the dir the desc file is under (leave empty for default), paths & cmds subs will be used
 - `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
 
 ```toml
 name = "foobar"
 preset = "stow"
+pwd = "~/foo"
 priority = 1000
+[rundat]
 ```
 
 #### Presets:

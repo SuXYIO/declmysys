@@ -14,6 +14,11 @@ func (decl Decl) Run(opts cmdtype.CmdRunOptions) error {
 		return fmt.Errorf("preset not found for preset name: %q", decl.Preset)
 	}
 
+	// use Decl.Pwd for workingdir, but leave override (for tests)
+	if opts.WorkingDir == "" {
+		opts.WorkingDir = decl.Pwd
+	}
+
 	// run
 	if preset.RunFunc == nil {
 		return fmt.Errorf("RunFunc not defined for preset %q", decl.Preset)

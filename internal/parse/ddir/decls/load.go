@@ -15,6 +15,7 @@ func (decl *Decl) Load(path string) error {
 	if err != nil {
 		return err
 	}
+	decl.descPath = path
 	err = decl.loadDesc(descdata)
 	if err != nil {
 		return err
@@ -68,6 +69,9 @@ func (decl Decl) descCommonIsValid(md toml.MetaData) error {
 func (decl *Decl) descCommonSetDefaults(md toml.MetaData) error {
 	if !md.IsDefined("priority") {
 		decl.Priority = consts.DefaultDeclsPriority
+	}
+	if !md.IsDefined("pwd") || decl.Pwd == "" {
+		decl.Pwd = decl.descPath
 	}
 	return nil
 }
