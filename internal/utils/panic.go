@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"github.com/mitchellh/colorstring"
 	"os"
 )
 
@@ -23,9 +22,9 @@ func Panic(msg string, err error, exitcode int) {
 		}
 	*/
 	if err != nil {
-		colorstring.Fprintf(os.Stderr, "[red]%s: %v\n", msg, err)
+		ErrorPrintf("%s: %v\n", msg, err)
 	} else {
-		colorstring.Fprintf(os.Stderr, "[red]%s\n", msg)
+		ErrorPrintf("%s\n", msg)
 	}
 	os.Exit(exitcode)
 }
