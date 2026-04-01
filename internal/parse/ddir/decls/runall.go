@@ -58,7 +58,6 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 					if err := d.List(os.Stdout, ToStringModeRun, indent); err != nil {
 						return err
 					}
-					fmt.Print(indent + consts.Indent)
 				}
 				if err := d.Run(cmdtype.CmdRunOptions{
 					RedirectStdout: opts.RedirectStdout,

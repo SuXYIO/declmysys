@@ -28,7 +28,7 @@ func TestCmdRun(t *testing.T) {
 		if err := cmd.Run(CmdRunOptions{
 			WorkingDir:   tmpdir,
 			AppendedArgs: fnames,
-			DoPCSubs:     true,
+			NoPCSubs:     false,
 		}); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

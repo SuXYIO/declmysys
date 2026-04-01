@@ -55,11 +55,7 @@ var presets = map[string]preset{
 				return fmt.Sprintf("%spackages[%s]", prestr, d.Name)
 			default:
 				// ToStringModeList
-				if packs, exists := d.RunDat["packs"]; !exists {
-					return fmt.Sprintf("%spackages[%s]: <not found>", prestr, d.Name)
-				} else {
-					return fmt.Sprintf("%spackages[%s]: %v", prestr, d.Name, packs)
-				}
+				return fmt.Sprintf("%spackages[%s]:\t%v", prestr, d.Name, d.RunDat["packs"])
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
@@ -106,7 +102,6 @@ var presets = map[string]preset{
 
 			// override opts
 			opts.AppendedArgs = packs
-			opts.DoPCSubs = false
 
 			// run
 			cmd := cmdtype.Cmd(mancmd)
@@ -124,12 +119,12 @@ var presets = map[string]preset{
 				d.RunDat = make(map[string]any)
 			}
 
-			// url
-			if !md.IsDefined("rundat", "url") {
-				return fmt.Errorf("must specify rundat.url for preset \"gitclone\"")
+			// src
+			if !md.IsDefined("rundat", "src") {
+				return fmt.Errorf("must specify rundat.src for preset \"gitclone\"")
 			}
-			if _, ok := d.RunDat["url"].(string); !ok {
-				return fmt.Errorf("rundat.url must be of type string for preset \"gitclone\", got %v of type %T", d.RunDat["url"], d.RunDat["url"])
+			if _, ok := d.RunDat["src"].(string); !ok {
+				return fmt.Errorf("rundat.src must be of type string for preset \"gitclone\", got %v of type %T", d.RunDat["src"], d.RunDat["src"])
 			}
 			// dest
 			if !md.IsDefined("rundat", "dest") {
@@ -146,12 +141,12 @@ var presets = map[string]preset{
 				return fmt.Sprintf("%sgitclone[%s]", prestr, d.Name)
 			default:
 				// ToStringModeList
-				return fmt.Sprintf("%sgitclone[%s]: url %s dest %s", prestr, d.Name, d.RunDat["url"], d.RunDat["dest"])
+				return fmt.Sprintf("%sgitclone[%s]:\tsrc %q, dest %q", prestr, d.Name, d.RunDat["src"], d.RunDat["dest"])
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// subs
-			url, err := subs.ApplyG(d.RunDat["url"].(string))
+			src, err := subs.ApplyG(d.RunDat["src"].(string))
 			if err != nil {
 				return err
 			}
@@ -159,10 +154,9 @@ var presets = map[string]preset{
 			if err != nil {
 				return err
 			}
-			opts.DoPCSubs = false
 
 			// run
-			cmd := cmdtype.Cmd{"git", "clone", url, dest}
+			cmd := cmdtype.Cmd{"git", "clone", src, dest}
 			if err := cmd.Run(opts); err != nil {
 				return err
 			}
@@ -176,13 +170,23 @@ var presets = map[string]preset{
 				d.RunDat = make(map[string]any)
 			}
 
-			if !md.IsDefined("rundat", "datadir") {
-				d.RunDat["datadir"] = consts.DefaultDeclsDataDir
+			// src
+			if !md.IsDefined("rundat", "src") {
+				d.RunDat["src"] = "stow"
 			} else {
-				if _, ok := d.RunDat["datadir"].(string); !ok {
-					return fmt.Errorf("rundat.datadir must be of type string for preset \"stow\", got %v of type %T", d.RunDat["datadir"], d.RunDat["datadir"])
+				if _, ok := d.RunDat["src"].(string); !ok {
+					return fmt.Errorf("rundat.src must be of type string for preset \"stow\", got %v of type %T", d.RunDat["src"], d.RunDat["src"])
 				}
 			}
+			// dest
+			if !md.IsDefined("rundat", "dest") {
+				d.RunDat["dest"] = "{HOME}"
+			} else {
+				if _, ok := d.RunDat["dest"].(string); !ok {
+					return fmt.Errorf("rundat.dest must be of type string for preset \"stow\", got %v of type %T", d.RunDat["dest"], d.RunDat["dest"])
+				}
+			}
+
 			return nil
 		},
 		ToString: func(d Decl, mode int8, prestr string) string {
@@ -191,23 +195,12 @@ var presets = map[string]preset{
 				return fmt.Sprintf("%sstow[%s]", prestr, d.Name)
 			default:
 				// ToStringModeList
-				return fmt.Sprintf("%sstow[%s]", prestr, d.Name)
+				return fmt.Sprintf("%sstow[%s]:\tsrc %q, dest %q", prestr, d.Name, d.RunDat["src"], d.RunDat["dest"])
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
-			// subs
-			raw, ok := d.RunDat["datadir"].(string)
-			if !ok {
-				return fmt.Errorf("invalid datadir: %v", d.RunDat["datadir"])
-			}
-			datadir, err := subs.ApplyPC(raw)
-			if err != nil {
-				return err
-			}
-			opts.DoPCSubs = false
-
 			// run
-			cmd := cmdtype.Cmd{"stow", datadir}
+			cmd := cmdtype.Cmd{"stow", "-t", d.RunDat["dest"].(string), d.RunDat["src"].(string)}
 			if err := cmd.Run(opts); err != nil {
 				return err
 			}
@@ -247,7 +240,6 @@ var presets = map[string]preset{
 			if err != nil {
 				return err
 			}
-			opts.DoPCSubs = true
 
 			// run
 			for _, cmd := range cmds {

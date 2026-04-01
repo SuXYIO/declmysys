@@ -15,10 +15,7 @@ const (
 	// default priorities
 	// gonna use uint here, since Priority is just an alias,
 	// avoids cycle-import shit
-	DefaultDeclsPriority uint = 100
-
-	// default misc
-	DefaultDeclsDataDir string = "data"
+	DefaultDeclPriority uint   = 100
 	NotYourFault        string = "If you, as a user, see this message, it's probably not your fault. Please open a GitHub issue or contact the author for help."
 	Indent              string = "    "
 )

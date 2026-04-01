@@ -17,7 +17,7 @@ type CmdRunOptions struct {
 	RedirectStderr io.Writer // default os.Stderr
 	AppendedArgs   []string  // useful for package install append package spec, []string{} or nil for none
 	WorkingDir     string    // change working directory, "" for use default
-	DoPCSubs       bool      // whether to do default PC subs
+	NoPCSubs       bool      // whether to do default PC subs
 	DryRun         io.Writer // won't run, only prints command to run to writer, nil for normal run
 }
 
@@ -29,7 +29,7 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	var c *exec.Cmd
 
-	if opts.DoPCSubs {
+	if !opts.NoPCSubs {
 		// do subs
 		err := cmd.subs(&opts)
 		if err != nil {
@@ -46,10 +46,7 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	if opts.DryRun != nil {
 		// dry run
-		if opts.WorkingDir != "" {
-			fmt.Fprintf(opts.DryRun, "[workdir: %s] ", opts.WorkingDir)
-		}
-		_, err := fmt.Fprint(opts.DryRun, c)
+		_, err := fmt.Fprintf(opts.DryRun, "%v\t[workdir: %s]", c, opts.WorkingDir)
 		return err
 	}
 

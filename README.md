@@ -41,7 +41,7 @@ I'm afraid it won't be as intuitive as **Stow**, but I promise using it will be 
 Cross-platform support is not guaranteed, but works on any Linux distro and any architecture theoretically.
 
 > [!NOTE]
-> All manual integration tests are done in an Alpine Virtual Machine (Alpine 3.23.3 Virtual `Linux 6.18.9-0-virt x86_64` on VirtualBox)
+> All manual tests are done in an Alpine Virtual Machine (Alpine 3.23.3 Virtual `Linux 6.18.9-0-virt x86_64` on VirtualBox)
 
 ## Install
 

@@ -2,5 +2,5 @@ name = "bar"
 preset = "gitclone"
 priority = 99
 [rundat]
-url = "github.com/foobar/baz"
+src = "https://github.com/foobar/baz"
 dest = "~/Foobar"

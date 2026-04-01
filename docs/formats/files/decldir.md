@@ -12,12 +12,11 @@ The default decldir is `~/Decl`, and the cli should support for modifying this d
 Decl/
 ├── .git/
 ├── subs.toml
-└── decls/
-    ├── decl1/
-    ├── decl2/
-    └── ...
+├── decl1/
+├── decl2/
+└── ...
 ```
 
 - `.git/`: optional regular git directory, for version control. Created via `git init`
 - `subs.toml`: subs table file. See [subs](../represents/subs.md)
-- `decls/`: stores declarations. See [decls](decls.md)
+- decls: stores declarations. See [decls](decls.md)

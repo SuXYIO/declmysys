@@ -1,0 +1,3 @@
+name = "stow test"
+preset = "stow"
+priority = 42

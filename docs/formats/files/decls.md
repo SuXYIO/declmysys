@@ -1,29 +1,31 @@
-# decls/
+# decls
 
 Where the declarations are stored.
 
-## Structure
+All directories under the decldir (except `.git/`) will be interpreted as a decl.
 
-The top `decls/` directory contains many subdirectories, I'll call them _declpacks_.
+## Structure
 
 Files:
 
 1. `desc.toml`: The descriptor, describing what the declarations in the pack are for, and also how to operate it
 
 ```text
-decls/
+Decl/
+├── .git/
+├── subs.toml
 ├── workdir/
 │   └── desc.toml
 ├── nvim/
 │   ├── desc.toml
-│   └── data/
+│   └── stow/
 │       └── .config/
 │           └── nvim/
 │               ├── init.lua
 │               └── theme.lua
 └── tmux/
     ├── desc.toml
-    └── data/
+    └── stow/
         └── .config/
             └── tmux/
                 └── tmux.conf
@@ -37,25 +39,18 @@ decls/
 - `pwd`: Optional present working directory, default is the dir the desc file is under (leave empty for default), paths & cmds subs will be used
 - `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
 
-```toml
-name = "foobar"
-preset = "stow"
-pwd = "~/foo"
-priority = 1000
-[rundat]
-```
-
 #### Presets:
 
 - `cmds`: Runs custom commands
   Required in `rundat`:
-  - `cmds`: list of cmds (`[]Cmd` i.e. `[][]string`) to run, will be parsed through paths & cmds subs
-- `stow`: Processes the `data/` directory with `stow data` command
-  Optional in `rundat`:
-  - `datadir`: default `data`, string of the directory being stowed, relative path is recommended, but still parsed through paths & cmds subs
-- `gitclone`: Clones a repository to certain location. Translates to `git clone {url} {dest}`, see example below.
+  - `cmds`: list of cmds (list of list of strings) to run, will be parsed through paths & cmds subs
+- `stow`: Stows a directory. Evaluates to `stow -t={dest} {src}`
+  Optional in `rundat`
+  - `src`: string of the directory being stowed, default `stow`
+  - `dest`: string of the target dir for stow, default `{HOME}`
+- `gitclone`: Clones a repository to certain location. Evaluates to `git clone {src} {dest}`, see example below.
   Required in `rundat`:
-  - `url`: string of the origin url, parsed by global subs
+  - `src`: string of the origin path / url, parsed by global subs
   - `dest`: string of the destination path, parsed by paths & cmds subs
 - `packages`: Runs a single command, but appends arguments, also includes presets, useful for installing packages.
   - `manager`: string for a preset name, or a list of strings for a custom manager command, will be parsed through paths & cmds subs if custom cmd, through global subs otherwise
@@ -65,18 +60,10 @@ Presets for `packages`:
 | Name | Manager Command |
 | ---- | --------------- |
 | `apt` | `["sudo", "apt", "install"]` |
+| `apk` | `["doas", "apk", "add"]` |
 
 > [!NOTE]
 > I'm not really familiar with other package managers, so I welcome you to contribute your favorate manager's command here!
-
-### data/
-
-Optional.
-
-Usually a `stow` structure. It is the common way people manage dotfiles so it should be familiar.
-(if you're not familiar, check out [GNU Stow Docs](https://www.gnu.org/software/stow/manual/), or search it online, there's plenty of tutorials for this)
-
-You can also use your own way, as long as you declare the operations properly in your `desc.toml`.
 
 ## Example
 
@@ -86,7 +73,7 @@ Bashrc via stow:
 # Structure:
 # bash/
 # ├── desc.toml
-# └── data/
+# └── stow/
 #     └── .bashrc
 
 name = "bashrc"
@@ -105,7 +92,7 @@ name = "clone neovim config"
 preset = "gitclone"
 priority = 500
 [rundat]
-url = "https://github.com/username/neovim_config"
+src = "https://github.com/username/neovim_config"
 dest = "{HOME}/.config/nvim"
 ```
 
@@ -115,15 +102,15 @@ Copy apt source:
 # Structure:
 # apt-source/
 # ├── desc.toml
-# └── data/
+# └── sources/
 #     ├── debian.sources
-#     └── extrepo.sources
+#     └── mysource.sources
 
 name = "apt-sources"
 preset = "cmds"
 priority = 1000
 [rundat]
-cmds = [["bash", "-c", "sudo mv data/* /etc/apt/sources.list.d"]]
+cmds = [["bash", "-c", "sudo mv sources/* /etc/apt/sources.list.d"]]
 ```
 
 Add user to dialout group:

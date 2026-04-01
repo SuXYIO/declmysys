@@ -92,4 +92,6 @@ disable_homedir_subs = false
 
 [global]
 [paths_cmds]
+# you can now use {ASROOT} in your decls, so you can quickly switch to "doas" or other stuff
+"{ASROOT}" = "sudo"
 ```

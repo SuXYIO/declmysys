@@ -68,7 +68,7 @@ func (decl Decl) descCommonIsValid(md toml.MetaData) error {
 
 func (decl *Decl) descCommonSetDefaults(md toml.MetaData) error {
 	if !md.IsDefined("priority") {
-		decl.Priority = consts.DefaultDeclsPriority
+		decl.Priority = consts.DefaultDeclPriority
 	}
 	if !md.IsDefined("pwd") || decl.Pwd == "" {
 		decl.Pwd = decl.descPath

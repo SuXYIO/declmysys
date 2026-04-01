@@ -26,7 +26,7 @@ func TestDeclsLoad(t *testing.T) {
 
 		{"simple",
 			"simple",
-			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclsPriority, Pwd: "testdata/simple", RunDat: map[string]any{"datadir": "data"}},
+			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclPriority, Pwd: "testdata/simple", RunDat: map[string]any{"src": "bar", "dest": "baz"}},
 			false,
 		},
 
@@ -42,6 +42,18 @@ func TestDeclsLoad(t *testing.T) {
 			false,
 		},
 
+		{"stow",
+			"stow",
+			Decl{
+				Name:     "stow test",
+				Preset:   "stow",
+				Priority: 42,
+				Pwd:      "testdata/stow",
+				RunDat:   map[string]any{"src": "stow", "dest": "{HOME}"},
+			},
+			false,
+		},
+
 		{"subs", // changed subs to be done with run, so no subs for load
 			"subs",
 			Decl{
@@ -49,7 +61,7 @@ func TestDeclsLoad(t *testing.T) {
 				Preset:   "gitclone",
 				Priority: 99,
 				Pwd:      "testdata/subs",
-				RunDat:   map[string]any{"url": "github.com/foobar/baz", "dest": "~/Foobar"},
+				RunDat:   map[string]any{"src": "https://github.com/foobar/baz", "dest": "~/Foobar"},
 			},
 			false,
 		},
