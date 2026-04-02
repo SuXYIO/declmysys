@@ -1,4 +1,4 @@
-package subs
+package metadata
 
 import "testing"
 

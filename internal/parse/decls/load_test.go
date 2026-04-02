@@ -7,12 +7,12 @@ import (
 
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 )
 
 func TestDeclsLoad(t *testing.T) {
 	// test with empty global subsdef var
-	subs.LoadGlobalSD([]byte(""))
+	metadata.GlobalMetaData.Load([]byte(""))
 
 	tests := []struct {
 		name     string

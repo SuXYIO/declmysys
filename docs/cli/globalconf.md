@@ -10,7 +10,7 @@ Will add a search order later. If no matches found, create one automatically.
 
 ## Values
 
-- `decldir`, the directory path of \_decldir. Will be parsed through the default paths&cmds subs rules
+- `decldir`, the directory path of decldir
 
 ## Example
 

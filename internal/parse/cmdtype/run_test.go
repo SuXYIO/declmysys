@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 )
 
 func TestCmdRun(t *testing.T) {
@@ -18,7 +18,7 @@ func TestCmdRun(t *testing.T) {
 		}
 
 		// test with empty global subsdef var
-		subs.LoadGlobalSD([]byte(""))
+		metadata.GlobalMetaData.Load([]byte(""))
 
 		tmpdir := t.TempDir()
 		fnames := []string{"foo", "bar", "baz_{USERNAME}"}
@@ -28,7 +28,6 @@ func TestCmdRun(t *testing.T) {
 		if err := cmd.Run(CmdRunOptions{
 			WorkingDir:   tmpdir,
 			AppendedArgs: fnames,
-			NoPCSubs:     false,
 		}); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}

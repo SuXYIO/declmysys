@@ -2,7 +2,7 @@ package consts
 
 import (
 	"github.com/suxyio/declmysys/internal/exitcode"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
@@ -28,12 +28,12 @@ var (
 
 func init() {
 	// initializes the two vars, to adapt directories
-	if ddirpath, err := subs.ApplyDefaultPC(DefaultDDirPath); err != nil {
+	if ddirpath, err := metadata.ApplyDefaultsSubs(DefaultDDirPath); err != nil {
 		utils.Panic("unable to parse DefaultDDirPath via subs.ApplyDefaultPC", err, exitcode.SetupError)
 	} else {
 		DefaultDDirPath = ddirpath
 	}
-	if gcpath, err := subs.ApplyDefaultPC(DefaultGlobconfPath); err != nil {
+	if gcpath, err := metadata.ApplyDefaultsSubs(DefaultGlobconfPath); err != nil {
 		utils.Panic("unable to parse DefaultGlobconfPath via subs.ApplyDefaultPC", err, exitcode.SetupError)
 	} else {
 		DefaultGlobconfPath = gcpath

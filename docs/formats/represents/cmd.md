@@ -2,7 +2,7 @@
 
 A command will be described as a _list of strings_.
 
-Will be parsed through paths&cmds subs rules. See [subs](../represents/subs.md), all elements of the list will be parsed separately.
+Will be parsed through subs. See [subs](../represents/subs.md), all elements of the list will be parsed separately.
 
 ## Format
 

@@ -6,7 +6,6 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 const (
@@ -18,7 +17,7 @@ const (
 type preset struct {
 	PreFunc  func(*Decl, toml.MetaData) error        // does the validation and parsing work
 	ToString func(Decl, int8, string) string         // turns into readable string, ASSUMES that prefunc is ran before
-	RunFunc  func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before, also does subs
+	RunFunc  func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before
 }
 
 //TODO: Change slice-printing work to "%v", or define cmdtype.Cmd to string
@@ -59,33 +58,24 @@ var presets = map[string]preset{
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
-			// subs
 			// manager
 			man, ok := d.RunDat["manager"].(manSpec)
 			if !ok {
 				return fmt.Errorf("rundat.manager must be of type manSpec for preset \"packages\" (in run, maybe forgot to run PreFunc before RunFunc? %s)", consts.NotYourFault)
 			}
-			var rawcmd []string
+			var mancmd []string
 			if man.Preset != "" {
 				// preset
 				if cmd, exists := manPresets[man.Preset]; !exists {
 					return fmt.Errorf("manager preset not found for preset name %q", man.Preset)
 				} else {
-					rawcmd = cmd
+					mancmd = cmd
 				}
 			} else {
-				rawcmd = man.CustomCmd
+				mancmd = man.CustomCmd
 			}
-			var mancmd []string
-			for _, elem := range rawcmd {
-				tmp, err := subs.ApplyPC(elem)
-				if err != nil {
-					return err
-				} else {
-					mancmd = append(mancmd, tmp)
-				}
-			}
-			// no subs for packs
+
+			// packs
 			packany, ok := d.RunDat["packs"].([]any)
 			if !ok {
 				return fmt.Errorf("packs must be of type []any for preset \"packages\", got %v of type %T", d.RunDat["packs"], d.RunDat["packs"])
@@ -145,18 +135,7 @@ var presets = map[string]preset{
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
-			// subs
-			src, err := subs.ApplyG(d.RunDat["src"].(string))
-			if err != nil {
-				return err
-			}
-			dest, err := subs.ApplyPC(d.RunDat["dest"].(string))
-			if err != nil {
-				return err
-			}
-
-			// run
-			cmd := cmdtype.Cmd{"git", "clone", src, dest}
+			cmd := cmdtype.Cmd{"git", "clone", d.RunDat["src"].(string), d.RunDat["dest"].(string)}
 			if err := cmd.Run(opts); err != nil {
 				return err
 			}
@@ -199,7 +178,6 @@ var presets = map[string]preset{
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
-			// run
 			cmd := cmdtype.Cmd{"stow", "-t", d.RunDat["dest"].(string), d.RunDat["src"].(string)}
 			if err := cmd.Run(opts); err != nil {
 				return err

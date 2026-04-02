@@ -4,19 +4,19 @@ It is the directory where the dotfiles and declarations are stored.
 
 ## Default
 
-The default decldir is `~/Decl`, and the cli should support for modifying this directory.
+The default decldir is `~/Decl`, you can use another by specifying in global config file, or passing argument in the cli.
 
 ## Structure
 
 ```text
 Decl/
 ├── .git/
-├── subs.toml
+├── metadata.toml
 ├── decl1/
 ├── decl2/
 └── ...
 ```
 
 - `.git/`: optional regular git directory, for version control. Created via `git init`
-- `subs.toml`: subs table file. See [subs](../represents/subs.md)
+- `metadata.toml`: defines metadata. See [metadata](metadata.md)
 - decls: stores declarations. See [decls](decls.md)

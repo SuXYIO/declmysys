@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 )
 
 func GetDecls(ddir string) (Decls, error) {
@@ -14,7 +16,9 @@ func GetDecls(ddir string) (Decls, error) {
 		for _, f := range declfiles {
 			if f.IsDir() {
 				// ignore
-				if f.Name() == ".git" {
+				if is, err := metadata.IsExcluded([]byte(f.Name())); err != nil {
+					return decls, err
+				} else if is {
 					continue
 				}
 

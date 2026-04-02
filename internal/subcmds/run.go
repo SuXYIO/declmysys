@@ -6,7 +6,7 @@ import (
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/decls"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
@@ -23,8 +23,8 @@ func Run(gc globconf.Globconf, mopts MainOpts, opts RunOpts) {
 		utils.Panic(fmt.Sprintf("ddir %s does not exist, you can create via \"init\" subcommand", mopts.DDir), nil, exitcode.FileError)
 	}
 
-	// subs.toml
-	if err := subs.GetSubsToml(mopts.DDir); err != nil {
+	// metadata.toml
+	if err := metadata.GetGlobalMetadata(mopts.DDir); err != nil {
 		utils.Panic("error getting subs.toml", err, exitcode.ConfigError)
 	}
 

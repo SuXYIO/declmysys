@@ -32,7 +32,7 @@ Running /home/user/Decl:
         packages[apt]
             Done!
     (150)
-        packages[flatpak-system-flathub]
+        packages[flatpak]
             Done!
     (100)
         stow[dotfiles]

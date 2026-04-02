@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/templates"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
 func GetGlobconf(gcpath string) (Globconf, error) {
 	// parse path with paths&cmds subs first
-	if gcp, err := subs.ApplyDefaultPC(gcpath); err != nil {
+	if gcp, err := metadata.ApplyDefaultsSubs(gcpath); err != nil {
 		return Globconf{}, err
 	} else {
 		gcpath = gcp

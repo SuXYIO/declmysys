@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 )
 
 // CmdRunOptions defines options for running a command
@@ -17,7 +17,6 @@ type CmdRunOptions struct {
 	RedirectStderr io.Writer // default os.Stderr
 	AppendedArgs   []string  // useful for package install append package spec, []string{} or nil for none
 	WorkingDir     string    // change working directory, "" for use default
-	NoPCSubs       bool      // whether to do default PC subs
 	DryRun         io.Writer // won't run, only prints command to run to writer, nil for normal run
 }
 
@@ -29,12 +28,10 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	var c *exec.Cmd
 
-	if !opts.NoPCSubs {
-		// do subs
-		err := cmd.subs(&opts)
-		if err != nil {
-			return err
-		}
+	// do subs
+	err := cmd.subs(&opts)
+	if err != nil {
+		return err
 	}
 
 	if len(opts.AppendedArgs) > 0 {
@@ -82,7 +79,7 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 func (cmd *Cmd) subs(opts *CmdRunOptions) error {
 	// paths&cmds for cmd
 	for i := range *cmd {
-		if elem, err := subs.ApplyPC((*cmd)[i]); err != nil {
+		if elem, err := metadata.SubsApply((*cmd)[i]); err != nil {
 			return err
 		} else {
 			(*cmd)[i] = elem
@@ -91,7 +88,7 @@ func (cmd *Cmd) subs(opts *CmdRunOptions) error {
 
 	// and also for appended args, changes opts directly
 	for i := range opts.AppendedArgs {
-		if elem, err := subs.ApplyPC(opts.AppendedArgs[i]); err != nil {
+		if elem, err := metadata.SubsApply(opts.AppendedArgs[i]); err != nil {
 			return err
 		} else {
 			opts.AppendedArgs[i] = elem

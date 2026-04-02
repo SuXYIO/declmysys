@@ -25,7 +25,7 @@ Listing /home/user/Decl:
     (200)
         packages[apt]: zsh  git  tmux  neofetch  neovim  flatpak  thunderbird  librewolf  kitty
     (150)
-        packages[flatpak-system-flathub]: com.valvesoftware.Steam com.visualstudio.code
+        packages[flatpak]: com.valvesoftware.Steam com.visualstudio.code
     (100)
         stow[dotfiles]: zshrc
         stow[dotfiles]: git

@@ -1,0 +1,11 @@
+# excluded files
+exclude = ["^.git"]
+
+# decldir specific substitutions
+[subs]
+# if to disable the homedir ("~") special substitutions
+# set true for safety, and use "{HOME}" for homedir
+disable_homedir_subs = false
+
+# self defined subs rules
+[subs.rules]

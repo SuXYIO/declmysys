@@ -1,4 +1,4 @@
-package subs
+package metadata
 
 import (
 	"os"
@@ -19,10 +19,10 @@ func TestApplySpecialHDSubs(t *testing.T) {
 		"~/foo ~ ~~baz~~ ~/foobar ~/barbaz": {homedir + "/foo " + homedir + " ~~baz~~ " + homedir + "/foobar " + homedir + "/barbaz", false},
 	}
 
-	tests.run(t, applySpecialHDSubs)
+	tests.run(t, applyHDSubs)
 }
 
-func TestApplyDefaultGSubs(t *testing.T) {
+func TestApplyDefaultSubs(t *testing.T) {
 	userinfo, err := user.Current()
 	if err != nil {
 		t.Fatal("unable to get user info:", err)
@@ -33,18 +33,6 @@ func TestApplyDefaultGSubs(t *testing.T) {
 	if err != nil {
 		t.Fatal("unable to get hostname info:", err)
 	}
-
-	tests := subsFuncTests{
-		"foo":              {"foo", false},
-		"foo{NAME}bar":     {"foo" + name + "bar", false},
-		"foo{USERNAME}bar": {"foo" + username + "bar", false},
-		"foo{HOSTNAME}bar": {"foo" + hostname + "bar", false},
-	}
-
-	tests.run(t, applyDefaultGSubs)
-}
-
-func TestApplyDefaultPCSubs(t *testing.T) {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
 		t.Fatal("unable to get homedir:", err)
@@ -59,13 +47,22 @@ func TestApplyDefaultPCSubs(t *testing.T) {
 	}
 	tmpdir := os.TempDir()
 
-	tests := subsFuncTests{
-		"foo": {"foo", false},
+	substr := map[string]string{
+		"foo":        "foo",
+		"{NAME}":     name,
+		"{USERNAME}": username,
+		"{HOSTNAME}": hostname,
+		"{HOME}":     homedir,
+		"{CONF}":     confdir,
+		"{CONFIG}":   confdir,
+		"{CACHE}":    cachedir,
+		"{TMP}":      tmpdir,
 	}
-	substr := map[string]string{"{HOME}": homedir, "{CONF}": confdir, "{CONFIG}": confdir, "{CACHE}": cachedir, "{TMP}": tmpdir}
+
+	tests := subsFuncTests{}
 	for from, to := range substr {
 		tests["foo"+from+"/bar"] = subsFuncRet{"foo" + to + "/bar", false}
 	}
 
-	tests.run(t, applyDefaultPCSubs)
+	tests.run(t, ApplyDefaultsSubs)
 }

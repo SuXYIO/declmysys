@@ -1,4 +1,4 @@
-package subs
+package metadata
 
 import (
 	"os"
@@ -9,8 +9,8 @@ import (
 // these are really shitty naming, but can't think of better ones
 // won't expose these outside this module
 
-// applySpecialHDSubs applies the special homedir subs
-func applySpecialHDSubs(str string) (string, error) {
+// applyHDSubs applies the special homedir subs
+func applyHDSubs(str string) (string, error) {
 	// prevent index out of range for empty string
 	if len(str) <= 0 {
 		return "", nil
@@ -35,9 +35,7 @@ func applySpecialHDSubs(str string) (string, error) {
 	return str, nil
 }
 
-// applyDefaultGSubs applies the default global subs rules to string
-// see no point in using this though, before reading subs.toml, ApplyDefaultPC integrates this, and it won't be used after reading
-func applyDefaultGSubs(str string) (string, error) {
+func applyDefaultsSubsNoHD(str string) (string, error) {
 	userinfo, err := user.Current()
 	if err != nil {
 		return str, err
@@ -50,17 +48,6 @@ func applyDefaultGSubs(str string) (string, error) {
 		return str, err
 	}
 	str = strings.ReplaceAll(str, "{HOSTNAME}", hostname)
-
-	return str, nil
-}
-
-// applyDefaultPCSubs applies the default paths & cmds subs rules to string
-func applyDefaultPCSubs(str string) (string, error) {
-	// first special homedir
-	str, err := applySpecialHDSubs(str)
-	if err != nil {
-		return str, err
-	}
 
 	// then default fc subs
 	homedir, err := os.UserHomeDir()
@@ -88,17 +75,19 @@ func applyDefaultPCSubs(str string) (string, error) {
 	return str, nil
 }
 
-// ApplyDefaultPC applies the default paths & cmds subs & global subs to string
-func ApplyDefaultPC(s string) (string, error) {
-	tmp, err := applyDefaultGSubs(s)
-	if err != nil {
-		return "", err
+// ApplyDefaultSubs applies the default subs rules to string, note that it does not include special hd subs
+func ApplyDefaultsSubs(str string) (string, error) {
+	if tmp, err := applyHDSubs(str); err != nil {
+		return str, err
+	} else {
+		str = tmp
 	}
-	s = tmp
-	tmp, err = applyDefaultPCSubs(s)
-	if err != nil {
-		return "", err
+
+	if tmp, err := applyDefaultsSubsNoHD(str); err != nil {
+		return str, err
+	} else {
+		str = tmp
 	}
-	s = tmp
-	return s, nil
+
+	return str, nil
 }

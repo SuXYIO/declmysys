@@ -3,7 +3,7 @@ package globconf
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 )
 
 // Load parses the global config data
@@ -30,7 +30,7 @@ func (gc *Globconf) Load(data []byte) error {
 
 // Subs substitudes necessary stuff for globconf
 func (gc *Globconf) subs() error {
-	if tmp, err := subs.ApplyDefaultPC(gc.DDir); err != nil {
+	if tmp, err := metadata.ApplyDefaultsSubs(gc.DDir); err != nil {
 		return err
 	} else {
 		gc.DDir = tmp

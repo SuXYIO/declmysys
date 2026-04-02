@@ -1,4 +1,4 @@
-# decls
+# Decls
 
 Where the declarations are stored.
 
@@ -13,7 +13,7 @@ Files:
 ```text
 Decl/
 ├── .git/
-├── subs.toml
+├── metadata.toml
 ├── workdir/
 │   └── desc.toml
 ├── nvim/
@@ -36,31 +36,32 @@ Decl/
 - `name`: Description name, make it human-readable. See [name](../represents/name.md)
 - `preset`: Name (string) of a preset
 - `priority`: Default `100` for decls. See [priority](../represents/priority.md)
-- `pwd`: Optional present working directory, default is the dir the desc file is under (leave empty for default), paths & cmds subs will be used
+- `pwd`: Optional present working directory, default is the dir the desc file is under (leave empty for default)
 - `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
 
 #### Presets:
 
 - `cmds`: Runs custom commands
   Required in `rundat`:
-  - `cmds`: list of cmds (list of list of strings) to run, will be parsed through paths & cmds subs
+  - `cmds`: list of cmds (list of list of strings) to run
 - `stow`: Stows a directory. Evaluates to `stow -t={dest} {src}`
   Optional in `rundat`
   - `src`: string of the directory being stowed, default `stow`
   - `dest`: string of the target dir for stow, default `{HOME}`
 - `gitclone`: Clones a repository to certain location. Evaluates to `git clone {src} {dest}`, see example below.
   Required in `rundat`:
-  - `src`: string of the origin path / url, parsed by global subs
-  - `dest`: string of the destination path, parsed by paths & cmds subs
+  - `src`: string of the origin path / url
+  - `dest`: string of the destination path
 - `packages`: Runs a single command, but appends arguments, also includes presets, useful for installing packages.
-  - `manager`: string for a preset name, or a list of strings for a custom manager command, will be parsed through paths & cmds subs if custom cmd, through global subs otherwise
-  - `packs`: list of strings (cmd, see [cmd](represents/cmd.md)) for package names, will be appended after the `manager` command, will not be parsed through any subs, I don't see the need here
+  - `manager`: string for a preset name, or a list of strings for a custom manager command
+  - `packs`: list of strings (cmd, see [cmd](represents/cmd.md)) for package names, will be appended after the `manager` command
 
-Presets for `packages`:
+Presets for `packages` (alphabetical order):
 | Name | Manager Command |
 | ---- | --------------- |
-| `apt` | `["sudo", "apt", "install"]` |
 | `apk` | `["doas", "apk", "add"]` |
+| `apt` | `["sudo", "apt", "install"]` |
+| `dnf` | `["sudo", "dnf", "install]` |
 
 > [!NOTE]
 > I'm not really familiar with other package managers, so I welcome you to contribute your favorate manager's command here!

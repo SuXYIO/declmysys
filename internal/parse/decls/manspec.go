@@ -15,8 +15,9 @@ type manSpec struct {
 }
 
 var manPresets = map[string][]string{
-	"apt": {"sudo", "apt", "install"},
 	"apk": {"doas", "apk", "add"},
+	"apt": {"sudo", "apt", "install"},
+	"dnf": {"sudo", "dnf", "install"},
 }
 
 func (m *manSpec) toManspec(data any) error {

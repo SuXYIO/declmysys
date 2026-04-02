@@ -9,7 +9,7 @@ import (
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
-	"github.com/suxyio/declmysys/internal/parse/subs"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/subcmds"
 	"github.com/suxyio/declmysys/internal/utils"
 )
@@ -73,7 +73,7 @@ func main() {
 	}
 	// replace argmain ddir with default in globconf if empty
 	if option := parser.FindOptionByLongName("decldir"); option != nil && option.IsSetDefault() {
-		if ddir, err := subs.ApplyDefaultPC(gc.DDir); err != nil {
+		if ddir, err := metadata.ApplyDefaultsSubs(gc.DDir); err != nil {
 			utils.Panic("apply default paths&cmds subs to main arg ddir fail", err, exitcode.Unknown)
 		} else {
 			argMain.DDir = ddir
