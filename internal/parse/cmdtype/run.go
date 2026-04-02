@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 // CmdRunOptions defines options for running a command

@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/suxyio/declmysys/internal/exitcode"
-	"github.com/suxyio/declmysys/internal/parse/ddir/decls"
-	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
+	"github.com/suxyio/declmysys/internal/parse/decls"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 

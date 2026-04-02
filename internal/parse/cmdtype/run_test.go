@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 func TestCmdRun(t *testing.T) {

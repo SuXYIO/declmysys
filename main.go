@@ -8,8 +8,8 @@ import (
 
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/exitcode"
-	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 	"github.com/suxyio/declmysys/internal/subcmds"
 	"github.com/suxyio/declmysys/internal/utils"
 )

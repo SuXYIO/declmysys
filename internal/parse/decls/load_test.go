@@ -7,7 +7,7 @@ import (
 
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
-	"github.com/suxyio/declmysys/internal/parse/ddir/subs"
+	"github.com/suxyio/declmysys/internal/parse/subs"
 )
 
 func TestDeclsLoad(t *testing.T) {
