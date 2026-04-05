@@ -29,7 +29,7 @@ You are ` + userinfo.Username + ".\n")
 				Name:     "create foo.txt",
 				Preset:   "cmds",
 				Priority: 16,
-				RunDat: map[string]any{
+				Args: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						{"touch", "foo.txt"},
 					},
@@ -39,7 +39,7 @@ You are ` + userinfo.Username + ".\n")
 				Name:     "echo line1",
 				Preset:   "cmds",
 				Priority: 8,
-				RunDat: map[string]any{
+				Args: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						// used redirect here, so must use shell
 						{"sh", "-c", "echo 'Born of God and Void.' >> foo.txt"},
@@ -50,7 +50,7 @@ You are ` + userinfo.Username + ".\n")
 				Name:     "echo line2",
 				Preset:   "cmds",
 				Priority: 7,
-				RunDat: map[string]any{
+				Args: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						{"sh", "-c", "echo 'You shall seal the blinding light that plagues their dreams.' >> foo.txt"},
 					},
@@ -60,7 +60,7 @@ You are ` + userinfo.Username + ".\n")
 				Name:     "echo line3",
 				Preset:   "cmds",
 				Priority: 6,
-				RunDat: map[string]any{
+				Args: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						{"sh", "-c", "echo 'You are the Vessel.' >> foo.txt"},
 					},
@@ -70,7 +70,7 @@ You are ` + userinfo.Username + ".\n")
 				Name:     "echo line4",
 				Preset:   "cmds",
 				Priority: 5,
-				RunDat: map[string]any{
+				Args: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						{"sh", "-c", "echo 'You are {USERNAME}.' >> foo.txt"},
 					},
@@ -102,7 +102,7 @@ func BenchmarkDeclsRunParse(b *testing.B) {
 			Name:     s,
 			Preset:   "cmds",
 			Priority: 42,
-			RunDat: map[string]any{
+			Args: map[string]any{
 				"cmds": []cmdtype.Cmd{
 					{"touch", s},
 				},

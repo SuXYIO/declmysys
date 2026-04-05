@@ -26,23 +26,23 @@ type preset struct {
 var presets = map[string]preset{
 	"packages": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.RunDat == nil {
-				d.RunDat = make(map[string]any)
+			if d.Args == nil {
+				d.Args = make(map[string]any)
 			}
 
 			// manager
-			if !md.IsDefined("rundat", "manager") {
-				return fmt.Errorf("must specify rundat.manager for preset \"packages\"")
+			if !md.IsDefined("args", "manager") {
+				return fmt.Errorf("must specify args.manager for preset \"packages\"")
 			}
 			var man manSpec
-			if err := man.toManspec(d.RunDat["manager"]); err != nil {
+			if err := man.toManspec(d.Args["manager"]); err != nil {
 				return err
 			}
-			d.RunDat["manager"] = man
+			d.Args["manager"] = man
 
 			// packs
-			if !md.IsDefined("rundat", "packs") {
-				return fmt.Errorf("must specify rundat.packs for preset \"packages\"")
+			if !md.IsDefined("args", "packs") {
+				return fmt.Errorf("must specify args.packs for preset \"packages\"")
 			}
 
 			return nil
@@ -54,14 +54,14 @@ var presets = map[string]preset{
 				return fmt.Sprintf("%spackages[%s]", prestr, d.Name)
 			default:
 				// ToStringModeList
-				return fmt.Sprintf("%spackages[%s]:\t%v", prestr, d.Name, d.RunDat["packs"])
+				return fmt.Sprintf("%spackages[%s]:\t%v", prestr, d.Name, d.Args["packs"])
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// manager
-			man, ok := d.RunDat["manager"].(manSpec)
+			man, ok := d.Args["manager"].(manSpec)
 			if !ok {
-				return fmt.Errorf("rundat.manager must be of type manSpec for preset \"packages\" (in run, maybe forgot to run PreFunc before RunFunc? %s)", consts.NotYourFault)
+				return fmt.Errorf("args.manager must be of type manSpec for preset \"packages\" (in run, maybe forgot to run PreFunc before RunFunc? %s)", consts.NotYourFault)
 			}
 			var mancmd []string
 			if man.Preset != "" {
@@ -76,9 +76,9 @@ var presets = map[string]preset{
 			}
 
 			// packs
-			packany, ok := d.RunDat["packs"].([]any)
+			packany, ok := d.Args["packs"].([]any)
 			if !ok {
-				return fmt.Errorf("packs must be of type []any for preset \"packages\", got %v of type %T", d.RunDat["packs"], d.RunDat["packs"])
+				return fmt.Errorf("packs must be of type []any for preset \"packages\", got %v of type %T", d.Args["packs"], d.Args["packs"])
 			}
 
 			var packs []string
@@ -105,23 +105,23 @@ var presets = map[string]preset{
 
 	"gitclone": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.RunDat == nil {
-				d.RunDat = make(map[string]any)
+			if d.Args == nil {
+				d.Args = make(map[string]any)
 			}
 
 			// src
-			if !md.IsDefined("rundat", "src") {
-				return fmt.Errorf("must specify rundat.src for preset \"gitclone\"")
+			if !md.IsDefined("args", "src") {
+				return fmt.Errorf("must specify args.src for preset \"gitclone\"")
 			}
-			if _, ok := d.RunDat["src"].(string); !ok {
-				return fmt.Errorf("rundat.src must be of type string for preset \"gitclone\", got %v of type %T", d.RunDat["src"], d.RunDat["src"])
+			if _, ok := d.Args["src"].(string); !ok {
+				return fmt.Errorf("args.src must be of type string for preset \"gitclone\", got %v of type %T", d.Args["src"], d.Args["src"])
 			}
 			// dest
-			if !md.IsDefined("rundat", "dest") {
-				return fmt.Errorf("must specify rundat.dest for preset \"gitclone\"")
+			if !md.IsDefined("args", "dest") {
+				return fmt.Errorf("must specify args.dest for preset \"gitclone\"")
 			}
-			if _, ok := d.RunDat["dest"].(string); !ok {
-				return fmt.Errorf("rundat.dest must be of type string for preset \"gitclone\", got %v of type %T", d.RunDat["dest"], d.RunDat["dest"])
+			if _, ok := d.Args["dest"].(string); !ok {
+				return fmt.Errorf("args.dest must be of type string for preset \"gitclone\", got %v of type %T", d.Args["dest"], d.Args["dest"])
 			}
 			return nil
 		},
@@ -131,11 +131,11 @@ var presets = map[string]preset{
 				return fmt.Sprintf("%sgitclone[%s]", prestr, d.Name)
 			default:
 				// ToStringModeList
-				return fmt.Sprintf("%sgitclone[%s]:\tsrc %q, dest %q", prestr, d.Name, d.RunDat["src"], d.RunDat["dest"])
+				return fmt.Sprintf("%sgitclone[%s]:\tsrc %q, dest %q", prestr, d.Name, d.Args["src"], d.Args["dest"])
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
-			cmd := cmdtype.Cmd{"git", "clone", d.RunDat["src"].(string), d.RunDat["dest"].(string)}
+			cmd := cmdtype.Cmd{"git", "clone", d.Args["src"].(string), d.Args["dest"].(string)}
 			if err := cmd.Run(opts); err != nil {
 				return err
 			}
@@ -145,24 +145,24 @@ var presets = map[string]preset{
 
 	"stow": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.RunDat == nil {
-				d.RunDat = make(map[string]any)
+			if d.Args == nil {
+				d.Args = make(map[string]any)
 			}
 
 			// src
-			if !md.IsDefined("rundat", "src") {
-				d.RunDat["src"] = "stow"
+			if !md.IsDefined("args", "src") {
+				d.Args["src"] = "stow"
 			} else {
-				if _, ok := d.RunDat["src"].(string); !ok {
-					return fmt.Errorf("rundat.src must be of type string for preset \"stow\", got %v of type %T", d.RunDat["src"], d.RunDat["src"])
+				if _, ok := d.Args["src"].(string); !ok {
+					return fmt.Errorf("args.src must be of type string for preset \"stow\", got %v of type %T", d.Args["src"], d.Args["src"])
 				}
 			}
 			// dest
-			if !md.IsDefined("rundat", "dest") {
-				d.RunDat["dest"] = "{HOME}"
+			if !md.IsDefined("args", "dest") {
+				d.Args["dest"] = "{HOME}"
 			} else {
-				if _, ok := d.RunDat["dest"].(string); !ok {
-					return fmt.Errorf("rundat.dest must be of type string for preset \"stow\", got %v of type %T", d.RunDat["dest"], d.RunDat["dest"])
+				if _, ok := d.Args["dest"].(string); !ok {
+					return fmt.Errorf("args.dest must be of type string for preset \"stow\", got %v of type %T", d.Args["dest"], d.Args["dest"])
 				}
 			}
 
@@ -174,11 +174,11 @@ var presets = map[string]preset{
 				return fmt.Sprintf("%sstow[%s]", prestr, d.Name)
 			default:
 				// ToStringModeList
-				return fmt.Sprintf("%sstow[%s]:\tsrc %q, dest %q", prestr, d.Name, d.RunDat["src"], d.RunDat["dest"])
+				return fmt.Sprintf("%sstow[%s]:\tsrc %q, dest %q", prestr, d.Name, d.Args["src"], d.Args["dest"])
 			}
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
-			cmd := cmdtype.Cmd{"stow", "-t", d.RunDat["dest"].(string), d.RunDat["src"].(string)}
+			cmd := cmdtype.Cmd{"stow", "-t", d.Args["dest"].(string), d.Args["src"].(string)}
 			if err := cmd.Run(opts); err != nil {
 				return err
 			}
@@ -188,18 +188,18 @@ var presets = map[string]preset{
 
 	"cmds": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.RunDat == nil {
-				d.RunDat = make(map[string]any)
+			if d.Args == nil {
+				d.Args = make(map[string]any)
 			}
 
-			if !md.IsDefined("rundat", "cmds") {
-				return fmt.Errorf("must specify rundat.cmds for preset \"cmds\"")
+			if !md.IsDefined("args", "cmds") {
+				return fmt.Errorf("must specify args.cmds for preset \"cmds\"")
 			}
 
-			if cmds, err := cmdtype.ToCmds(d.RunDat["cmds"]); err != nil {
+			if cmds, err := cmdtype.ToCmds(d.Args["cmds"]); err != nil {
 				return err
 			} else {
-				d.RunDat["cmds"] = cmds
+				d.Args["cmds"] = cmds
 			}
 			return nil
 		},
@@ -214,7 +214,7 @@ var presets = map[string]preset{
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// turn to cmd
-			cmds, err := cmdtype.ToCmds(d.RunDat["cmds"])
+			cmds, err := cmdtype.ToCmds(d.Args["cmds"])
 			if err != nil {
 				return err
 			}

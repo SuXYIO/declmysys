@@ -2,5 +2,5 @@ name = "bar"
 preset = "cmds"
 pwd = "~/foo"
 priority = 99
-[rundat]
+[args]
 cmds = [["sudo", "foo", "{HOME}/Foobar"], ["bar", "baz"]]

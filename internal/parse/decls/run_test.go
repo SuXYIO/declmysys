@@ -25,7 +25,7 @@ func TestDeclRun(t *testing.T) {
 			Preset:   "cmds",
 			Priority: 0,
 			Pwd:      tmpdir,
-			RunDat: map[string]any{
+			Args: map[string]any{
 				"cmds": []cmdtype.Cmd{
 					{"touch", "foo"},
 					{"touch", "bar", "baz_{USERNAME}"},

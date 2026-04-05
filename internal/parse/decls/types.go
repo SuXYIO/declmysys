@@ -9,6 +9,6 @@ type Decl struct {
 	Preset   string         `toml:"preset"`
 	Priority Priority       `toml:"priority"`
 	Pwd      string         `toml:"pwd"`
-	RunDat   map[string]any `toml:"rundat"`
+	Args     map[string]any `toml:"args"`
 	descPath string         // will not be loaded by toml, only for setting default pwd
 }

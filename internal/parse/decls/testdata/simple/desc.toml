@@ -1,5 +1,5 @@
 name = "foo"
 preset = "stow"
-[rundat]
+[args]
 src = "bar"
 dest = "baz"

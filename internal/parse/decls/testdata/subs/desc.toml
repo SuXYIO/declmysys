@@ -1,6 +1,6 @@
 name = "bar"
 preset = "gitclone"
 priority = 99
-[rundat]
+[args]
 src = "https://github.com/foobar/baz"
 dest = "~/Foobar"

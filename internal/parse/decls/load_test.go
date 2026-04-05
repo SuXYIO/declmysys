@@ -26,7 +26,7 @@ func TestDeclsLoad(t *testing.T) {
 
 		{"simple",
 			"simple",
-			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclPriority, Pwd: "testdata/simple", RunDat: map[string]any{"src": "bar", "dest": "baz"}},
+			Decl{Name: "foo", Preset: "stow", Priority: consts.DefaultDeclPriority, Pwd: "testdata/simple", Args: map[string]any{"src": "bar", "dest": "baz"}},
 			false,
 		},
 
@@ -37,7 +37,7 @@ func TestDeclsLoad(t *testing.T) {
 				Preset:   "cmds",
 				Priority: 99,
 				Pwd:      "~/foo",
-				RunDat:   map[string]any{"cmds": []cmdtype.Cmd{{"sudo", "foo", "{HOME}/Foobar"}, {"bar", "baz"}}},
+				Args:     map[string]any{"cmds": []cmdtype.Cmd{{"sudo", "foo", "{HOME}/Foobar"}, {"bar", "baz"}}},
 			},
 			false,
 		},
@@ -49,7 +49,7 @@ func TestDeclsLoad(t *testing.T) {
 				Preset:   "stow",
 				Priority: 42,
 				Pwd:      "testdata/stow",
-				RunDat:   map[string]any{"src": "stow", "dest": "{HOME}"},
+				Args:     map[string]any{"src": "stow", "dest": "{HOME}"},
 			},
 			false,
 		},
@@ -61,7 +61,7 @@ func TestDeclsLoad(t *testing.T) {
 				Preset:   "gitclone",
 				Priority: 99,
 				Pwd:      "testdata/subs",
-				RunDat:   map[string]any{"src": "https://github.com/foobar/baz", "dest": "~/Foobar"},
+				Args:     map[string]any{"src": "https://github.com/foobar/baz", "dest": "~/Foobar"},
 			},
 			false,
 		},
@@ -72,7 +72,7 @@ func TestDeclsLoad(t *testing.T) {
 				Preset:   "cmds",
 				Priority: 0,
 				Pwd:      "testdata/touch",
-				RunDat: map[string]any{
+				Args: map[string]any{
 					"cmds": []cmdtype.Cmd{
 						{"touch", "foo"},
 						{"touch", "bar", "baz_{USERNAME}"},
@@ -108,5 +108,5 @@ func declEqual(a Decl, b Decl) bool {
 		a.Preset == b.Preset &&
 		a.Priority == b.Priority &&
 		a.Pwd == b.Pwd &&
-		reflect.DeepEqual(a.RunDat, b.RunDat))
+		reflect.DeepEqual(a.Args, b.Args))
 }

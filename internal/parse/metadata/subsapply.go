@@ -21,6 +21,7 @@ func (r SubsRules) SubsToReplacer() strings.Replacer {
 func applySubsReplacer(str string, repler *strings.Replacer) string {
 	// NOTE: Passes the replacer in seems awkward, but this design allows for high performance,
 	// no need to convert to replacer every time
+	// (actually used replacer only for non-recursive subs)
 	return repler.Replace(str)
 }
 
