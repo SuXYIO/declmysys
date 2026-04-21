@@ -1,0 +1,9 @@
+[[rule]]
+include = ["metadata.toml"]
+[rule.schema]
+path = "./.schemas/metadata.json"
+
+[[rule]]
+include = ["**/desc.toml"]
+[rule.schema]
+path = "./.schemas/desc.json"

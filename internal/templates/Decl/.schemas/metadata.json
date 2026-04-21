@@ -1,0 +1,45 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "type": "object",
+    "title": "Decldir Metadata",
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "version used when creating this decldir, don't change unless you know what you're doing"
+        },
+        "exclude": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "regex patterns for files to exclude",
+            "default": [
+                "^\\.git$",
+                "^\\.schemas$"
+            ]
+        },
+        "subs": {
+            "type": "object",
+            "properties": {
+                "disable_homedir_subs": {
+                    "type": "boolean",
+                    "description": "whether to disable the homedir subs",
+                    "default": false
+                },
+                "rules": {
+                    "type": "object",
+                    "description": "key-value pairs for subs rules",
+                    "default": {},
+                    "additionalProperties": true
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "version",
+        "exclude",
+        "subs"
+    ],
+    "additionalProperties": false
+}

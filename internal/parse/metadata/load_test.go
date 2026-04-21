@@ -19,7 +19,7 @@ foo = []`, Metadata{}, true},
 
 		{"empty", ``, Metadata{
 			Exclude: []string{
-				"^.git",
+				"^\\.git$",
 			},
 			SubsDef: SubsDef{
 				SpecialHDDisable: false,
@@ -29,8 +29,8 @@ foo = []`, Metadata{}, true},
 		}, false},
 
 		{"common", `exclude = [
-	"^.myexclude",
-	"^.git"
+	"^\\.myexclude$",
+	"^\\.git$"
 ]
 [subs]
 disable_homedir_subs = true
@@ -38,8 +38,8 @@ disable_homedir_subs = true
 "foo" = "bar"
 "{~}" = "{HOME}"`, Metadata{
 			Exclude: []string{
-				"^.myexclude",
-				"^.git",
+				"^\\.myexclude$",
+				"^\\.git$",
 			},
 			SubsDef: SubsDef{
 				SpecialHDDisable: true,

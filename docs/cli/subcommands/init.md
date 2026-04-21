@@ -9,6 +9,7 @@ declmysys init [--no-git]
 ```
 
 - `--no-git`: Won't create the `.git/` directory (via `git init`)
+- `--no-taplo`: Won't create the `.taplo.toml` file and the `.schemas` directory, enable if you don't use completion and validation
 
 ## Example
 

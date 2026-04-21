@@ -14,7 +14,7 @@ func (m *Metadata) Load(data []byte) error {
 	// replace default fields
 	if !md.IsDefined("exclude") {
 		m.Exclude = []string{
-			"^.git",
+			"^\\.git$",
 		}
 	}
 	if !md.IsDefined("subs", "rules") {

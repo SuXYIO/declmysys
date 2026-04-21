@@ -1,6 +1,7 @@
 package metadata
 
 type Metadata struct {
+	Version     string   `toml:"version"`
 	Exclude     []string `toml:"exclude"`
 	SubsDef     `toml:"subs"`
 	initialized bool

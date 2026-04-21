@@ -7,7 +7,6 @@ import (
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/decls"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
-	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
@@ -18,22 +17,7 @@ type ListOpts struct {
 }
 
 func List(gc globconf.Globconf, mopts MainOpts, opts ListOpts) {
-	// ddir doesn't exist
-	if !DDirExist(mopts.DDir) {
-		utils.Panic(fmt.Sprintf("ddir %s does not exist, you can create via \"init\" subcommand", mopts.DDir), nil, exitcode.FileError)
-	}
-
-	// metadata.toml
-	if err := metadata.GetGlobalMetadata(mopts.DDir); err != nil {
-		utils.Panic("error getting subs.toml", err, exitcode.ConfigError)
-	}
-
-	// decls
-	// can't use "decls" as var name since decls package took it damn it
-	declss, err := decls.GetDecls(mopts.DDir)
-	if err != nil {
-		utils.Panic("error getting decls", err, exitcode.ConfigError)
-	}
+	declss := getDeclsData(mopts.DDir)
 
 	// list
 	// BUG: since go-flags doesn't support default for positionals yet,

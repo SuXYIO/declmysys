@@ -12,7 +12,7 @@ func AskYN(msg string) bool {
 	// true for yes, false for no
 	/*
 		usage example:
-			ans := AskYNQ("delete file")
+			ans := AskYNQ("delete file?")
 			if ans == true {
 				// delete
 			} else {

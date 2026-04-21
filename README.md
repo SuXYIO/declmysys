@@ -47,7 +47,16 @@ Cross-platform support is not guaranteed, but works on any Linux distro and any 
 
 Dependencies:
 
-- `git` (`2.52.0` in the testing machine)
+- `git`
+
+Recommended:
+
+- `stow` for using the stow preset
+- `taplo` for toml completion and validation
+
+> [!NOTE]
+> For those of you who don't know, Taplo is an excellent linter and formatter for TOML (no this is not an ad).
+> I wrote the schemas files (under `.schemas`) and the `.taplo.toml` files under every decldir, so writing decls will be hopefully easier.
 
 ### Go-install
 
@@ -127,12 +136,11 @@ Design:
 - [ ] Logic
   - [ ] Ablility to specify which decl to run
   - [ ] Better error messages (show which operation went wrong)
-  - [ ] Less nested file structure
-  - [ ] Add logging
-- [ ] QoL
-  - [ ] Toml autocompletion integration (via taplo)
+  - [x] Less nested file structure
+- [ ] Features / QoL
+  - [x] Toml autocompletion integration (via taplo)
   - [ ] Shell completion integration
-  - [ ] Dry run for `run` subcmd, verbose for `list` subcmd
+  - [x] Dry run for `run` subcmd
   - [ ] Pre-install command for `packages` decl (e.g. `sudo apt update`)
   - [ ] Locales
 

@@ -37,19 +37,19 @@ Decl/
 - `preset`: Name (string) of a preset
 - `priority`: Default `100` for decls. See [priority](../represents/priority.md)
 - `pwd`: Optional present working directory, default is the dir the desc file is under (leave empty for default)
-- `rundat`: Optional data for run spec, used in presets, no specific fields, depends on preset
+- `args`: Optional args for execution, preset specific fields
 
 #### Presets:
 
 - `cmds`: Runs custom commands
-  Required in `rundat`:
+  Required in `args`:
   - `cmds`: list of cmds (list of list of strings) to run
 - `stow`: Stows a directory. Evaluates to `stow -t={dest} {src}`
-  Optional in `rundat`
+  Optional in `args`
   - `src`: string of the directory being stowed, default `stow`
-  - `dest`: string of the target dir for stow, default `{HOME}`
+  - `dest`: string of the target directory for stow, default `{HOME}`
 - `gitclone`: Clones a repository to certain location. Evaluates to `git clone {src} {dest}`, see example below.
-  Required in `rundat`:
+  Required in `args`:
   - `src`: string of the origin path / url
   - `dest`: string of the destination path
 - `packages`: Runs a single command, but appends arguments, also includes presets, useful for installing packages.
@@ -61,7 +61,7 @@ Presets for `packages` (alphabetical order):
 | ---- | --------------- |
 | `apk` | `["doas", "apk", "add"]` |
 | `apt` | `["sudo", "apt", "install"]` |
-| `dnf` | `["sudo", "dnf", "install]` |
+| `dnf` | `["sudo", "dnf", "install"]` |
 
 > [!NOTE]
 > I'm not really familiar with other package managers, so I welcome you to contribute your favorate manager's command here!
@@ -92,7 +92,7 @@ Clone your own repo:
 name = "clone neovim config"
 preset = "gitclone"
 priority = 500
-[rundat]
+[args]
 src = "https://github.com/username/neovim_config"
 dest = "{HOME}/.config/nvim"
 ```
@@ -110,7 +110,7 @@ Copy apt source:
 name = "apt-sources"
 preset = "cmds"
 priority = 1000
-[rundat]
+[args]
 cmds = [["bash", "-c", "sudo mv sources/* /etc/apt/sources.list.d"]]
 ```
 
@@ -120,7 +120,7 @@ Add user to dialout group:
 name = "add user to dialout group"
 preset = "cmds"
 priority = 50
-[rundat]
+[args]
 cmds = [["sudo", "gpasswd", "-a", "{USERNAME}", "dialout"]]
 ```
 
@@ -129,7 +129,7 @@ Create Workspace dir:
 ```toml
 name = "create ~/Workspace dir"
 preset = "cmds"
-[rundat]
+[args]
 cmds = [["mkdir", "{HOME}/Workspace"]]
 ```
 
@@ -138,7 +138,7 @@ Install packages via apt:
 ```toml
 name = "apt"
 preset = "packages"
-[rundat]
+[args]
 manager = "apt"
 packs = ["neovim", "tmux", "alacritty"]
 ```
@@ -148,7 +148,7 @@ Install packages with your own manager:
 ```toml
 name = "foopm"
 preset = "packages"
-[rundat]
+[args]
 manager = ["foopm", "-i"]
 packs = ["foo", "bar", "baz"]
 ```

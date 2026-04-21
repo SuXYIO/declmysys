@@ -1,11 +1,16 @@
+# version used when creating this decldir, don't change unless you know what you're doing
+version = "{VERSION}"
+
 # excluded files
-exclude = ["^.git"]
+exclude = ["^\\.git$", "^\\.schemas$"]
 
 # decldir specific substitutions
 [subs]
-# if to disable the homedir ("~") special substitutions
+
+# whether to disable the homedir special subs
 # set true for safety, and use "{HOME}" for homedir
+# default is false
 disable_homedir_subs = false
 
-# self defined subs rules
+# key-value pairs for subs rules
 [subs.rules]

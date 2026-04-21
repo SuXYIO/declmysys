@@ -7,8 +7,8 @@ import (
 
 type SubsRules map[string]string
 
-// SubsToReplacer turns SubsRules to Replacer
-func (r SubsRules) SubsToReplacer() strings.Replacer {
+// ToReplacer turns SubsRules to Replacer
+func (r SubsRules) ToReplacer() strings.Replacer {
 	var pairs []string
 	for k, v := range r {
 		pairs = append(pairs, k)
@@ -17,8 +17,8 @@ func (r SubsRules) SubsToReplacer() strings.Replacer {
 	return *strings.NewReplacer(pairs...)
 }
 
-// applySubsReplacer applies a set of subs rules to string
-func applySubsReplacer(str string, repler *strings.Replacer) string {
+// ApplySubsReplacer applies a set of subs rules to string
+func ApplySubsReplacer(str string, repler *strings.Replacer) string {
 	// NOTE: Passes the replacer in seems awkward, but this design allows for high performance,
 	// no need to convert to replacer every time
 	// (actually used replacer only for non-recursive subs)
@@ -35,8 +35,8 @@ func SubsApply(s string) (string, error) {
 	}
 
 	// Custom
-	repl := GlobalMetaData.SubsDef.CustomRules.SubsToReplacer()
-	s = applySubsReplacer(s, &repl)
+	repl := GlobalMetaData.SubsDef.CustomRules.ToReplacer()
+	s = ApplySubsReplacer(s, &repl)
 
 	// Defaults
 	if tmp, err := applyDefaultsSubsNoHD(s); err != nil {

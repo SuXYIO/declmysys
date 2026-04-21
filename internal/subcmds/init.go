@@ -4,17 +4,21 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime/debug"
 
 	"github.com/otiai10/copy"
 
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
+	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/templates"
 	"github.com/suxyio/declmysys/internal/utils"
 )
 
 type InitOpts struct {
-	NoGit bool `long:"no-git" description:"Won't create the .git directory (via git init)"`
+	NoGit   bool `long:"no-git" description:"Won't create the .git directory (via git init)"`
+	NoTaplo bool `long:"no-taplo" description:"Won't create the .taplo.toml file"`
 }
 
 func Init(gc globconf.Globconf, mopts MainOpts, opts InitOpts) {
@@ -46,11 +50,35 @@ func Init(gc globconf.Globconf, mopts MainOpts, opts InitOpts) {
 		Skip: func(srcinfo os.FileInfo, src, dest string) (bool, error) {
 			fname := srcinfo.Name()
 			// exclude .gitkeep
-			return fname == ".gitkeep", nil
+			if opts.NoTaplo && (fname == ".taplo.toml" ||
+				(fname == ".schemas" && srcinfo.IsDir())) {
+				return true, nil
+			}
+			return false, nil
 		},
 	}); err != nil {
 		utils.Panic("copy template to path fail", err, exitcode.FileError)
 	}
+
+	// correct version in metadata.toml
+	// NOTE: This is acutally pretty bad design
+	mdpath := filepath.Join(mopts.DDir, "metadata.toml")
+	if dat, err := os.ReadFile(mdpath); err != nil {
+		utils.Panic("error reading metadata.toml", err, exitcode.FileError)
+	} else {
+		// replace version
+		info, ok := debug.ReadBuildInfo()
+		if !ok {
+			utils.Panic("error reading build info", nil, exitcode.Unknown)
+		}
+		repl := metadata.SubsRules{"{VERSION}": info.Main.Version}.ToReplacer()
+
+		res := metadata.ApplySubsReplacer(string(dat), &repl)
+		if err := os.WriteFile(mdpath, []byte(res), 0644); err != nil {
+			utils.Panic("error overwriting metadata.toml", err, exitcode.FileError)
+		}
+	}
+
 	fmt.Println("Copied template files to", mopts.DDir)
 	fmt.Println("Successfully initialized decldir in", mopts.DDir)
 }

@@ -1,0 +1,209 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "type": "object",
+    "title": "Decl Description",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "human-readable name for decl"
+        },
+        "preset": {
+            "type": "string",
+            "description": "name of a preset",
+            "enum": [
+                "cmds",
+                "stow",
+                "gitclone",
+                "packages"
+            ]
+        },
+        "priority": {
+            "type": "integer",
+            "description": "priority of decl, higher for earlier execution",
+            "default": 100
+        },
+        "pwd": {
+            "type": "string",
+            "description": "present working directory for decl execution, default (or use empty string) is directory where this desc.toml file is stored"
+        },
+        "args": {
+            "type": "object",
+            "description": "args for execution, preset specific fields"
+        }
+    },
+    "required": [
+        "name",
+        "preset"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "preset": {
+                        "enum": [
+                            "cmds"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "args": {
+                        "properties": {
+                            "cmds": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/$defs/cmdtype"
+                                }
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "cmds"
+                        ]
+                    }
+                },
+                "required": [
+                    "args"
+                ]
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "preset": {
+                        "enum": [
+                            "stow"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "args": {
+                        "properties": {
+                            "src": {
+                                "type": "string",
+                                "description": "the directory being stowed",
+                                "default": "stow"
+                            },
+                            "dest": {
+                                "type": "string",
+                                "description": "the target directory for stow",
+                                "default": "{HOME}"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "preset": {
+                        "enum": [
+                            "gitclone"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "args": {
+                        "properties": {
+                            "src": {
+                                "type": "string",
+                                "description": "origin path / url"
+                            },
+                            "dest": {
+                                "type": "string",
+                                "description": "destination path"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "src",
+                            "dest"
+                        ]
+                    }
+                },
+                "required": [
+                    "args"
+                ]
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "preset": {
+                        "enum": [
+                            "packages"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "args": {
+                        "properties": {
+                            "manager": {
+                                "allOf": [
+                                    {
+                                        "if": {
+                                            "type": "string"
+                                        },
+                                        "then": {
+                                            "description": "package manager preset name",
+                                            "enum": [
+                                                "apk",
+                                                "apt",
+                                                "dnf"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "if": {
+                                            "type": "array"
+                                        },
+                                        "then": {
+                                            "description": "install command for your own package manager",
+                                            "items": {
+                                                "$ref": "#/$defs/cmdtype"
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "packs": {
+                                "type": "array",
+                                "description": "packages to install, appended as command args after `manager` command",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "manager",
+                            "packs"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "args"
+            ]
+        }
+    ],
+    "$defs": {
+        "cmdtype": {
+            "type": "array",
+            "description": "executable command, args separated into array",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

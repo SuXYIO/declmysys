@@ -14,10 +14,10 @@ type subsFuncTests map[string]subsFuncRet
 
 // subsRulesTester helps write tests for subs rules
 func (tests subsRulesTests) run(t *testing.T, rules SubsRules) {
-	repl := rules.SubsToReplacer()
+	repl := rules.ToReplacer()
 	for in, out := range tests {
 		t.Run(in, func(t *testing.T) {
-			res := applySubsReplacer(in, &repl)
+			res := ApplySubsReplacer(in, &repl)
 			if res != out {
 				t.Errorf(`expected "%v" for case "%v", got "%v"`, out, in, res)
 			}
