@@ -129,7 +129,7 @@ Design:
 - [ ] Update docs (i mean, at least make it _readable_)
   - [ ] Write quickstart and stuff
   - [ ] Add docs site via github pages (try docsify?)
-- [ ] Use better cli framework (try `github.com/urfave/cli`?)
+- [x] Use better cli framework (try `github.com/urfave/cli`?)
 - [ ] Better UI (Use `github.com/charmbracelet/bubbletea`?)
   - [ ] Progress bar
   - [ ] Colorscheme

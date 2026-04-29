@@ -1,4 +1,4 @@
-# GlobalConf
+# config
 
 The CLI should read from a global (user-specific) config file for certain values.
 

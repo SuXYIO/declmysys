@@ -1,6 +1,10 @@
 package consts
 
 import (
+	"fmt"
+	"runtime"
+	"runtime/debug"
+
 	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/utils"
@@ -21,12 +25,26 @@ const (
 )
 
 var (
+	Version   string = "" // initialized in init()
+	BuildInfo string = "" // initialized in init()
+
 	// default paths, must be processed by ApplyDefaultPC
 	DefaultGlobconfPath string = "{CONF}/declmysys/config.toml"
 	DefaultDDirPath     string = "{HOME}/Decl"
 )
 
 func init() {
+	if ver, err := getVer(); err != nil {
+		Version = "(unknown)"
+		// probably should log something, but havn't impled log yet
+	} else {
+		Version = ver
+	}
+	BuildInfo = fmt.Sprintf(
+		"%s %s",
+		Version,
+		runtime.GOOS+"/"+runtime.GOARCH)
+
 	// initializes the two vars, to adapt directories
 	if ddirpath, err := metadata.ApplyDefaultsSubs(DefaultDDirPath); err != nil {
 		utils.Panic("unable to parse DefaultDDirPath via metadata.ApplyDefaultSubs", err, exitcode.SetupError)
@@ -38,4 +56,13 @@ func init() {
 	} else {
 		DefaultGlobconfPath = gcpath
 	}
+}
+
+func getVer() (string, error) {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return "", fmt.Errorf("error reading build info")
+	}
+	version := info.Main.Version
+	return version, nil
 }

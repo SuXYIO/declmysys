@@ -2,43 +2,49 @@ package subcmds
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 
-	"github.com/suxyio/declmysys/internal/exitcode"
 	"github.com/suxyio/declmysys/internal/parse/decls"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 	"github.com/suxyio/declmysys/internal/utils"
+	"github.com/urfave/cli/v3"
 )
 
-type ListOpts struct {
-	Args struct {
-		Priority uint `positional-arg-name:"priority" description:"Show the specific procedures for a certain priority" long-description:"Show the specific procedures for a certain priority"`
-	} `positional-args:"yes"`
-}
+func List(ctx context.Context, cmd *cli.Command) error {
+	// get ddir and stuff
+	gc, err := globconf.GetGlobconf(cmd.String("config"))
+	if err != nil {
+		return fmt.Errorf("failed to get global config: %v", err)
+	}
+	ddir, err := getDDir(gc, cmd)
+	if err != nil {
+		return fmt.Errorf("failed to get decldir: %v", err)
+	}
+	priority := cmd.IntArg("priority")
 
-func List(gc globconf.Globconf, mopts MainOpts, opts ListOpts) {
-	declss := getDeclsData(mopts.DDir)
+	declss, err := getDeclsData(ddir)
+	if err != nil {
+		return fmt.Errorf("failed to get decls data: %v", err)
+	}
 
 	// list
-	// BUG: since go-flags doesn't support default for positionals yet,
-	// can only assume that default value 0 is not user input
 	var w bytes.Buffer
-	var priority *uint
-	if opts.Args.Priority == 0 {
+	if priority < 0 {
 		fmt.Fprintf(&w, "Listing %s:\n", gc.DDir)
-		priority = nil
 	} else {
-		fmt.Fprintf(&w, "Listing %s (priority %d):\n", gc.DDir, opts.Args.Priority)
-		priority = &opts.Args.Priority
+		fmt.Fprintf(&w, "Listing %s (priority %d):\n", gc.DDir, priority)
 	}
 	if err := declss.List(&w, decls.DeclsListOpts{
 		Indent:         1,
 		FilterPriority: priority,
 	}); err != nil {
-		utils.Panic("error listing decls", err, exitcode.ExecError)
+		return fmt.Errorf("error listing decls: %v", err)
 	}
 
 	if err := utils.AutoPager(w.Bytes()); err != nil {
-		utils.Panic("error autopaging", err, exitcode.ExecError)
+		return fmt.Errorf("failed to autopage: %v", err)
 	}
+
+	return nil
 }

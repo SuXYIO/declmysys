@@ -81,7 +81,7 @@ You are ` + userinfo.Username + ".\n")
 		if err := decls.Run(DeclsRunOpts{
 			noPrint:        true,
 			WorkingDir:     tmpdir,
-			FilterPriority: nil,
+			FilterPriority: -1,
 		}); err != nil {
 			t.Errorf("unexpected error running RunDecls: %v", err)
 		}

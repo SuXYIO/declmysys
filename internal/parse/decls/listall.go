@@ -11,7 +11,7 @@ import (
 
 type DeclsListOpts struct {
 	Indent         int
-	FilterPriority *Priority
+	FilterPriority int // negative for no filter
 }
 
 func (decls Decls) List(w io.Writer, opts DeclsListOpts) error {
@@ -39,7 +39,7 @@ func (decls Decls) List(w io.Writer, opts DeclsListOpts) error {
 
 	indent := strings.Repeat(consts.Indent, opts.Indent)
 	for _, grp := range priGroups {
-		if opts.FilterPriority == nil || (opts.FilterPriority != nil && grp[0].Priority == *opts.FilterPriority) {
+		if opts.FilterPriority < 0 || (opts.FilterPriority >= 0 && int(grp[0].Priority) == opts.FilterPriority) {
 			fmt.Fprintf(w, "%s(%d)\n", indent, grp[0].Priority)
 			for _, d := range grp {
 				d.List(w, ToStringModeList, indent+consts.Indent)

@@ -16,7 +16,7 @@ type Priority = uint
 type DeclsRunOpts struct {
 	Indent         uint
 	WorkingDir     string
-	FilterPriority *Priority
+	FilterPriority int // negative for no filter
 	Dry            bool
 	RedirectStdout io.Writer
 	RedirectStderr io.Writer
@@ -39,7 +39,7 @@ func (decls Decls) Run(opts DeclsRunOpts) error {
 	indent := strings.Repeat(consts.Indent, int(opts.Indent))
 	for _, d := range decls {
 		// filter by priority
-		if opts.FilterPriority == nil || (opts.FilterPriority != nil && d.Priority == *opts.FilterPriority) {
+		if opts.FilterPriority < 0 || (opts.FilterPriority >= 0 && int(d.Priority) == opts.FilterPriority) {
 			if opts.Dry {
 				// dry run
 				if err := d.List(os.Stdout, ToStringModeRun, indent); err != nil {

@@ -1,86 +1,78 @@
 package subcmds
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime/debug"
 
 	"github.com/otiai10/copy"
+	"github.com/urfave/cli/v3"
 
-	"github.com/suxyio/declmysys/internal/exitcode"
+	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
 	"github.com/suxyio/declmysys/internal/parse/metadata"
 	"github.com/suxyio/declmysys/internal/templates"
-	"github.com/suxyio/declmysys/internal/utils"
 )
 
-type InitOpts struct {
-	NoGit   bool `long:"no-git" description:"Won't create the .git directory (via git init)"`
-	NoTaplo bool `long:"no-taplo" description:"Won't create the .taplo.toml file"`
-}
-
-func Init(gc globconf.Globconf, mopts MainOpts, opts InitOpts) {
-	// ddir doesn't exist
-	if DDirExist(mopts.DDir) {
-		if dir, err := os.ReadDir(mopts.DDir); err != nil {
-			utils.Panic(fmt.Sprintf("failed to read ddir %s", mopts.DDir), nil, exitcode.FileError)
-		} else {
-			if len(dir) > 0 {
-				utils.Panic(fmt.Sprintf("ddir already %s exists and is not empty", mopts.DDir), nil, exitcode.FileError)
-			}
-		}
+func Init(ctx context.Context, cmd *cli.Command) error {
+	// get ddir and stuff
+	gc, err := globconf.GetGlobconf(cmd.String("config"))
+	if err != nil {
+		return fmt.Errorf("failed to get global config: %v", err)
+	}
+	ddir, err := getDDir(gc, cmd)
+	if err != nil {
+		return fmt.Errorf("failed to get decldir: %v", err)
 	}
 
-	if !opts.NoGit {
+	if !cmd.Bool("no-git") {
 		// init git
 		if !gitAvail() {
-			utils.Panic("Git is not available, please ensure dependencies are installed correctly", nil, exitcode.SetupError)
+			return fmt.Errorf("git is not available")
 		}
-		if err := gitInit(mopts.DDir); err != nil {
-			utils.Panic("Git initialize failed", err, exitcode.ExecError)
+		if err := gitInit(ddir); err != nil {
+			return fmt.Errorf("failed to init git repository: %v", err)
 		}
 	}
 
 	// copy template
-	if err := copy.Copy("Decl", mopts.DDir, copy.Options{
+	if err := copy.Copy("Decl", ddir, copy.Options{
 		FS:                templates.DDir,
 		PermissionControl: copy.AddPermission(0664), // damn permissions almost ruined my filesystem
 		Skip: func(srcinfo os.FileInfo, src, dest string) (bool, error) {
 			fname := srcinfo.Name()
-			// exclude .gitkeep
-			if opts.NoTaplo && (fname == ".taplo.toml" ||
+			// exclude
+			if cmd.Bool("no-taplo") && (fname == ".taplo.toml" ||
 				(fname == ".schemas" && srcinfo.IsDir())) {
 				return true, nil
 			}
 			return false, nil
 		},
 	}); err != nil {
-		utils.Panic("copy template to path fail", err, exitcode.FileError)
+		return fmt.Errorf("failed to copy template to path: %v", err)
 	}
 
 	// correct version in metadata.toml
 	// NOTE: This is acutally pretty bad design
-	mdpath := filepath.Join(mopts.DDir, "metadata.toml")
+	mdpath := filepath.Join(ddir, "metadata.toml")
 	if dat, err := os.ReadFile(mdpath); err != nil {
-		utils.Panic("error reading metadata.toml", err, exitcode.FileError)
+		return fmt.Errorf("failed to read metadata.toml: %v", err)
 	} else {
 		// replace version
-		info, ok := debug.ReadBuildInfo()
-		if !ok {
-			utils.Panic("error reading build info", nil, exitcode.Unknown)
-		}
-		repl := metadata.SubsRules{"{VERSION}": info.Main.Version}.ToReplacer()
+		repl := metadata.SubsRules{"{VERSION}": consts.Version}.ToReplacer()
 
 		res := metadata.ApplySubsReplacer(string(dat), &repl)
 		if err := os.WriteFile(mdpath, []byte(res), 0644); err != nil {
-			utils.Panic("error overwriting metadata.toml", err, exitcode.FileError)
+			return fmt.Errorf("failed to overwrite metadata.toml: %v", err)
 		}
 	}
 
-	fmt.Println("Copied template files to", mopts.DDir)
-	fmt.Println("Successfully initialized decldir in", mopts.DDir)
+	fmt.Println("Copied template files to", ddir)
+	fmt.Println("Successfully initialized decldir in", ddir)
+
+	return nil
 }
 
 func gitInit(path string) error {

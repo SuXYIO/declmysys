@@ -10,7 +10,7 @@ declmysys version
 
 ## Aliases
 
-Same as `-V` or `--version`
+Same as `-v` or `--version`
 
 ## Example
 
