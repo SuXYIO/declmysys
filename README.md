@@ -51,8 +51,8 @@ Dependencies:
 
 Recommended:
 
-- `stow` for using the stow preset
 - `taplo` for toml completion and validation
+- `stow` for using the stow preset
 
 > [!NOTE]
 > For those of you who don't know, Taplo is an excellent linter and formatter for TOML (no this is not an ad).
@@ -74,23 +74,7 @@ If you do not know where `GOPATH` is (usually `~/go`), try `go env GOPATH`.
 > [!TIP]
 > Try `git clone --branch=main --depth=1 https://github.com/suxyio/declmysys.git` if network is slow.
 
-#### GoReleaser
-
-Needs [goreleaser](https://goreleaser.com/) installed.
-
-Run:
-
-```bash
-git clone https://github.com/suxyio/declmysys.git
-cd declmysys
-goreleaser build
-```
-
-The results are in `./dest` directory.
-
-#### Go-Install
-
-Alternatively, build without goreleaser:
+Requires `go` cli tool
 
 ```bash
 git clone https://github.com/suxyio/declmysys.git
