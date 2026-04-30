@@ -43,7 +43,7 @@ Decl/
 
 - `cmds`: Runs custom commands
   Required in `args`:
-  - `cmds`: list of cmds (list of list of strings) to run
+  - `cmds`: list of \_cmd_s (list of list of strings) to run
 - `stow`: Stows a directory. Evaluates to `stow -t={dest} {src}`
   Optional in `args`
   - `src`: string of the directory being stowed, default `stow`
@@ -53,8 +53,9 @@ Decl/
   - `src`: string of the origin path / url
   - `dest`: string of the destination path
 - `packages`: Runs a single command, but appends arguments, also includes presets, useful for installing packages.
-  - `manager`: string for a preset name, or a list of strings for a custom manager command
-  - `packs`: list of strings (cmd, see [cmd](represents/cmd.md)) for package names, will be appended after the `manager` command
+  Required in `args`:
+  - `manager`: string for a preset name, or a _cmd_ for a custom manager command
+  - `packs`: _cmd_ for package names, will be appended after the `manager` command
 
 Presets for `packages` (alphabetical order):
 | Name | Manager Command |

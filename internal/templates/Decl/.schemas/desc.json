@@ -20,7 +20,8 @@
         "priority": {
             "type": "integer",
             "description": "priority of decl, higher for earlier execution",
-            "default": 100
+            "default": 100,
+            "minimum": 0
         },
         "pwd": {
             "type": "string",
@@ -149,7 +150,7 @@
                     "args": {
                         "properties": {
                             "manager": {
-                                "allOf": [
+                                "oneOf": [
                                     {
                                         "if": {
                                             "type": "string"
@@ -169,9 +170,7 @@
                                         },
                                         "then": {
                                             "description": "install command for your own package manager",
-                                            "items": {
-                                                "$ref": "#/$defs/cmdtype"
-                                            }
+                                            "$ref": "#/$defs/cmdtype"
                                         }
                                     }
                                 ]
@@ -190,11 +189,11 @@
                             "packs"
                         ]
                     }
-                }
-            },
-            "required": [
-                "args"
-            ]
+                },
+                "required": [
+                    "args"
+                ]
+            }
         }
     ],
     "$defs": {

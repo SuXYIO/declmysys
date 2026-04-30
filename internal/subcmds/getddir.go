@@ -17,12 +17,8 @@ func getDDir(gc globconf.Globconf, cmd *cli.Command) (string, error) {
 	}
 
 	if ddirExist(ddir) {
-		if dir, err := os.ReadDir(ddir); err != nil {
+		if _, err := os.ReadDir(ddir); err != nil {
 			return "", fmt.Errorf("failed to read ddir at %s: %v", ddir, err)
-		} else {
-			if len(dir) > 0 {
-				return "", fmt.Errorf("ddir at %s already exists and is not empty", ddir)
-			}
 		}
 	}
 

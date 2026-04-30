@@ -58,12 +58,16 @@ Recommended:
 > For those of you who don't know, Taplo is an excellent linter and formatter for TOML (no this is not an ad).
 > I wrote the schemas files (under `.schemas`) and the `.taplo.toml` files under every decldir, so writing decls will be hopefully easier.
 
+### Binaries
+
+All precompiled binaries are available at [GitHub Releases](https://github.com/SuXYIO/declmysys/releases) page.
+
 ### Go-install
 
 Run:
 
 ```bash
-go install github.com/suxyio/declmysys
+go install github.com/suxyio/declmysys@latest
 ```
 
 And the executable will be put to `GOPATH/bin`.

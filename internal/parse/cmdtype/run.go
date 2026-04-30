@@ -16,8 +16,9 @@ type CmdRunOptions struct {
 	RedirectStdout io.Writer // default os.Stdout
 	RedirectStderr io.Writer // default os.Stderr
 	AppendedArgs   []string  // useful for package install append package spec, []string{} or nil for none
-	WorkingDir     string    // change working directory, "" for use default
+	WorkingDir     string    // change working directory, "" for use default, will do subs for it
 	DryRun         io.Writer // won't run, only prints command to run to writer, nil for normal run
+	DryPrintPrestr string    // prestr for dry run print, appended before every line
 }
 
 // Run runs a command
@@ -28,8 +29,13 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	var c *exec.Cmd
 
-	// do subs
+	// do subs for cmd
 	err := cmd.subs(&opts)
+	if err != nil {
+		return err
+	}
+	// also for workdir
+	workdir, err := metadata.SubsApply(opts.WorkingDir)
 	if err != nil {
 		return err
 	}
@@ -43,13 +49,15 @@ func (cmd Cmd) Run(opts CmdRunOptions) error {
 
 	if opts.DryRun != nil {
 		// dry run
-		_, err := fmt.Fprintf(opts.DryRun, "%v\t[workdir: %s]", c, opts.WorkingDir)
+		fmt.Fprint(opts.DryRun, opts.DryPrintPrestr)
+		_, err := fmt.Fprintf(opts.DryRun, "[workdir: %s] %v", workdir, c)
+		fmt.Fprintln(opts.DryRun)
 		return err
 	}
 
 	// change dir
-	if opts.WorkingDir != "" {
-		c.Dir = opts.WorkingDir
+	if workdir != "" {
+		c.Dir = workdir
 	}
 	// redirect
 	if opts.RedirectStdin != nil {

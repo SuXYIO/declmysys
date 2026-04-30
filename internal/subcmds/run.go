@@ -28,7 +28,7 @@ func Run(ctx context.Context, cmd *cli.Command) error {
 	}
 
 	// run
-	if priority == 0 {
+	if priority < 0 {
 		if dry {
 			fmt.Printf("Running %s (dry):\n", gc.DDir)
 		} else {

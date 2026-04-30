@@ -9,14 +9,14 @@ import (
 )
 
 const (
-	ToStringModeList int8 = iota
+	ToStringModeList = iota
 	ToStringModeRun
 )
 
 // Preset defines behaviors of a preset
 type preset struct {
 	PreFunc  func(*Decl, toml.MetaData) error        // does the validation and parsing work
-	ToString func(Decl, int8, string) string         // turns into readable string, ASSUMES that prefunc is ran before
+	ToString func(Decl) string                       // turns specific attributes into readable string, ASSUMES that prefunc is ran before
 	RunFunc  func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before
 }
 
@@ -47,15 +47,8 @@ var presets = map[string]preset{
 
 			return nil
 		},
-		ToString: func(d Decl, mode int8, prestr string) string {
-			// indent is the level of indents
-			switch mode {
-			case ToStringModeRun:
-				return fmt.Sprintf("%spackages[%s]", prestr, d.Name)
-			default:
-				// ToStringModeList
-				return fmt.Sprintf("%spackages[%s]:\t%v", prestr, d.Name, d.Args["packs"])
-			}
+		ToString: func(d Decl) string {
+			return fmt.Sprintf(": %v", d.Args["packs"])
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// manager
@@ -125,14 +118,8 @@ var presets = map[string]preset{
 			}
 			return nil
 		},
-		ToString: func(d Decl, mode int8, prestr string) string {
-			switch mode {
-			case ToStringModeRun:
-				return fmt.Sprintf("%sgitclone[%s]", prestr, d.Name)
-			default:
-				// ToStringModeList
-				return fmt.Sprintf("%sgitclone[%s]:\tsrc %q, dest %q", prestr, d.Name, d.Args["src"], d.Args["dest"])
-			}
+		ToString: func(d Decl) string {
+			return fmt.Sprintf(": %s => %s", d.Args["src"], d.Args["dest"])
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			cmd := cmdtype.Cmd{"git", "clone", d.Args["src"].(string), d.Args["dest"].(string)}
@@ -168,14 +155,8 @@ var presets = map[string]preset{
 
 			return nil
 		},
-		ToString: func(d Decl, mode int8, prestr string) string {
-			switch mode {
-			case ToStringModeRun:
-				return fmt.Sprintf("%sstow[%s]", prestr, d.Name)
-			default:
-				// ToStringModeList
-				return fmt.Sprintf("%sstow[%s]:\tsrc %q, dest %q", prestr, d.Name, d.Args["src"], d.Args["dest"])
-			}
+		ToString: func(d Decl) string {
+			return fmt.Sprintf(": %s => %s", d.Args["src"], d.Args["dest"])
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			cmd := cmdtype.Cmd{"stow", "-t", d.Args["dest"].(string), d.Args["src"].(string)}
@@ -203,14 +184,8 @@ var presets = map[string]preset{
 			}
 			return nil
 		},
-		ToString: func(d Decl, mode int8, prestr string) string {
-			switch mode {
-			case ToStringModeRun:
-				return fmt.Sprintf("%scmds[%s]", prestr, d.Name)
-			default:
-				// ToStringModeList
-				return fmt.Sprintf("%scmds[%s]", prestr, d.Name)
-			}
+		ToString: func(d Decl) string {
+			return fmt.Sprintf(": %v", d.Args["cmds"])
 		},
 		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
 			// turn to cmd
