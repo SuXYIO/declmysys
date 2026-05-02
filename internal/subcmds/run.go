@@ -11,7 +11,7 @@ import (
 
 func Run(ctx context.Context, cmd *cli.Command) error {
 	// get ddir and stuff
-	gc, err := globconf.GetGlobconf(cmd.String("config"))
+	gc, err := globconf.GetGlobconf()
 	if err != nil {
 		return fmt.Errorf("failed to get global config: %v", err)
 	}

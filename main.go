@@ -26,13 +26,6 @@ func main() {
 		// flags
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:      "config",
-				Aliases:   []string{"C"},
-				Value:     consts.DefaultGlobconfPath,
-				TakesFile: true,
-				Usage:     "specify the global config path",
-			},
-			&cli.StringFlag{
 				Name:      "decldir",
 				Aliases:   []string{"D"},
 				Value:     consts.DefaultDDirPath,

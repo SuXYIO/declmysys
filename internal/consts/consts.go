@@ -29,8 +29,9 @@ var (
 	BuildInfo string = "" // initialized in init()
 
 	// default paths, must be processed by ApplyDefaultPC
-	DefaultGlobconfPath string = "{CONF}/declmysys/config.toml"
+	DefaultGlobconfPath string = "{CONF}/declmysys" // note that this is the directory path
 	DefaultDDirPath     string = "{HOME}/Decl"
+	GlobconfPathEnvvar  string = "DECLMYSYS_CONFIG"
 )
 
 func init() {
