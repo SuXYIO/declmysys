@@ -7,7 +7,6 @@ import (
 
 	"github.com/suxyio/declmysys/internal/parse/decls"
 	"github.com/suxyio/declmysys/internal/parse/globconf"
-	"github.com/suxyio/declmysys/internal/utils"
 	"github.com/urfave/cli/v3"
 )
 
@@ -42,9 +41,7 @@ func List(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("error listing decls: %v", err)
 	}
 
-	if err := utils.AutoPager(w.Bytes()); err != nil {
-		return fmt.Errorf("failed to autopage: %v", err)
-	}
+	fmt.Print(w.String())
 
 	return nil
 }

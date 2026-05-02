@@ -6,6 +6,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/suxyio/declmysys/internal/consts"
 	"github.com/suxyio/declmysys/internal/parse/cmdtype"
+	"github.com/suxyio/declmysys/internal/utils"
 )
 
 const (
@@ -20,16 +21,10 @@ type preset struct {
 	RunFunc  func(Decl, cmdtype.CmdRunOptions) error // self-explanatory, ASSUMES that prefunc is ran before
 }
 
-//TODO: Change slice-printing work to "%v", or define cmdtype.Cmd to string
-
 // Presets maps preset name to preset definition, shall not be modified
 var presets = map[string]preset{
 	"packages": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.Args == nil {
-				d.Args = make(map[string]any)
-			}
-
 			// manager
 			if !md.IsDefined("args", "manager") {
 				return fmt.Errorf("must specify args.manager for preset \"packages\"")
@@ -98,10 +93,6 @@ var presets = map[string]preset{
 
 	"gitclone": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.Args == nil {
-				d.Args = make(map[string]any)
-			}
-
 			// src
 			if !md.IsDefined("args", "src") {
 				return fmt.Errorf("must specify args.src for preset \"gitclone\"")
@@ -132,10 +123,6 @@ var presets = map[string]preset{
 
 	"stow": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.Args == nil {
-				d.Args = make(map[string]any)
-			}
-
 			// src
 			if !md.IsDefined("args", "src") {
 				d.Args["src"] = "stow"
@@ -169,10 +156,6 @@ var presets = map[string]preset{
 
 	"cmds": {
 		PreFunc: func(d *Decl, md toml.MetaData) error {
-			if d.Args == nil {
-				d.Args = make(map[string]any)
-			}
-
 			if !md.IsDefined("args", "cmds") {
 				return fmt.Errorf("must specify args.cmds for preset \"cmds\"")
 			}
@@ -200,6 +183,45 @@ var presets = map[string]preset{
 					return err
 				}
 			}
+			return nil
+		},
+	},
+
+	"manual": {
+		PreFunc: func(d *Decl, md toml.MetaData) error {
+			if !md.IsDefined("args", "desc") {
+				return fmt.Errorf("must specify args.desc for preset \"manual\"")
+			}
+			if desc, exists := d.Args["desc"]; !exists {
+				return fmt.Errorf("must specify args.desc for preset \"manual\"")
+			} else {
+				if _, ok := desc.(string); !ok {
+					return fmt.Errorf("args.desc must be of string type for preset \"manual\"")
+				}
+			}
+			return nil
+		},
+		ToString: func(d Decl) string {
+			return fmt.Sprintf(": %q", d.Args["desc"])
+		},
+		RunFunc: func(d Decl, opts cmdtype.CmdRunOptions) error {
+			desc, ok := d.Args["desc"].(string)
+			if !ok {
+				return fmt.Errorf("args.desc must be of string type for preset \"manual\"")
+			}
+
+			if opts.DryRun != nil {
+				_, err := opts.DryRun.Write([]byte(desc))
+				return err
+			}
+
+			fmt.Println(desc)
+
+			fmt.Print("press any key to continue...")
+			if _, err := utils.GetAnyKey(); err != nil {
+				return fmt.Errorf("error getting any key: %v", err)
+			}
+
 			return nil
 		},
 	},

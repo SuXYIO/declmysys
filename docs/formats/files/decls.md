@@ -43,7 +43,7 @@ Decl/
 
 - `cmds`: Runs custom commands
   Required in `args`:
-  - `cmds`: list of \_cmd_s (list of list of strings) to run
+  - `cmds`: list of _cmds_ (list of list of strings) to run
 - `stow`: Stows a directory. Evaluates to `stow -t={dest} {src}`
   Optional in `args`
   - `src`: string of the directory being stowed, default `stow`
@@ -56,6 +56,9 @@ Decl/
   Required in `args`:
   - `manager`: string for a preset name, or a _cmd_ for a custom manager command
   - `packs`: _cmd_ for package names, will be appended after the `manager` command
+- `manual`: Print a description, and wait for the user. Useful for operations that cannot be automated.
+  Required in `args`:
+  - `desc`: string for the description
 
 Presets for `packages` (alphabetical order):
 | Name | Manager Command |
