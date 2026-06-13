@@ -9,5 +9,5 @@ type Globconf struct {
 }
 
 var DefaultGlobconf Globconf = Globconf{
-	DDir: consts.DefaultGlobconfPath,
+	DDir: consts.DefaultDDirPath,
 }
