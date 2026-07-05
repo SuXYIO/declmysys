@@ -141,4 +141,4 @@ Implementation:
 
 I'm just getting started to programming, **Go** is pretty new to me, so it's also a learning project.
 
-btw, **Rust** will NOT be used as far as I'm concerned. Yes, I tried to learn it, and I failed :sweat_smile:.
+btw, **Rust** will NOT be used as far as I'm concerned. ~~Yes, I tried to learn it, and I failed :sweat_smile:.~~ you know what, I'm learning Rust again, expect it to show up in my future projects!
